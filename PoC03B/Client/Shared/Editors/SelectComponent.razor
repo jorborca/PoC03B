@@ -1,0 +1,14 @@
+﻿<MudSelect id="@Id" T="string" Label="@Label" AnchorOrigin="Origin.BottomCenter">
+    <MudSelectItem Value="@("Uno")" />
+    <MudSelectItem Value="@("Dos")" />
+    <MudSelectItem Value="@("Tres")" />
+    <MudSelectItem Value="@("Cuatro")" />
+</MudSelect>
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    [Parameter]
+    public string? Label { get; set; }
+}

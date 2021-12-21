@@ -1,0 +1,11 @@
+﻿<MudTextField id="@Id" @bind-Value="HelperText" Label="@Label" Variant="Variant.Text" />
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    [Parameter]
+    public string? Label { get; set; }
+
+    public string HelperText { get; set; }
+}

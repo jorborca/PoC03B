@@ -1,0 +1,26 @@
+﻿@using PoC03B.Shared
+
+<MudButton id="@Id" OnClick="OnClick" Variant="Variant.Filled">@Label</MudButton>
+
+@code {
+    [CascadingParameter] 
+    public Action<string, string, object> formAction { get; set; }
+
+    [Parameter]
+    public string Id { get; set; }
+
+    [Parameter]
+    public string Label { get; set; }
+
+    private void OnClick()
+    {
+        //formActions.First(x => x.Id == Id).Action?.Invoke();
+
+		//var actionParameters = new Dictionary<string, object>() { 
+		//    { "Id", Id }, 
+		//    { "Action", "OnClick" }
+        //};
+		
+		formAction?.Invoke(Id, "OnClick", Label);
+    }
+}

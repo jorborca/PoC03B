@@ -1,0 +1,47 @@
+[
+  {
+    "TypeName": "TextBoxComponent",
+    "Parameters": {
+      "Id": "txtTexto1",
+      "Label": "Texto 2"
+    },
+    "xs": 2,
+    "RowId": 1 
+  },
+  {
+    "typeName": "SelectComponent",
+    "parameters": {
+      "id": "ddlSelect",
+      "Label": "Seleccion"
+    },
+    "xs": 2,
+    "RowId": 1
+  },
+  {
+    "TypeName": "TextBoxComponent",
+    "Parameters": {
+      "Id": "txtTexto2",
+      "Label": "Otro texto"
+    },
+    "xs": 5,
+    "RowId": 2
+  },
+  {
+    "TypeName": "ButtonComponent",
+    "Parameters": {
+      "Id": "btnAceptar",
+      "Label": "Aceptar"
+    },
+    "xs": 2,
+    "RowId": 3
+  },
+  {
+    "TypeName": "ButtonComponent",
+    "Parameters": {
+      "Id": "btnCancelar",
+      "Label": "Cancelar"
+    },
+    "xs": 2,
+    "RowId": 3
+  }
+]

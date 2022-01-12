@@ -1,9 +1,58 @@
 ﻿@page "/"
 
+
 <PageTitle>Index</PageTitle>
 
-@*<MudSelect T="int" Label="Coffee" AnchorOrigin="Origin.BottomCenter">
-    <MudSelectItem Value="1">@("Cappuccino")</MudSelectItem>
-    <MudSelectItem Value="2">@("Cafe Latte")</MudSelectItem>
-    <MudSelectItem Value="3">@("Espresso")</MudSelectItem>
-</MudSelect>*@
+<h1>Test Drop Zone</h1>
+
+<div class="dropzone @dropClass" style="background-color: lightgray; width: 100%; height: 80vh;"
+    ondragover="event.preventDefault();"
+    ondragstart="event.dataTransfer.setData('', event.target.id);"
+    @ondrop="HandleDrop"
+    @ondragenter="HandleDragEnter"
+    @ondragleave="HandleDragLeave">
+
+</div>
+
+<MudGrid>
+    <MudItem>
+
+    </MudItem>
+</MudGrid>
+
+@code {
+    [CascadingParameter] JobsContainer Container { get; set; }
+    [Parameter] public JobStatuses ListStatus { get; set; }
+    [Parameter] public JobStatuses[] AllowedStatuses { get; set; }
+
+    List<JobModel> Jobs = new List<JobModel>();
+    string dropClass = "";
+
+    private void HandleDragEnter()
+    {
+        if (ListStatus == Container.Payload.Status) return;
+
+        if (AllowedStatuses != null && !AllowedStatuses.Contains(Container.Payload.Status))
+        {
+            dropClass = "no-drop";
+        }
+        else
+        {
+            dropClass = "can-drop";
+        }
+    }
+
+    private void HandleDragLeave()
+    {
+        dropClass = "";
+    }
+
+      private async Task HandleDrop()
+    {
+        dropClass = "";
+
+        if (AllowedStatuses != null && !AllowedStatuses.Contains(Container.Payload.Status)) return;
+
+        await Container.UpdateJobAsync(ListStatus);
+    }
+}

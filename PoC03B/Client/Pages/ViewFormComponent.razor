@@ -2,6 +2,7 @@
 
 @using System.Text.Json
 @using PoC03B.Shared
+@using System.Linq
 
 @inject HttpClient httpClient
 @inject ISnackbar snackBar;
@@ -13,88 +14,15 @@
 @if (formComponents.Any())
 {
     <CascadingValue Value="formAction">
-        @foreach (FormComponent formComponent in formComponents)
+        @for(int rowId = 1; rowId <= MaxRowId(); rowId++)
         {
-            @if (formComponent.RowId == GetRowId())
-            {
-                <MudGrid Class="align-end">
-                    <MudItem xs="formComponent.xs">
+            <div class="mud-grid mud-grid-spacing-xs-3 mud-grid-justify-xs-flex-start align-end">
+                <Virtualize Items="GetFormComponentsByRow(rowId)" Context="formComponent">
+                    <MudItem xs="@formComponent.xs">
                         <DynamicComponent Type="@formComponent.TypeComponent" Parameters="@formComponent.Parameters"></DynamicComponent>
                     </MudItem>
-                </MudGrid>
-            }
+                </Virtualize>
+            </div>
         }
     </CascadingValue>
-}
-
-@code {
-    string namespaceComponents = "PoC03B.Client.Shared.Editors";
-
-    public int rowId = 0;
-    List<FormComponent> formComponents = new();
-    Action<string, string, object> formAction { get; set; }
-
-    private int GetRowId() => rowId++;
-
-    protected async override Task OnInitializedAsync()
-    {
-        formAction = OnComponent_Action;
-
-        await GetDynamicForm();
-    }
-
-    private async Task GetDynamicForm()
-    {
-        formComponents = await httpClient.GetFromJsonAsync<List<FormComponent>>("/data.json"); //WebHostEnvironment.WebRootPath
-
-        if (formComponents == null)
-        {
-            return;
-        }
-
-        foreach (var formComponent in formComponents)
-        {
-            formComponent.TypeComponent = Type.GetType($"{namespaceComponents}.{formComponent.TypeName}");
-
-            if (formComponent?.Parameters != null)
-            {
-                foreach (var parameter in formComponent.Parameters)
-                {
-                    string key = parameter.Key;
-                    JsonElement jsonElement = (JsonElement)parameter.Value;
-
-                    object? newParameterType = key switch
-                    {
-                        "Id" => jsonElement.GetString(),
-                        "Label" => jsonElement.GetString(),
-                        "Visible" => jsonElement.GetBoolean(),
-                        _ => jsonElement.GetString()
-                    };
-
-                    if (newParameterType == null)
-                    {
-                        continue;
-                    }
-
-                    formComponent.Parameters[key] = newParameterType;
-                }
-            }
-        }
-    }
-
-    private void OnComponent_Action(string senderId, string eventType, object data)
-    {
-        string action = $"{senderId}_{eventType}";
-
-        switch (action)
-        {
-            case "btnAceptar_OnClick":
-                snackBar.Add($"Action: {action}", Severity.Success);
-                break;
-
-            case "btnCancelar_OnClick":
-                snackBar.Add($"Action: {action}", Severity.Error);
-                break;
-        }
-    }
 }

@@ -12,10 +12,20 @@
     [Parameter]
     public string Label { get; set; }
 
+    [Parameter]
+    public string Class { get; set; }
+
+    [Parameter]
+    public string Style { get; set; }
+
+    [Parameter]
+    public string Text { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] 
+    public Dictionary<string, object> Attributes { get; set; }
+
     private void OnClick()
     {
-        //formActions.First(x => x.Id == Id).Action?.Invoke();
-
 		//var actionParameters = new Dictionary<string, object>() { 
 		//    { "Id", Id }, 
 		//    { "Action", "OnClick" }

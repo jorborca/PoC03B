@@ -1,11 +1,22 @@
-﻿<MudTextField id="@Id" @bind-Value="HelperText" Label="@Label" Variant="Variant.Text" />
+﻿<MudTextField id="@Id" @bind-Value="Text" Label="@Label" Variant="Variant.Text" @attributes="@Attributes" />
 
 @code {
     [Parameter]
     public string Id { get; set; }
 
     [Parameter]
-    public string? Label { get; set; }
+    public string Label { get; set; }
 
-    public string HelperText { get; set; }
+    [Parameter]
+    public string Class { get; set; }
+
+    [Parameter]
+    public string Style { get; set; }
+
+    [Parameter]
+    public string Text { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] 
+    public Dictionary<string, object> Attributes { get; set; }
+
 }

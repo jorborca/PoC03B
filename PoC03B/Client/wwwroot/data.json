@@ -1,45 +1,64 @@
 [
   {
-    "TypeName": "TextBoxComponent",
+    "TypeName": "PoC03B.Client.Shared.Editors.TextBoxComponent",
     "Parameters": {
       "Id": "txtTexto1",
-      "Label": "Texto 2"
-    },
-    "xs": 2,
-    "RowId": 1 
-  },
-  {
-    "typeName": "SelectComponent",
-    "parameters": {
-      "id": "ddlSelect",
-      "Label": "Seleccion"
+      "Label": "Texto 1",
+      "Class": "",
+      "Style": "",
+      "Text": "",
+      "Attributes": ""
     },
     "xs": 2,
     "RowId": 1
   },
   {
-    "TypeName": "TextBoxComponent",
+    "typeName": "PoC03B.Client.Shared.Editors.SelectComponent",
+    "parameters": {
+      "Id": "ddlSelect",
+      "Label": "Seleccion",
+      "Class": "",
+      "Style": "",
+      "Text": "",
+      "Attributes": ""
+    },
+    "xs": 2,
+    "RowId": 2
+  },
+  {
+    "TypeName": "PoC03B.Client.Shared.Editors.TextBoxComponent",
     "Parameters": {
       "Id": "txtTexto2",
-      "Label": "Otro texto"
+      "Label": "Texto 2",
+      "Style": "",
+      "Text": "",
+      "Attributes": ""
     },
     "xs": 5,
     "RowId": 2
   },
   {
-    "TypeName": "ButtonComponent",
+    "TypeName": "PoC03B.Client.Shared.Editors.ButtonComponent",
     "Parameters": {
       "Id": "btnAceptar",
-      "Label": "Aceptar"
+      "Label": "Aceptar",
+      "Class": "",
+      "Style": "",
+      "Text": "",
+      "Attributes": ""
     },
     "xs": 2,
     "RowId": 3
   },
   {
-    "TypeName": "ButtonComponent",
+    "TypeName": "PoC03B.Client.Shared.Editors.ButtonComponent",
     "Parameters": {
       "Id": "btnCancelar",
-      "Label": "Cancelar"
+      "Label": "Cancelar",
+      "Class": "",
+      "Style": "",
+      "Text": "",
+      "Attributes": ""
     },
     "xs": 2,
     "RowId": 3

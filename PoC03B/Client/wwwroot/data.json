@@ -3,7 +3,7 @@
     "TypeName": "PoC03B.Client.Shared.Editors.TextBoxComponent",
     "Parameters": {
       "Id": "txtTexto1",
-      "Label": "Texto 1",
+      "Label": "Texto uno dos tres",
       "Class": "",
       "Style": "",
       "Text": "",

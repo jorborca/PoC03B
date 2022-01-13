@@ -2,7 +2,7 @@
 
 <MudLayout>
     <MudAppBar Color="Color.Info" Elevation="1" Dense="false">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />
+        @*<MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />*@
         <MudText Typo="Typo.h5">DynaForms</MudText>
         <MudDivider Vertical="true" FlexItem="true" Class="ml-16"/>
         <MudToolBar>
@@ -11,11 +11,11 @@
         </MudToolBar>
         <MudSpacer />
     </MudAppBar>
-    <MudDrawer Open="@open" Fixed="true" Elevation="1" Variant="@DrawerVariant.Mini" ClipMode="DrawerClipMode.Docked" 
+    <MudDrawer Open="true" Fixed="true" Elevation="1" Variant="@DrawerVariant.Mini" ClipMode="DrawerClipMode.Docked" 
         OpenMiniOnHover="true" Color="Color.Dark">
         <NavMenu />
     </MudDrawer>
-    <MudMainContent Class="mt-5 px-12">
+    <MudMainContent Class="mt-7 px-12">
         @Body
         @*<MudContainer>
         </MudContainer>*@

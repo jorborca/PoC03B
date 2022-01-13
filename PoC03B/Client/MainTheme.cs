@@ -18,7 +18,8 @@ namespace PoC03B.Client
 
             LayoutProperties = new LayoutProperties()
             {
-                DefaultBorderRadius = "6px"
+                DefaultBorderRadius = "6px",
+                DrawerWidthLeft = "170px",
             };
 
             Typography = new Typography()

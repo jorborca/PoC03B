@@ -1,28 +1,5 @@
 ﻿@page "/View"
 
-@using System.Text.Json
-@using PoC03B.Shared
-@using System.Linq
+<PageTitle>View DynamicForm</PageTitle>
 
-@inject HttpClient httpClient
-@inject ISnackbar snackBar;
-
-<PageTitle>View</PageTitle>
-
-@*<InputFile OnChange="@LoadFiles" />*@
-
-@if (formComponents.Any())
-{
-    <CascadingValue Value="formAction">
-        @for(int rowId = 1; rowId <= MaxRowId(); rowId++)
-        {
-            <div class="mud-grid mud-grid-spacing-xs-3 mud-grid-justify-xs-flex-start align-end">
-                <Virtualize Items="GetFormComponentsByRow(rowId)" Context="formComponent">
-                    <MudItem xs="@formComponent.xs">
-                        <DynamicComponent Type="@formComponent.TypeComponent" Parameters="@formComponent.Parameters"></DynamicComponent>
-                    </MudItem>
-                </Virtualize>
-            </div>
-        }
-    </CascadingValue>
-}
+<DynamicFormComponent></DynamicFormComponent>

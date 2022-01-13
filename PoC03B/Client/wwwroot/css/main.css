@@ -1,0 +1,11 @@
+﻿.dropzone {
+    border: 1px dashed #75868a;
+}
+
+    .dropzone.no-drop {
+        border: 2px dashed red;
+    }
+
+    .dropzone.can-drop {
+        border: 2px dashed green;
+    }

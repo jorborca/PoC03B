@@ -9,11 +9,11 @@ namespace PoC03B.Client.Pages
     {
         dynamic ViewModel { get; set; }
 
-        List<FormComponent> formComponents = new();
+        List<FormComponentModel> formComponents = new();
         Action<string, string, object>? formAction { get; set; }
 
         private int MaxRowId() => formComponents.Max(x => x.RowId);
-        private List<FormComponent> GetFormComponentsByRow(int rowId) => formComponents.Where(x => x.RowId == rowId).ToList();
+        private List<FormComponentModel> GetFormComponentsByRow(int rowId) => formComponents.Where(x => x.RowId == rowId).ToList();
 
         protected async override Task OnInitializedAsync()
         {
@@ -25,7 +25,7 @@ namespace PoC03B.Client.Pages
         private async Task GetDynamicForm()
         {
             //WebHostEnvironment.WebRootPath
-            formComponents = await httpClient.GetFromJsonAsync<List<FormComponent>>("/data.json");
+            formComponents = await httpClient.GetFromJsonAsync<List<FormComponentModel>>("/data.json");
 
             if (formComponents == null)
             {
@@ -34,7 +34,7 @@ namespace PoC03B.Client.Pages
 
             foreach (var formComponent in formComponents)
             {
-                formComponent.TypeComponent = Type.GetType($"{formComponent.TypeName}");
+                formComponent.ComponentType = Type.GetType($"{formComponent.TypeName}");
 
                 if (formComponent?.Parameters != null)
                 {

@@ -1,34 +1,82 @@
 ﻿@inherits LayoutComponentBase
 
-<MudLayout>
-    <MudAppBar Color="Color.Info" Elevation="1" Dense="false">
-        @*<MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />*@
-        <MudText Typo="Typo.h5">DynaForms</MudText>
-        <MudDivider Vertical="true" FlexItem="true" Class="ml-16"/>
-        <MudToolBar>
-            <MudIconButton Link="/" Icon="@Icons.Material.Outlined.EditNote" Size="Size.Large" Color="Color.Inherit" />
-            <MudIconButton Link="view" Icon="@Icons.Material.Outlined.Preview" Size="Size.Large" Color="Color.Inherit" />
-        </MudToolBar>
-        <MudSpacer />
-    </MudAppBar>
-    <MudDrawer Open="true" Fixed="true" Elevation="1" Variant="@DrawerVariant.Mini" ClipMode="DrawerClipMode.Docked" 
-        OpenMiniOnHover="true" Color="Color.Dark">
-        <NavMenu />
-    </MudDrawer>
-    <MudMainContent Class="mt-7 px-12">
-        @Body
-        @*<MudContainer>
-        </MudContainer>*@
-    </MudMainContent>
-    @*<MudDrawerContainer Class="mud-height-full">
-    </MudDrawerContainer>*@
-</MudLayout>
+<CascadingValue Value="FormDesignerData" Name="FormDesignerData">
+    <MudLayout>
+            <MudAppBar Color="Color.Info" Elevation="1" Dense="true">
+                @*<MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />*@
+                <MudText Typo="Typo.h6">DynaForms</MudText>
+                @*<MudDivider Vertical="true" FlexItem="true" Class="ml-11 mr-5"/>*@
+                <MudIconButton Icon="@Icons.Material.Outlined.RemoveCircle" Class="ml-12" Size="Size.Medium" Color="Color.Inherit" OnClick="OnRemoveRow" />
+                <MudText Typo="Typo.body1">@FormDesignerData.Rows</MudText>
+                <MudIconButton Icon="@Icons.Material.Outlined.AddCircle" Size="Size.Medium" Color="Color.Inherit" OnClick="OnAddRow" />
+                <MudSpacer />
+                <MudIconButton Link="/" Icon="@Icons.Material.Outlined.EditNote" Size="Size.Medium" Color="Color.Inherit" />
+                <MudIconButton Link="view" Icon="@Icons.Material.Outlined.Preview" Size="Size.Medium" Color="Color.Inherit" />
+            </MudAppBar>
+            <MudDrawer Open="true" Fixed="true" Elevation="1" Variant="@DrawerVariant.Mini" ClipMode="DrawerClipMode.Docked" 
+                OpenMiniOnHover="true" Color="Color.Dark">
+                <NavMenu />
+            </MudDrawer>
+            <MudMainContent Class="mt-7 px-7">
+                @Body
+                @*<MudContainer>
+                </MudContainer>*@
+            </MudMainContent>
+            @*<MudDrawerContainer Class="mud-height-full">
+            </MudDrawerContainer>*@
+    </MudLayout>
+</CascadingValue>
 
 @code {
-    private bool open = false;
+    private FormDesignerModel FormDesignerData { get; set; } = new();
 
-    private void ToggleDrawer()
+    protected override async Task OnInitializedAsync()
     {
-        open = !open;
+        AddFormRowDesigner();
     }
+
+    private void OnAddRow()
+    {
+        AddFormRowDesigner();
+    }
+
+    private void OnRemoveRow()
+    {
+        RemoveFormRowDesigner();
+    }
+
+    private void AddFormRowDesigner()
+    {
+        FormDesignerData.Rows++;
+
+        int rowId = FormDesignerData.Rows;
+
+        if (!FormDesignerData.Items.Any(x => x.RowId == rowId))
+        {
+            for (int colId = 1; colId <= 12; colId++)
+            {
+                FormDesignerData.Items.Add(new FormComponentModel()
+                    {
+                        Id = Guid.NewGuid(),
+                        RowId = rowId,
+                        ColId = colId,
+                        Xs = 1
+                    });
+            }
+        }
+    }
+
+    private void RemoveFormRowDesigner()
+    {
+        if (FormDesignerData.Rows == 1) return;
+
+        int rowId = FormDesignerData.Rows;
+
+        if (!FormDesignerData.Items.Any(x => x.RowId == rowId && x.TypeName != null ))
+        {
+            FormDesignerData.Items.RemoveAll(x => x.RowId == rowId);
+            FormDesignerData.Rows--;
+        }
+    }
+
 }

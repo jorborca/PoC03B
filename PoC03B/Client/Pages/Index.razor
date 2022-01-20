@@ -2,39 +2,75 @@
 
 <PageTitle>Index</PageTitle>
 
+@inject ISnackbar Snackbar;
 
-
-@for(int rowId = 1; rowId <= MaxRowId; rowId++)
+@for(int rowId = 1; rowId <= FormDesignerData.Rows; rowId++)
 {
-    <div class="mud-grid mud-grid-spacing-xs-3 mud-grid-justify-xs-flex-start align-end">
-        @for(int itemId = 1; itemId <= 12; itemId++)
-        {
-            <MudItem xs="1" Class=@($"dropzone @dropClass")
+    <div class="mud-grid mud-grid-spacing-xs-0 mud-grid-justify-xs-flex-start">
+        <Virtualize Items="GetFormComponentsByRow(rowId)" Context="formComponent">
+            <MudItem xs="@formComponent.Xs" Class="dropzone"
                 ondragover="event.preventDefault();"
                 ondragstart="event.dataTransfer.setData('', event.target.id);"
-                @ondrop="HandleDrop"
-                @ondragenter="HandleDragEnter"
-                @ondragleave="HandleDragLeave">
+                @ondrop="() => OnDrop(formComponent.Id)">
+                
+                @if(formComponent.TypeName == null)
+                {
+                    <text>@formComponent.RowId|@formComponent.ColId</text>
+                }
+                else
+                {
+                    <DynamicComponent Type="@formComponent.ComponentType" Parameters="@formComponent.Parameters"></DynamicComponent>
+                }
             </MudItem>
-        }
+        </Virtualize>
     </div>
 }
 
+@*@foreach (rowId = 1; rowId <= FormDesignerData.Rows; rowId++)
+{
+    <div class="mud-grid mud-grid-spacing-xs-0 mud-grid-justify-xs-flex-start"
+        ondragover="event.preventDefault();"
+        ondragstart="event.dataTransfer.setData('', event.target.id);">
+        @for (colId = 1; colId <= 12; colId++)
+        {
+            <div class="mud-grid-item mud-grid-item-xs-1 dropzone"
+                dropzone="moveZone"
+                @key=@colId
+                ondragover="event.preventDefault();"
+                ondragstart="event.dataTransfer.setData('', event.target.id);"
+                @ondrop="() => OnDrop(colId.ToString())">
+                <text>@rowId|@colId</text>
+            </div>
+
+            @if (CheckFormComponentByRowAndCol(rowId, colId))
+            {
+                <MudItem xs="@(GetFormComponentByRowAndCol(rowId, colId).Xs)" Class="@($"dropzone @dropClass")">
+                <div 
+                    class="mud-grid-item mud-grid-item-xs-1 dropzone @dropClass"
+                    ondragover="event.preventDefault();"
+                    ondragstart="event.dataTransfer.setData('', event.target.id);"
+                    @ondragenter="HandleDragEnter"
+                    @ondragleave="HandleDragLeave"
+                    @ondrop="(() => HandleDrop(rowId, colId))">
+                    
+                </div>
+            }
+            else
+            {
+            }
+        }
+    </div>
+}*@
+
 @code {
-    int MaxRowId { get; set; } = 1;
+    [CascadingParameter(Name = "FormDesignerData")] protected FormDesignerModel FormDesignerData { get; set; }
+
+    List<FormComponentModel> GetFormComponentsByRow(int rowId) => FormDesignerData.Items.Where(x => x.RowId == rowId).ToList();
+
     string dropClass = "";
 
-    
-    
-    //[CascadingParameter] JobsContainer Container { get; set; }
-    //[Parameter] public JobStatuses ListStatus { get; set; }
-    //[Parameter] public JobStatuses[] AllowedStatuses { get; set; }
-
-    //List<JobModel> Jobs = new List<JobModel>();
-
-    private void HandleDragEnter()
+    private void OnDragEnter(Guid id)
     {
-        //if (ListStatus == Container.Payload.Status) return;
 
         //if (AllowedStatuses != null && !AllowedStatuses.Contains(Container.Payload.Status))
         //{
@@ -44,19 +80,26 @@
         //{
         //    dropClass = "can-drop";
         //}
+
     }
 
-    private void HandleDragLeave()
+    private void OnDragOver()
+    {
+
+    }
+
+    private void OnDragLeave()
     {
         //dropClass = "";
     }
 
-      private async Task HandleDrop()
+    private void OnDrop(Guid id)
     {
-        //dropClass = "";
+        var targetComponent = FormDesignerData.Items.Single(x => x.Id == id);
 
-        //if (AllowedStatuses != null && !AllowedStatuses.Contains(Container.Payload.Status)) return;
+        targetComponent.TypeName = FormDesignerData.DragTypeName;
+        targetComponent.ComponentType = Type.GetType($"{FormDesignerData.DragTypeName}");
 
-        //await Container.UpdateJobAsync(ListStatus);
+        FormDesignerData.DragTypeName = string.Empty;
     }
 }

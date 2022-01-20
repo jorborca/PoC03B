@@ -1,7 +1,25 @@
 ﻿<MudNavMenu Class="mud-width-full">
-    <MudNavGroup Title="Editors" Icon="@Icons.Filled.Comment" Expanded="true" Drag>
-        <MudNavLink Href="" Match="NavLinkMatch.All"  Icon="@Icons.Filled.TextFields">TextBox</MudNavLink>
-        <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Filled.SelectAll">Select</MudNavLink>
-        <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Filled.SmartButton">Button</MudNavLink>
+    <MudNavGroup Title="Editors" Expanded="true">
+        <MudNavLink draggable="true" Match="NavLinkMatch.All"  Icon="@Icons.Filled.TextFields" 
+            @ondragstart="@(() => OnDragStart("PoC03B.Client.Shared.Editors.TextBoxComponent"))">
+            TextBox
+        </MudNavLink>
+        <MudNavLink draggable="true" Match="NavLinkMatch.All" Icon="@Icons.Filled.SelectAll" 
+            @ondragstart="@(() => OnDragStart("PoC03B.Client.Shared.Editors.SelectComponent"))">
+            Select
+        </MudNavLink>
+        <MudNavLink draggable="true" Match="NavLinkMatch.All" Icon="@Icons.Filled.SmartButton" 
+            @ondragstart="@(() => OnDragStart("PoC03B.Client.Shared.Editors.ButtonComponent"))">
+            Button
+        </MudNavLink>
     </MudNavGroup>
 </MudNavMenu>
+
+@code {
+    [CascadingParameter(Name = "FormDesignerData")] protected FormDesignerModel FormDesignerData { get; set; }
+
+    private void OnDragStart(string typeName)
+    {
+        FormDesignerData.DragTypeName = typeName;
+    }
+}

@@ -9,12 +9,12 @@
       "Text": "",
       "Attributes": ""
     },
-    "xs": 2,
+    "Xs": 2,
     "RowId": 1
   },
   {
-    "typeName": "PoC03B.Client.Shared.Editors.SelectComponent",
-    "parameters": {
+    "TypeName": "PoC03B.Client.Shared.Editors.SelectComponent",
+    "Parameters": {
       "Id": "ddlSelect",
       "Label": "Seleccion",
       "Class": "",
@@ -22,7 +22,7 @@
       "Text": "",
       "Attributes": ""
     },
-    "xs": 2,
+    "Xs": 2,
     "RowId": 2
   },
   {
@@ -34,7 +34,7 @@
       "Text": "",
       "Attributes": ""
     },
-    "xs": 5,
+    "Xs": 5,
     "RowId": 2
   },
   {
@@ -44,10 +44,10 @@
       "Label": "Aceptar",
       "Class": "",
       "Style": "",
-      "Text": "",
+      "Text": "{Nombre}",
       "Attributes": ""
     },
-    "xs": 2,
+    "Xs": 2,
     "RowId": 3
   },
   {
@@ -60,7 +60,7 @@
       "Text": "",
       "Attributes": ""
     },
-    "xs": 2,
+    "Xs": 2,
     "RowId": 3
   }
 ]

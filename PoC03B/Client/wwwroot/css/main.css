@@ -1,5 +1,8 @@
 ﻿.dropzone {
+    display: flex !important;
     border: 1px dashed #75868a;
+    min-height: 30px;
+    align-items: center;
 }
 
     .dropzone.no-drop {
@@ -9,3 +12,11 @@
     .dropzone.can-drop {
         border: 2px dashed green;
     }
+
+    .dropzone .mud-input-control {
+        margin-top: 0;
+    }
+
+        .dropzone .mud-input-control > .mud-input-control-input-container > div.mud-input.mud-input-text {
+            margin-top: 0;
+        }

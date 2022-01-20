@@ -20,13 +20,14 @@ namespace PoC03B.Client
             {
                 DefaultBorderRadius = "6px",
                 DrawerWidthLeft = "170px",
+                AppbarHeight = "50px"
             };
 
             Typography = new Typography()
             {
                 Default = new Default()
                 {
-                    FontFamily = new[] { "Gotham Book" },
+                    FontFamily = new[] { "Gotham Book", "Roboto" },
                     FontWeight = 400,
                     FontSize = ".875rem",
                     LineHeight = 1.43,
@@ -34,7 +35,7 @@ namespace PoC03B.Client
                 },
                 H1 = new H1()
                 {
-                    FontFamily = new[] { "Gotham Bold" },
+                    FontFamily = new[] { "Gotham Bold", "Roboto" },
                     FontWeight = 300,
                     FontSize = "6rem",
                     LineHeight = 1.167,
@@ -42,7 +43,7 @@ namespace PoC03B.Client
                 },
                 H2 = new H2()
                 {
-                    FontFamily = new[] { "Gotham Bold" },
+                    FontFamily = new[] { "Gotham Bold", "Roboto" },
                     FontWeight = 300,
                     FontSize = "3.75rem",
                     LineHeight = 1.2,
@@ -50,7 +51,7 @@ namespace PoC03B.Client
                 },
                 H3 = new H3()
                 {
-                    FontFamily = new[] { "Gotham Bold" },
+                    FontFamily = new[] { "Gotham Bold", "Roboto" },
                     FontWeight = 400,
                     FontSize = "3rem",
                     LineHeight = 1.167,
@@ -58,7 +59,7 @@ namespace PoC03B.Client
                 },
                 H4 = new H4()
                 {
-                    FontFamily = new[] { "Gotham Bold" },
+                    FontFamily = new[] { "Gotham Bold", "Roboto" },
                     FontWeight = 400,
                     FontSize = "2.125rem",
                     LineHeight = 1.235,
@@ -66,7 +67,7 @@ namespace PoC03B.Client
                 },
                 H5 = new H5()
                 {
-                    FontFamily = new[] { "Gotham Bold" },
+                    FontFamily = new[] { "Gotham Bold", "Roboto" },
                     FontWeight = 400,
                     FontSize = "1.5rem",
                     LineHeight = 1.334,
@@ -74,7 +75,7 @@ namespace PoC03B.Client
                 },
                 H6 = new H6()
                 {
-                    FontFamily = new[] { "Gotham Bold" },
+                    FontFamily = new[] { "Gotham Bold", "Roboto" },
                     FontWeight = 500,
                     FontSize = "1.25rem",
                     LineHeight = 1.6,
@@ -82,7 +83,7 @@ namespace PoC03B.Client
                 },
                 Subtitle1 = new Subtitle1()
                 {
-                    FontFamily = new[] { "Gotham Bold" },
+                    FontFamily = new[] { "Gotham Bold", "Roboto" },
                     FontWeight = 400,
                     FontSize = "1rem",
                     LineHeight = 1.75,
@@ -90,7 +91,7 @@ namespace PoC03B.Client
                 },
                 Subtitle2 = new Subtitle2()
                 {
-                    FontFamily = new[] { "Gotham Bold" },
+                    FontFamily = new[] { "Gotham Bold", "Roboto" },
                     FontWeight = 500,
                     FontSize = ".875rem",
                     LineHeight = 1.57,
@@ -98,7 +99,7 @@ namespace PoC03B.Client
                 },
                 Body1 = new Body1()
                 {
-                    FontFamily = new[] { "Gotham Book" },
+                    FontFamily = new[] { "Gotham Book", "Roboto" },
                     FontWeight = 400,
                     FontSize = "1rem",
                     LineHeight = 1.5,
@@ -106,7 +107,7 @@ namespace PoC03B.Client
                 },
                 Body2 = new Body2()
                 {
-                    FontFamily = new[] { "Gotham Book" },
+                    FontFamily = new[] { "Gotham Book", "Roboto" },
                     FontWeight = 400,
                     FontSize = ".875rem",
                     LineHeight = 1.43,
@@ -114,7 +115,7 @@ namespace PoC03B.Client
                 },
                 Button = new Button()
                 {
-                    FontFamily = new[] { "Gotham Book" },
+                    FontFamily = new[] { "Gotham Book", "Roboto" },
                     FontWeight = 500,
                     FontSize = ".875rem",
                     LineHeight = 1.75,
@@ -122,7 +123,7 @@ namespace PoC03B.Client
                 },
                 Caption = new Caption()
                 {
-                    FontFamily = new[] { "Gotham Book" },
+                    FontFamily = new[] { "Gotham Book", "Roboto" },
                     FontWeight = 400,
                     FontSize = ".75rem",
                     LineHeight = 1.66,
@@ -130,7 +131,7 @@ namespace PoC03B.Client
                 },
                 Overline = new Overline()
                 {
-                    FontFamily = new[] { "Gotham Book" },
+                    FontFamily = new[] { "Gotham Book", "Roboto" },
                     FontWeight = 400,
                     FontSize = ".75rem",
                     LineHeight = 2.66,

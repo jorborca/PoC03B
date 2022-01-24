@@ -3,6 +3,7 @@
     border: 1px dashed #75868a;
     min-height: 30px;
     align-items: center;
+    padding: 5px 5px 5px 5px;
 }
 
     .dropzone.no-drop {
@@ -20,3 +21,29 @@
         .dropzone .mud-input-control > .mud-input-control-input-container > div.mud-input.mud-input-text {
             margin-top: 0;
         }
+
+.mud-badge-root .menuzone {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0.3s linear,opacity 0.3s linear;
+}
+
+.mud-badge-root:hover .menuzone {
+    visibility: visible;
+    opacity: 1;
+}
+
+.menuzone > .mud-badge.mud-badge-icon .mud-icon-badge {
+    font-size: 16px;
+    margin-inline-start: -4px;
+    margin-top: -2px;
+}
+
+.menuzone > .mud-badge {
+    font-size: 16px;
+}
+
+.menuzone-button-focus:hover {
+    /*transform: scale(1.2);*/
+    outline: solid 2px black;
+}

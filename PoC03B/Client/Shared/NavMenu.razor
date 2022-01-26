@@ -8,6 +8,10 @@
             @ondragstart="@(() => OnDragStart("PoC03B.Client.Shared.Editors.SelectComponent"))">
             Select
         </MudNavLink>
+        <MudNavLink draggable="true" Match="NavLinkMatch.All" Icon="@Icons.Filled.RadioButtonChecked" 
+            @ondragstart="@(() => OnDragStart("PoC03B.Client.Shared.Editors.RadioComponent"))">
+            Radio
+        </MudNavLink>
         <MudNavLink draggable="true" Match="NavLinkMatch.All" Icon="@Icons.Filled.SmartButton" 
             @ondragstart="@(() => OnDragStart("PoC03B.Client.Shared.Editors.ButtonComponent"))">
             Button

@@ -1,0 +1,71 @@
+{
+  "Rows": 3,
+  "DragByTypeName": null,
+  "DragByID": null,
+  "Items": [
+    {
+      "TypeName": "PoC03B.Client.Shared.Editors.TextBoxComponent",
+      "Parameters": {
+        "Id": "txtTexto1",
+        "Label": "Texto uno dos tres",
+        "Class": "",
+        "Style": "",
+        "Text": "",
+        "Attributes": ""
+      },
+      "Xs": 2,
+      "RowId": 1
+    },
+    {
+      "TypeName": "PoC03B.Client.Shared.Editors.SelectComponent",
+      "Parameters": {
+        "Id": "ddlSelect",
+        "Label": "Seleccion",
+        "Class": "",
+        "Style": "",
+        "Text": "",
+        "Attributes": ""
+      },
+      "Xs": 2,
+      "RowId": 2
+    },
+    {
+      "TypeName": "PoC03B.Client.Shared.Editors.TextBoxComponent",
+      "Parameters": {
+        "Id": "txtTexto2",
+        "Label": "Texto 2",
+        "Style": "",
+        "Text": "",
+        "Attributes": ""
+      },
+      "Xs": 5,
+      "RowId": 2
+    },
+    {
+      "TypeName": "PoC03B.Client.Shared.Editors.RadioComponent",
+      "Parameters": {
+        "Id": "btnAceptar",
+        "Label": "Aceptar",
+        "Class": "",
+        "Style": "",
+        "Text": "Nombre",
+        "Attributes": ""
+      },
+      "Xs": 2,
+      "RowId": 3
+    },
+    {
+      "TypeName": "PoC03B.Client.Shared.Editors.ButtonComponent",
+      "Parameters": {
+        "Id": "btnCancelar",
+        "Label": "Cancelar",
+        "Class": "",
+        "Style": "",
+        "Text": "",
+        "Attributes": ""
+      },
+      "Xs": 2,
+      "RowId": 3
+    }
+  ]
+}

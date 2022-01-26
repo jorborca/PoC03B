@@ -1,4 +1,5 @@
-﻿using MudBlazor;
+﻿using Microsoft.AspNetCore.Components;
+using MudBlazor;
 using PoC03B.Shared;
 using System.Net.Http.Json;
 using System.Text.Json;
@@ -7,7 +8,9 @@ namespace PoC03B.Client.Pages
 {
     public partial class DynamicFormComponent
     {
-        dynamic ViewModel { get; set; }
+        [Inject] HttpClient Http { get; set; }
+
+        //dynamic ViewModel { get; set; }
 
         List<FormComponentModel> formComponents = new();
         Action<string, string, object>? formAction { get; set; }
@@ -25,12 +28,14 @@ namespace PoC03B.Client.Pages
         private async Task GetDynamicForm()
         {
             //WebHostEnvironment.WebRootPath
-            formComponents = await httpClient.GetFromJsonAsync<List<FormComponentModel>>("/data.json");
+            //formComponents = await httpClient.GetFromJsonAsync<List<FormComponentModel>>("/DynamicForm_0.json");
+            var response = await Http.GetFromJsonAsync<FormDesignerModel>("templates/load/DynamicForm_0");
 
-            if (formComponents == null)
-            {
-                return;
-            }
+            if (response == null) return;
+
+            formComponents = response.Items;
+
+            if (formComponents == null) return;
 
             foreach (var formComponent in formComponents)
             {

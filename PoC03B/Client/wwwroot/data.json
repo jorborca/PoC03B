@@ -44,7 +44,7 @@
       "Label": "Aceptar",
       "Class": "",
       "Style": "",
-      "Text": "{Nombre}",
+      "Text": "Nombre",
       "Attributes": ""
     },
     "Xs": 2,

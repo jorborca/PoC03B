@@ -2,12 +2,6 @@
 
 <PageTitle>Index</PageTitle>
 
-@inject ISnackbar Snackbar;
-
-<MudBadge Icon="@Icons.Filled.Clear" Color="Color.Error" Overlap="true" Bordered="true" Class="mx-6 my-4">
-        <MudButton Color="Color.Error" Variant="Variant.Filled" DisableElevation="true">Security Issues</MudButton>
-</MudBadge>
-
 @for(int rowId = 1; rowId <= FormDesignerData.Rows; rowId++)
 {
     <div class="mud-grid mud-grid-spacing-xs-0 mud-grid-justify-xs-flex-start">
@@ -18,7 +12,7 @@
                 @ondrop="() => OnDrop(formComponent.Id)">
                 @if(formComponent.TypeName != null)
                 {
-                    <div class="mud-badge-root">
+                    <div class="mud-badge-root mud-width-full">
                         <DynamicComponent Type="@formComponent.ComponentType" Parameters="@formComponent.Parameters"></DynamicComponent>
                         <span class="mud-badge-wrapper mud-badge-center center menuzone" @onmouseleave="ResetMainMode">
                             <span class="mud-badge mud-badge-icon mud-badge-center center mud-elevation-0 mud-badge-overlap menuzone-button-focus @GetMainModeColor()"
@@ -51,6 +45,10 @@
     </div>
 }
 
+@*<MudBadge Icon="@Icons.Filled.Clear" Color="Color.Error" Overlap="true" Bordered="true" Class="mx-6 my-4">
+        <MudButton Color="Color.Error" Variant="Variant.Filled" DisableElevation="true">Security Issues</MudButton>
+</MudBadge>*@
+
 @*Icon="@Icons.Material.Filled.Lock"
     <div class="mud-grid mud-grid-spacing-xs-0 mud-grid-justify-xs-flex-start"
     ondragover="event.preventDefault();"
@@ -72,118 +70,3 @@
             @ondrop="(() => HandleDrop(rowId, colId))">
         </div>
 </div>*@
-
-@code {
-    [CascadingParameter(Name = "FormDesignerData")] protected FormDesignerModel FormDesignerData { get; set; }
-
-    List<FormComponentModel> GetFormComponentsByRow(int rowId) => FormDesignerData.Items.Where(x => x.RowId == rowId).ToList();
-
-    string dropClass = "";
-    int MainMode;
-    string MainOperation;
-    string MainModeColor;
-
-    private void OnDragStart(string operation, Guid id)
-    {
-        MainOperation = operation;
-        FormDesignerData.DragByID = id;
-    }
-
-    private void OnDragEnter(Guid id)
-    {
-
-        //if (AllowedStatuses != null && !AllowedStatuses.Contains(Container.Payload.Status))
-        //{
-        //    dropClass = "no-drop";
-        //}
-        //else
-        //{
-        //    dropClass = "can-drop";
-        //}
-
-    }
-
-    private void OnDragOver()
-    {
-
-    }
-
-    private void OnDragLeave()
-    {
-        //dropClass = "";
-    }
-
-    private void OnDrop(Guid id)
-    {
-        var targetComponent = FormDesignerData.Items.Single(x => x.Id == id);
-
-        if(FormDesignerData.DragByTypeName != null)
-        {
-            targetComponent.TypeName = FormDesignerData.DragByTypeName;
-            targetComponent.ComponentType = Type.GetType($"{FormDesignerData.DragByTypeName}");            
-            FormDesignerData.DragByTypeName = null;
-        }
-
-        if(FormDesignerData.DragByID != null)
-        {
-            var originComponent = FormDesignerData.Items.Single(x => x.Id == FormDesignerData.DragByID);
-
-            switch(MainOperation)
-            {
-                case "MainMode":
-                    Type? backupComponentType = targetComponent.ComponentType;
-                    string? backupTypeName = targetComponent.TypeName;
-
-                    targetComponent.ComponentType = originComponent.ComponentType;
-                    targetComponent.TypeName = originComponent.TypeName;
-
-                    originComponent.ComponentType = backupComponentType;
-                    originComponent.TypeName = backupTypeName;
-
-                    FormDesignerData.DragByID = null;
-                    break;
-
-                case "ResizeRight":
-                    originComponent.Xs++; 
-                    break;
-            }
-        }        
-    }
-
-    private void OnClick_MainMode(Guid id)
-    {
-        switch(MainMode)
-        {
-            case 0:
-                
-                break;
-
-            case 1:
-                FormDesignerData.Items.Remove(FormDesignerData.Items.Single(x => x.Id == id));
-                break;
-        }
-
-        MainMode = 0;
-    }
-
-    private void ChangeMainMode()
-    {
-        MainMode++;
-
-        if (MainMode > 1) MainMode = 0;
-    }
-
-    private void ResetMainMode()
-    {
-        MainMode = 0;
-    }
-
-    private string GetMainModeColor()
-    {
-        return MainMode switch
-        {
-            0 => "mud-theme-info",
-            1 => "mud-theme-error",
-        };
-    }
-}

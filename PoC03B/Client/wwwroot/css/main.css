@@ -3,6 +3,8 @@
     border: 1px dashed #75868a;
     min-height: 30px;
     align-items: center;
+    margin-top: -1px;
+    margin-left: -1px;
     padding: 5px 5px 5px 5px;
 }
 

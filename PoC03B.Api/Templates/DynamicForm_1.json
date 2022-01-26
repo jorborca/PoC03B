@@ -1,0 +1,95 @@
+{
+  "Rows": 1,
+  "DragByTypeName": null,
+  "DragByID": null,
+  "Items": [
+    {
+      "Id": "90aceddb-8e25-4622-bac3-a2ec5a87017d",
+      "RowId": 1,
+      "ColId": 1,
+      "TypeName": "PoC03B.Client.Shared.Editors.TextBoxComponent",
+      "Parameters": null,
+      "Xs": 1
+    },
+    {
+      "Id": "5bacf885-bb7e-4f25-8e63-c7e72fc3388d",
+      "RowId": 1,
+      "ColId": 3,
+      "TypeName": null,
+      "Parameters": null,
+      "Xs": 1
+    },
+    {
+      "Id": "37ad3e5e-95ed-4605-8ecb-c526ba717a60",
+      "RowId": 1,
+      "ColId": 4,
+      "TypeName": null,
+      "Parameters": null,
+      "Xs": 1
+    },
+    {
+      "Id": "914c309c-5c96-4895-94bb-ce18bd3041d3",
+      "RowId": 1,
+      "ColId": 5,
+      "TypeName": null,
+      "Parameters": null,
+      "Xs": 1
+    },
+    {
+      "Id": "b22be041-6384-40b2-ad6f-8dd580d9d93a",
+      "RowId": 1,
+      "ColId": 6,
+      "TypeName": null,
+      "Parameters": null,
+      "Xs": 1
+    },
+    {
+      "Id": "da342e7e-f804-4360-837b-cf15307db9b7",
+      "RowId": 1,
+      "ColId": 7,
+      "TypeName": null,
+      "Parameters": null,
+      "Xs": 1
+    },
+    {
+      "Id": "73182c09-d205-4777-90df-a29077d6328d",
+      "RowId": 1,
+      "ColId": 8,
+      "TypeName": null,
+      "Parameters": null,
+      "Xs": 1
+    },
+    {
+      "Id": "04d65529-cdc1-425b-a506-8654e1cde768",
+      "RowId": 1,
+      "ColId": 9,
+      "TypeName": null,
+      "Parameters": null,
+      "Xs": 1
+    },
+    {
+      "Id": "c5261303-1093-43b8-ba14-fad81928555c",
+      "RowId": 1,
+      "ColId": 10,
+      "TypeName": null,
+      "Parameters": null,
+      "Xs": 1
+    },
+    {
+      "Id": "99372fc4-f4c3-40a7-8455-9abacb546e16",
+      "RowId": 1,
+      "ColId": 11,
+      "TypeName": null,
+      "Parameters": null,
+      "Xs": 1
+    },
+    {
+      "Id": "c6f680e5-3b7e-440e-8886-86cb8d0021ea",
+      "RowId": 1,
+      "ColId": 12,
+      "TypeName": null,
+      "Parameters": null,
+      "Xs": 1
+    }
+  ]
+}

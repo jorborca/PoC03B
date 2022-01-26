@@ -9,6 +9,8 @@
                 <MudIconButton Icon="@Icons.Material.Outlined.RemoveCircle" Class="ml-12" Size="Size.Medium" Color="Color.Inherit" OnClick="OnRemoveRow" />
                 <MudText Typo="Typo.body1">@FormDesignerData.Rows</MudText>
                 <MudIconButton Icon="@Icons.Material.Outlined.AddCircle" Size="Size.Medium" Color="Color.Inherit" OnClick="OnAddRow" />
+                <MudIconButton Icon="@Icons.Material.Outlined.Save" Size="Size.Medium" Color="Color.Inherit" OnClick="OnSaveTemplate" />
+                <MudIconButton Icon="@Icons.Material.Outlined.FolderOpen" Size="Size.Medium" Color="Color.Inherit" OnClick="OnLoadTemplate" />
                 <MudSpacer />
                 <MudIconButton Link="/" Icon="@Icons.Material.Outlined.EditNote" Size="Size.Medium" Color="Color.Inherit" />
                 <MudIconButton Link="view" Icon="@Icons.Material.Outlined.Preview" Size="Size.Medium" Color="Color.Inherit" />
@@ -26,57 +28,3 @@
             </MudDrawerContainer>*@
     </MudLayout>
 </CascadingValue>
-
-@code {
-    private FormDesignerModel FormDesignerData { get; set; } = new();
-
-    protected override async Task OnInitializedAsync()
-    {
-        AddFormRowDesigner();
-    }
-
-    private void OnAddRow()
-    {
-        AddFormRowDesigner();
-    }
-
-    private void OnRemoveRow()
-    {
-        RemoveFormRowDesigner();
-    }
-
-    private void AddFormRowDesigner()
-    {
-        FormDesignerData.Rows++;
-
-        int rowId = FormDesignerData.Rows;
-
-        if (!FormDesignerData.Items.Any(x => x.RowId == rowId))
-        {
-            for (int colId = 1; colId <= 12; colId++)
-            {
-                FormDesignerData.Items.Add(new FormComponentModel()
-                {
-                    Id = Guid.NewGuid(),
-                    RowId = rowId,
-                    ColId = colId,
-                    Xs = 1
-                });
-            }
-        }
-    }
-
-    private void RemoveFormRowDesigner()
-    {
-        if (FormDesignerData.Rows == 1) return;
-
-        int rowId = FormDesignerData.Rows;
-
-        if (!FormDesignerData.Items.Any(x => x.RowId == rowId && x.TypeName != null ))
-        {
-            FormDesignerData.Items.RemoveAll(x => x.RowId == rowId);
-            FormDesignerData.Rows--;
-        }
-    }
-
-}

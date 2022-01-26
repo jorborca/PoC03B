@@ -1,0 +1,28 @@
+﻿<MudRadioGroup @bind-SelectedOption="SelectedOption">
+    <MudRadio Option="1" Color="Color.Primary" Size="Size.Small">Uno</MudRadio>
+    <MudRadio Option="2" Color="Color.Secondary" Size="Size.Medium">Dos</MudRadio>
+    <MudRadio Option="3" Color="Color.Tertiary" Size="Size.Large">Tres</MudRadio>
+</MudRadioGroup>
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    [Parameter]
+    public string Label { get; set; }
+
+    [Parameter]
+    public string Class { get; set; }
+
+    [Parameter]
+    public string Style { get; set; }
+
+    [Parameter]
+    public string Text { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] 
+    public Dictionary<string, object> Attributes { get; set; }
+
+
+     public string SelectedOption { get; set; }
+}

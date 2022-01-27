@@ -12,6 +12,14 @@
             @ondragstart="@(() => OnDragStart("PoC03B.Client.Shared.Editors.RadioComponent"))">
             Radio
         </MudNavLink>
+        <MudNavLink draggable="true" Match="NavLinkMatch.All" Icon="@Icons.Filled.Checklist" 
+            @ondragstart="@(() => OnDragStart("PoC03B.Client.Shared.Editors.CheckBoxComponent"))">
+            Check
+        </MudNavLink>
+        <MudNavLink draggable="true" Match="NavLinkMatch.All" Icon="@Icons.Filled.SwitchLeft" 
+            @ondragstart="@(() => OnDragStart("PoC03B.Client.Shared.Editors.SwitchComponent"))">
+            Switch
+        </MudNavLink>
         <MudNavLink draggable="true" Match="NavLinkMatch.All" Icon="@Icons.Filled.SmartButton" 
             @ondragstart="@(() => OnDragStart("PoC03B.Client.Shared.Editors.ButtonComponent"))">
             Button

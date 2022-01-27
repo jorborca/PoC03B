@@ -2,7 +2,8 @@
 
 using System.Net.Http.Json;
 using Microsoft.AspNetCore.Components;
-using PoC03B.Shared;
+using PoC03B.Shared.Enums;
+using PoC03B.Shared.Models;
 
 public partial class MainLayout
 {
@@ -41,7 +42,9 @@ public partial class MainLayout
                     Id = Guid.NewGuid(),
                     RowId = rowId,
                     ColId = colId,
-                    Xs = 1
+                    Xs = 1,
+                    Position = FieldPosition.CenterCenter,
+                    State = FieldState.Empty
                 });
             }
         }

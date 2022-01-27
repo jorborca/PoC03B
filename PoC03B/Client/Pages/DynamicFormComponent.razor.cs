@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using PoC03B.Shared;
+using PoC03B.Shared.Models;
 using System.Net.Http.Json;
 using System.Text.Json;
 

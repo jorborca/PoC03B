@@ -27,7 +27,8 @@
 .mud-badge-root .menuzone {
     visibility: hidden;
     opacity: 0;
-    transition: visibility 0.3s linear,opacity 0.3s linear;
+    transition: visibility 0.2s linear,opacity 0.2s linear;
+    z-index: 2;
 }
 
 .mud-badge-root:hover .menuzone {
@@ -47,5 +48,5 @@
 
 .menuzone-button-focus:hover {
     /*transform: scale(1.2);*/
-    outline: solid 2px black;
+    outline: solid 1px black;
 }

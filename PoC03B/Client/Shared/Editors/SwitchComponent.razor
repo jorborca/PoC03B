@@ -1,0 +1,24 @@
+﻿<MudSwitch @bind-Checked="@Basic_Switch1" />
+
+@code {
+    public bool Basic_Switch1 { get; set; } = false;
+
+    [Parameter]
+    public string Id { get; set; }
+
+    [Parameter]
+    public string Label { get; set; }
+
+    [Parameter]
+    public string Class { get; set; }
+
+    [Parameter]
+    public string Style { get; set; }
+
+    [Parameter]
+    public string Text { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] 
+    public Dictionary<string, object> Attributes { get; set; }
+
+}

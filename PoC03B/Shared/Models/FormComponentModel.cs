@@ -1,6 +1,7 @@
-﻿using System.Text.Json.Serialization;
+﻿using PoC03B.Shared.Enums;
+using System.Text.Json.Serialization;
 
-namespace PoC03B.Shared;
+namespace PoC03B.Shared.Models;
 
 public class FormComponentModel
 {
@@ -14,5 +15,10 @@ public class FormComponentModel
     public string? TypeName { get; set; }
     public IDictionary<string, object> Parameters { get; set; }
     public int Xs { get; set; }
+    public int Sm { get; set; }
+    public int Md { get; set; }
+    public int Lg { get; set; }
 
+    public FieldPosition Position { get; set; }
+    public FieldState State { get; set; }
 }

@@ -6,7 +6,7 @@
 {
     <div class="mud-grid mud-grid-spacing-xs-0 mud-grid-justify-xs-flex-start">
         <Virtualize Items="GetFormComponentsByRow(rowId)" Context="formComponent">
-            <MudItem xs="@formComponent.Xs" Class="@($"dropzone {@dropClass}")"
+            <MudItem xs="@formComponent.Xs" Class="@($"{GetPositionClass(formComponent.Position)} dropzone {@dropClass}")"
                 ondragover="event.preventDefault();"
                 ondragstart="event.dataTransfer.setData('', event.target.id);"
                 @ondrop="() => OnDrop(formComponent.Id)">
@@ -14,28 +14,32 @@
                 {
                     <div class="mud-badge-root mud-width-full">
                         <DynamicComponent Type="@formComponent.ComponentType" Parameters="@formComponent.Parameters"></DynamicComponent>
-                        <span class="mud-badge-wrapper mud-badge-center center menuzone" @onmouseleave="ResetMainMode">
-                            <span class="mud-badge mud-badge-icon mud-badge-center center mud-elevation-0 mud-badge-overlap menuzone-button-focus @GetMainModeColor()"
+                        <span class="mud-badge-wrapper mud-badge-center center menuzone" @onmouseleave="ResetMainOperation">
+                            <span class="mud-badge mud-badge-icon mud-badge-center center mud-elevation-0 mud-badge-overlap menuzone-button-focus @GetMainOperationColor()"
                                 draggable="true"
-                                @oncontextmenu="ChangeMainMode"
+                                @oncontextmenu="OnChange_MainOperation"
                                 @oncontextmenu:preventDefault="true" 
                                 @oncontextmenu:stopPropagation="true"
-                                @onclick="@(() => OnClick_MainMode(formComponent.Id))"
-                                @ondragstart="@(() => OnDragStart("MainMode", formComponent.Id))">
-                                @switch(MainMode)
+                                @onclick="@(() => OnClick_MainOperation(formComponent.Id))"
+                                @ondragstart="@(() => OnDragStart(FieldOperation.Move, formComponent.Id))">
+                                @switch(MainOperation)
                                 {
-                                    case 0:
+                                    case FieldOperation.Move:
+                                    case FieldOperation.Resize:
                                         <svg class="mud-icon-root mud-svg-icon mud-inherit-text mud-icon-size-medium mud-icon-badge" focusable="false" viewBox="0 0 24 24" aria-hidden="true"><!--!--><path d="M0 0h24v24H0z" fill="none"></path><path d="M17 4h3c1.1 0 2 .9 2 2v2h-2V6h-3V4zM4 8V6h3V4H4c-1.1 0-2 .9-2 2v2h2zm16 8v2h-3v2h3c1.1 0 2-.9 2-2v-2h-2zM7 18H4v-2H2v2c0 1.1.9 2 2 2h3v-2zM18 8H6v8h12V8z"></path></svg>
                                     break;
-                                    case 1:
+                                    case FieldOperation.Delete:
                                         <svg class="mud-icon-root mud-svg-icon mud-inherit-text mud-icon-size-medium mud-icon-badge" focusable="false" viewBox="0 0 24 24" aria-hidden="true"><!--!--><path d="M0 0h24v24H0z" fill="none"></path><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+                                    break;
+                                    case FieldOperation.Expand:
+                                        <svg class="mud-icon-root mud-svg-icon mud-inherit-text mud-icon-size-medium mud-icon-badge" focusable="false" viewBox="0 0 24 24" aria-hidden="true"><!--!--><path d="M0 0h24v24H0V0z" fill="none"></path><path d="M5.59 7.41L10.18 12l-4.59 4.59L7 18l6-6-6-6zM16 6h2v12h-2z"></path></svg>
                                     break;
                                 }
                             </span>
-                            <span class="mud-badge mud-badge-dot mud-badge-center left mud-elevation-0 mud-theme-primary mud-badge-overlap menuzone-button-focus mr-1"></span>
+                            @*<span class="mud-badge mud-badge-dot mud-badge-center left mud-elevation-0 mud-theme-primary mud-badge-overlap menuzone-button-focus mr-1"></span>*@
                             <span class="mud-badge mud-badge-dot mud-badge-center right mud-elevation-0 mud-theme-primary mud-badge-overlap menuzone-button-focus ml-1"
                                 draggable="true"    
-                                @ondragstart="@(() => OnDragStart("ResizeRight", formComponent.Id))">
+                                @ondragstart="@(() => OnDragStart(FieldOperation.Resize, formComponent.Id))">
                             </span>
                         </span>
                     </div>
@@ -45,10 +49,9 @@
     </div>
 }
 
-@*<MudBadge Icon="@Icons.Filled.Clear" Color="Color.Error" Overlap="true" Bordered="true" Class="mx-6 my-4">
-        <MudButton Color="Color.Error" Variant="Variant.Filled" DisableElevation="true">Security Issues</MudButton>
+@*<MudBadge Icon="@Icons.Filled.LastPage" Color="Color.Warning" Overlap="true" Bordered="true" Class="mx-6 my-4">
+    <MudButton Color="Color.Error" Variant="Variant.Filled" DisableElevation="true">Security Issues</MudButton>
 </MudBadge>*@
-
 @*Icon="@Icons.Material.Filled.Lock"
     <div class="mud-grid mud-grid-spacing-xs-0 mud-grid-justify-xs-flex-start"
     ondragover="event.preventDefault();"

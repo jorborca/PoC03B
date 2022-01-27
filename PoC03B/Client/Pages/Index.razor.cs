@@ -2,7 +2,8 @@
 
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using PoC03B.Shared;
+using PoC03B.Shared.Enums;
+using PoC03B.Shared.Models;
 
 public partial class Index
 {
@@ -10,13 +11,12 @@ public partial class Index
 
     [CascadingParameter(Name = "FormDesignerData")] protected FormDesignerModel FormDesignerData { get; set; }
 
-    List<FormComponentModel> GetFormComponentsByRow(int rowId) => FormDesignerData.Items.Where(x => x.RowId == rowId && x.Xs != 0).ToList();
+    List<FormComponentModel> GetFormComponentsByRow(int rowId) => FormDesignerData.Items.Where(x => x.RowId == rowId && x.State != FieldState.Disabled).ToList();
 
-    int MainMode;
-    string MainOperation = "MainMode";
+    FieldOperation MainOperation = FieldOperation.Move;
     string dropClass = "";
 
-    private void OnDragStart(string operation, Guid id)
+    private void OnDragStart(FieldOperation operation, Guid id)
     {
         MainOperation = operation;
         FormDesignerData.DragByID = id;
@@ -48,74 +48,173 @@ public partial class Index
     {
         var targetComponent = FormDesignerData.Items.Single(x => x.Id == id);
 
+        // Drag Item from Toolbar to Field
         if (FormDesignerData.DragByTypeName != null)
         {
             targetComponent.TypeName = FormDesignerData.DragByTypeName;
             targetComponent.ComponentType = Type.GetType($"{FormDesignerData.DragByTypeName}");
+            targetComponent.State = FieldState.Hold;
             FormDesignerData.DragByTypeName = null;
         }
 
+        // Drag Item between Fields
         if (FormDesignerData.DragByID != null)
         {
             var originComponent = FormDesignerData.Items.Single(x => x.Id == FormDesignerData.DragByID);
+            ProcessOperation(originComponent, targetComponent);
+            FormDesignerData.DragByID = null;
+        }
+    }
 
-            switch (MainOperation)
-            {
-                case "MainMode":
-                    Type? backupComponentType = targetComponent.ComponentType;
-                    string? backupTypeName = targetComponent.TypeName;
+    private void OnClick_MainOperation(Guid id)
+    {
+        var originComponent = FormDesignerData.Items.Single(x => x.Id == id);
+        ProcessOperation(originComponent, originComponent);
+        MainOperation = FieldOperation.Move;
+    }
 
-                    targetComponent.ComponentType = originComponent.ComponentType;
-                    targetComponent.TypeName = originComponent.TypeName;
+    private void OnChange_MainOperation()
+    {
+        MainOperation++;
+        if (MainOperation > FieldOperation.Expand) MainOperation = 0;
+    }
 
-                    originComponent.ComponentType = backupComponentType;
-                    originComponent.TypeName = backupTypeName;
+    private void ProcessOperation(FormComponentModel originComponent, FormComponentModel targetComponent)
+    {
+        switch (MainOperation)
+        {
+            case FieldOperation.Move:
+                Type? backupComponentType = targetComponent.ComponentType;
+                string? backupTypeName = targetComponent.TypeName;
 
-                    FormDesignerData.DragByID = null;
-                    break;
+                targetComponent.ComponentType = originComponent.ComponentType;
+                targetComponent.TypeName = originComponent.TypeName;
+                targetComponent.State = FieldState.Hold;
 
-                case "ResizeRight":
-                    targetComponent.Xs = 0;
+                // Restore and Split the collapsed fields
+                List<FormComponentModel> itemsToSplit = FormDesignerData.Items.Where(
+                    x => x.RowId == originComponent.RowId
+                    && x.State == FieldState.Disabled
+                    && x.ColId > originComponent.ColId
+                    && x.ColId <= originComponent.ColId + originComponent.Xs
+                ).ToList();
+
+                itemsToSplit.ForEach(x => {
+                    x.State = FieldState.Empty;
+                });
+
+                originComponent.ComponentType = backupComponentType;
+                originComponent.TypeName = backupTypeName;
+                originComponent.State = FieldState.Empty;
+                originComponent.Xs = 1;
+                break;
+
+            case FieldOperation.Resize:
+                //Snackbar.Add($"Origin: {originComponent.ColId}-{originComponent.Xs}");
+                //Snackbar.Add($"Target: {targetComponent.ColId}-{targetComponent.Xs}");
+
+                // Join fields
+                List<FormComponentModel> itemsToJoin = FormDesignerData.Items.Where(
+                    x => x.RowId == originComponent.RowId
+                    && x.State == FieldState.Empty
+                    && x.ColId > originComponent.ColId
+                    && x.ColId <= targetComponent.ColId
+                ).ToList();
+
+                itemsToJoin.ForEach(x => {
+                    x.State = FieldState.Disabled;
                     originComponent.Xs++;
-                    break;
-            }
+                });
+                break;
+
+            case FieldOperation.Delete: // Eliminar Item
+                FormDesignerData.Items.Remove(originComponent);
+                break;
+
+            case FieldOperation.Expand:
+                var limitComponent = FormDesignerData.Items.FirstOrDefault(
+                    x => x.RowId == originComponent.RowId
+                    && x.ColId > originComponent.ColId
+                    && x.State == FieldState.Hold,
+                    new FormComponentModel { 
+                        ColId = 12
+                    }
+                );
+                
+                List<FormComponentModel> itemsToExpand = FormDesignerData.Items.Where(
+                    x => x.RowId == originComponent.RowId
+                    && x.ColId > originComponent.ColId
+                    && x.ColId <= limitComponent.ColId
+                    && x.State == FieldState.Empty
+                ).ToList();
+
+                itemsToExpand.ForEach(x => {
+                    x.State = FieldState.Disabled;
+                    originComponent.Xs++;
+                });
+                break;
         }
     }
 
-    private void OnClick_MainMode(Guid id)
+    private void ResetMainOperation()
     {
-        switch (MainMode)
+        MainOperation = FieldOperation.Move;
+    }
+
+    private string GetMainOperationColor()
+    {
+        return MainOperation switch
         {
-            case 0:
-
-                break;
-
-            case 1:
-                FormDesignerData.Items.Remove(FormDesignerData.Items.Single(x => x.Id == id));
-                break;
-        }
-
-        MainMode = 0;
-    }
-
-    private void ChangeMainMode()
-    {
-        MainMode++;
-
-        if (MainMode > 1) MainMode = 0;
-    }
-
-    private void ResetMainMode()
-    {
-        MainMode = 0;
-    }
-
-    private string GetMainModeColor()
-    {
-        return MainMode switch
-        {
-            0 => "mud-theme-info",
-            1 => "mud-theme-error",
+            FieldOperation.Move => "mud-theme-info",
+            FieldOperation.Resize => "mud-theme-info",
+            FieldOperation.Delete => "mud-theme-error",
+            FieldOperation.Expand => "mud-theme-warning",
         };
+    }
+
+    private string GetPositionClass(FieldPosition position)
+    {
+        string horizontalPosition = string.Empty;
+        string verticalPosition = string.Empty;
+
+        switch (position)
+        {
+            case FieldPosition.TopCenter:
+                verticalPosition = "align-items-top";
+                horizontalPosition = "mud-typography-align-center";
+                break;
+
+            case FieldPosition.TopLeft:
+                verticalPosition = "align-items-top";
+                horizontalPosition = "mud-typography-align-left";
+                break;
+
+            case FieldPosition.TopRight:
+                verticalPosition = "align-items-top";
+                horizontalPosition = "mud-typography-align-right";
+                break;
+
+            case FieldPosition.CenterCenter:
+                verticalPosition = "align-items-center";
+                horizontalPosition = "mud-typography-align-center";
+                break;
+
+            case FieldPosition.BottomCenter:
+                verticalPosition = "align-items-bottom";
+                horizontalPosition = "mud-typography-align-center";
+                break;
+
+            case FieldPosition.BottomLeft:
+                verticalPosition = "align-items-bottom";
+                horizontalPosition = "mud-typography-align-left";
+                break;
+
+            case FieldPosition.BottomRight:
+                verticalPosition = "align-items-bottom";
+                horizontalPosition = "mud-typography-align-right";
+                break;
+        }
+
+        return $"{horizontalPosition} {verticalPosition}";
     }
 }

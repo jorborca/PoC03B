@@ -1,0 +1,29 @@
+﻿<MudCheckBox @bind-Checked="@Basic_CheckBox1"></MudCheckBox>
+<MudCheckBox @bind-Checked="@Basic_CheckBox2" Color="Color.Primary"></MudCheckBox>
+<MudCheckBox @bind-Checked="@Basic_CheckBox1" Color="Color.Secondary"></MudCheckBox>
+<MudCheckBox @bind-Checked="@Basic_CheckBox1" Disabled="true"></MudCheckBox>
+
+@code {
+    public bool Basic_CheckBox1 { get; set; } = true;
+    public bool Basic_CheckBox2 { get; set; } = false;
+    public bool Basic_CheckBox3 { get; set; } = false;
+
+    [Parameter]
+    public string Id { get; set; }
+
+    [Parameter]
+    public string Label { get; set; }
+
+    [Parameter]
+    public string Class { get; set; }
+
+    [Parameter]
+    public string Style { get; set; }
+
+    [Parameter]
+    public string Text { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] 
+    public Dictionary<string, object> Attributes { get; set; }
+
+}

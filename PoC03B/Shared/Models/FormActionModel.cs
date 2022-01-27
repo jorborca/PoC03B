@@ -1,4 +1,4 @@
-﻿namespace PoC03B.Shared;
+﻿namespace PoC03B.Shared.Models;
 
 public class FormActionModel
 {

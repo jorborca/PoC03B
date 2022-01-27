@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using PoC03B.Api.Endpoints;
-using PoC03B.Shared;
+using PoC03B.Shared.Models;
 //using PoC03B.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -1,4 +1,4 @@
-﻿using PoC03B.Shared;
+﻿using PoC03B.Shared.Models;
 using System.Text.Json;
 
 namespace PoC03B.Api.Endpoints

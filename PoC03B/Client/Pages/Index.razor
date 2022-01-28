@@ -14,7 +14,7 @@
                 {
                     <div class="mud-badge-root mud-width-full">
                         <DynamicComponent Type="@formComponent.ComponentType" Parameters="@formComponent.Parameters"></DynamicComponent>
-                        <span class="mud-badge-wrapper mud-badge-center center menuzone" @onmouseleave="ResetMainOperation">
+                        <span class="mud-badge-wrapper mud-badge-center center menuzone" @onmouseleave="OnMouseLeave_MainOperation">
                             <span class="mud-badge mud-badge-icon mud-badge-center center mud-elevation-0 mud-badge-overlap menuzone-button-focus @GetMainOperationColor()"
                                 draggable="true"
                                 @oncontextmenu="OnChange_MainOperation"
@@ -32,6 +32,9 @@
                                         <svg class="mud-icon-root mud-svg-icon mud-inherit-text mud-icon-size-medium mud-icon-badge" focusable="false" viewBox="0 0 24 24" aria-hidden="true"><!--!--><path d="M0 0h24v24H0z" fill="none"></path><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
                                     break;
                                     case FieldOperation.Expand:
+                                        <svg class="mud-icon-root mud-svg-icon mud-inherit-text mud-icon-size-medium mud-icon-badge" focusable="false" viewBox="0 0 24 24" aria-hidden="true"><!--!--><path d="M0 0h24v24H0V0z" fill="none"></path><path d="M5.59 7.41L10.18 12l-4.59 4.59L7 18l6-6-6-6zM16 6h2v12h-2z"></path></svg>
+                                    break;
+                                    case FieldOperation.Split:
                                         <svg class="mud-icon-root mud-svg-icon mud-inherit-text mud-icon-size-medium mud-icon-badge" focusable="false" viewBox="0 0 24 24" aria-hidden="true"><!--!--><path d="M0 0h24v24H0V0z" fill="none"></path><path d="M5.59 7.41L10.18 12l-4.59 4.59L7 18l6-6-6-6zM16 6h2v12h-2z"></path></svg>
                                     break;
                                 }

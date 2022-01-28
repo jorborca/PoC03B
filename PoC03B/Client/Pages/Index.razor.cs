@@ -79,6 +79,11 @@ public partial class Index
         if (MainOperation > FieldOperation.Expand) MainOperation = 0;
     }
 
+    private void OnMouseLeave_MainOperation()
+    {
+        MainOperation = FieldOperation.Move;
+    }
+
     private void ProcessOperation(FormComponentModel originComponent, FormComponentModel targetComponent)
     {
         switch (MainOperation)
@@ -156,11 +161,6 @@ public partial class Index
         }
     }
 
-    private void ResetMainOperation()
-    {
-        MainOperation = FieldOperation.Move;
-    }
-
     private string GetMainOperationColor()
     {
         return MainOperation switch
@@ -174,46 +174,16 @@ public partial class Index
 
     private string GetPositionClass(FieldPosition position)
     {
-        string horizontalPosition = string.Empty;
-        string verticalPosition = string.Empty;
+        string verticalPosition = "align-items-top";
+        string horizontalPosition = "mud-typography-align-left";
 
-        switch (position)
-        {
-            case FieldPosition.TopCenter:
-                verticalPosition = "align-items-top";
-                horizontalPosition = "mud-typography-align-center";
-                break;
+        if(position.ToString().Contains("Top")) verticalPosition = "align-items-top";
+        if (position.ToString().Contains("Medium")) verticalPosition = "align-items-center";
+        if (position.ToString().Contains("Bottom")) verticalPosition = "align-items-bottom";
 
-            case FieldPosition.TopLeft:
-                verticalPosition = "align-items-top";
-                horizontalPosition = "mud-typography-align-left";
-                break;
-
-            case FieldPosition.TopRight:
-                verticalPosition = "align-items-top";
-                horizontalPosition = "mud-typography-align-right";
-                break;
-
-            case FieldPosition.CenterCenter:
-                verticalPosition = "align-items-center";
-                horizontalPosition = "mud-typography-align-center";
-                break;
-
-            case FieldPosition.BottomCenter:
-                verticalPosition = "align-items-bottom";
-                horizontalPosition = "mud-typography-align-center";
-                break;
-
-            case FieldPosition.BottomLeft:
-                verticalPosition = "align-items-bottom";
-                horizontalPosition = "mud-typography-align-left";
-                break;
-
-            case FieldPosition.BottomRight:
-                verticalPosition = "align-items-bottom";
-                horizontalPosition = "mud-typography-align-right";
-                break;
-        }
+        if (position.ToString().Contains("Left")) horizontalPosition = "mud-typography-align-left";
+        if (position.ToString().Contains("Center")) horizontalPosition = "mud-typography-align-center";
+        if (position.ToString().Contains("Right")) horizontalPosition = "mud-typography-align-right";
 
         return $"{horizontalPosition} {verticalPosition}";
     }

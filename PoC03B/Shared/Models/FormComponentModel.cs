@@ -21,4 +21,9 @@ public class FormComponentModel
 
     public FieldPosition Position { get; set; }
     public FieldState State { get; set; }
+
+    //public FormComponentModel Clone()
+    //{
+    //    return (FormComponentModel)this.MemberwiseClone();
+    //}
 }

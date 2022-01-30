@@ -40,7 +40,11 @@ app.UseCors("AllOrigins");
 //app.MapGet("/weatherforecast", weatherEndpoint.GetWeatherForecasts).WithName("GetWeatherForecast");
 
 var templateManagerEndpoint = new TemplateManagerEndpoint();
-app.MapGet("/templates/load/{templateName}", (string templateName) => templateManagerEndpoint.LoadTemplateAsync(templateName)).WithName("LoadTemplate");
-app.MapPost("/templates/save", ([FromBody] FormDesignerModel template) => templateManagerEndpoint.SaveTemplateAsync(template)).WithName("SaveTemplate");
+app.MapGet("/templates/load/{id}", (string id) => templateManagerEndpoint.LoadTemplateAsync(id)).WithName("LoadTemplate");
+app.MapPost("/templates/save", ([FromBody] FormDesigner template) => templateManagerEndpoint.SaveTemplateAsync(template)).WithName("SaveTemplate");
+
+var historyEndpoint = new HistoryEndpoint();
+app.MapGet("/history/load", historyEndpoint.LoadHistoryAsync).WithName("LoadHistory");
+app.MapPost("/history/save", ([FromBody] List<FormHistory> history) => historyEndpoint.SaveHistoryAsync(history)).WithName("SaveHistory");
 
 app.Run();

@@ -1,34 +1,32 @@
 ﻿using PoC03B.Shared.Models;
 using System.Text.Json;
 
-namespace PoC03B.Api.Endpoints
+namespace PoC03B.Api.Endpoints;
+
+public class TemplateManagerEndpoint
 {
-    public class TemplateManagerEndpoint
+    public async Task<IResult> SaveTemplateAsync(FormDesigner template)
     {
-        public async Task<IResult> SaveTemplateAsync(FormDesignerModel template)
-        {
-            string filePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", $"{template.Name}.json");
-            string jsonTemplate = JsonSerializer.Serialize(template); 
-            await File.WriteAllTextAsync(filePath, jsonTemplate);
+        string filePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", $"{template.Id}.json");
+        string jsonTemplate = JsonSerializer.Serialize(template); 
+        await File.WriteAllTextAsync(filePath, jsonTemplate);
 
-            //using FileStream createStream = File.Create(fileName);
-            //await JsonSerializer.SerializeAsync(createStream, FormDesignerData.Items);
-            //await createStream.DisposeAsync();
+        //using FileStream createStream = File.Create(fileName);
+        //await JsonSerializer.SerializeAsync(createStream, FormDesignerData.Items);
+        //await createStream.DisposeAsync();
 
-            return Results.Ok();
-        }
+        return Results.Ok();
+    }
 
-        public async Task<IResult> LoadTemplateAsync(string templateName)
-        {
-            string filePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", $"{templateName}.json");
-            string jsonTemplate = await File.ReadAllTextAsync(filePath);
+    public async Task<IResult> LoadTemplateAsync(string id)
+    {
+        string filePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", $"{id}.json");
+        string jsonTemplate = await File.ReadAllTextAsync(filePath);
             
-            var template = JsonSerializer.Deserialize<FormDesignerModel>(jsonTemplate);
+        var template = JsonSerializer.Deserialize<FormDesigner>(jsonTemplate);
 
-            if (template == null) return Results.NotFound();
+        if (template == null) return Results.NotFound();
 
-            return Results.Ok(template);
-        }
-
+        return Results.Ok(template);
     }
 }

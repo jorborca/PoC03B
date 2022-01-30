@@ -1,6 +1,6 @@
 ﻿namespace PoC03B.Shared.Models;
 
-public class FormActionModel
+public class FormAction
 {
     public string Id { get; set; }
     //public Action Action { get; set; }

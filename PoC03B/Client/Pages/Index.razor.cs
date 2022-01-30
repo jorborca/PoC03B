@@ -4,17 +4,31 @@ using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using PoC03B.Shared.Enums;
 using PoC03B.Shared.Models;
+using System.Net.Http.Json;
+using System.Threading.Tasks;
 
 public partial class Index
 {
+    [Inject] HttpClient Http { get; set; }
     [Inject] ISnackbar Snackbar { get; set; }
 
-    [CascadingParameter(Name = "FormDesignerData")] protected FormDesignerModel FormDesignerData { get; set; }
+    [CascadingParameter(Name = "FormDesignerData")] 
+    protected FormDesigner FormDesignerData { get; set; }
+    
+    [Parameter] 
+    public Guid? idTemplate { get; set; }
 
-    List<FormComponentModel> GetFormComponentsByRow(int rowId) => FormDesignerData.Items.Where(x => x.RowId == rowId && x.State != FieldState.Disabled).ToList();
-
-    FieldOperation MainOperation = FieldOperation.Move;
+    List<FormComponent> GetFormComponentsByRow(int rowId) => FormDesignerData.Items.Where(x => x.RowId == rowId && x.State != FieldState.Disabled).ToList();
+    FieldOperation MainOperation = FieldOperation.Move;    
     string dropClass = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        if(idTemplate != null)
+        {
+            await LoadTemplate(idTemplate.Value);
+        }
+    }
 
     private void OnDragStart(FieldOperation operation, Guid id)
     {
@@ -76,7 +90,7 @@ public partial class Index
     private void OnChange_MainOperation()
     {
         MainOperation++;
-        if (MainOperation > FieldOperation.Expand) MainOperation = 0;
+        if (MainOperation > FieldOperation.Split) MainOperation = 0;
     }
 
     private void OnMouseLeave_MainOperation()
@@ -84,7 +98,7 @@ public partial class Index
         MainOperation = FieldOperation.Move;
     }
 
-    private void ProcessOperation(FormComponentModel originComponent, FormComponentModel targetComponent)
+    private void ProcessOperation(FormComponent originComponent, FormComponent targetComponent)
     {
         switch (MainOperation)
         {
@@ -97,7 +111,7 @@ public partial class Index
                 targetComponent.State = FieldState.Hold;
 
                 // Restore and Split the collapsed fields
-                List<FormComponentModel> itemsToSplit = FormDesignerData.Items.Where(
+                List<FormComponent> itemsToSplit = FormDesignerData.Items.Where(
                     x => x.RowId == originComponent.RowId
                     && x.State == FieldState.Disabled
                     && x.ColId > originComponent.ColId
@@ -119,7 +133,7 @@ public partial class Index
                 //Snackbar.Add($"Target: {targetComponent.ColId}-{targetComponent.Xs}");
 
                 // Join fields
-                List<FormComponentModel> itemsToJoin = FormDesignerData.Items.Where(
+                List<FormComponent> itemsToJoin = FormDesignerData.Items.Where(
                     x => x.RowId == originComponent.RowId
                     && x.State == FieldState.Empty
                     && x.ColId > originComponent.ColId
@@ -141,12 +155,12 @@ public partial class Index
                     x => x.RowId == originComponent.RowId
                     && x.ColId > originComponent.ColId
                     && x.State == FieldState.Hold,
-                    new FormComponentModel { 
+                    new FormComponent { 
                         ColId = 12
                     }
                 );
                 
-                List<FormComponentModel> itemsToExpand = FormDesignerData.Items.Where(
+                List<FormComponent> itemsToExpand = FormDesignerData.Items.Where(
                     x => x.RowId == originComponent.RowId
                     && x.ColId > originComponent.ColId
                     && x.ColId <= limitComponent.ColId
@@ -158,6 +172,21 @@ public partial class Index
                     originComponent.Xs++;
                 });
                 break;
+
+            case FieldOperation.Split:
+                if(originComponent.Xs > 1)
+                {
+                    FormDesignerData.Items.Where(
+                        x => x.RowId == originComponent.RowId
+                        && x.ColId > originComponent.ColId
+                        && x.ColId <= originComponent.ColId + originComponent.Xs)
+                    .ToList().ForEach(x =>
+                    {
+                        originComponent.Xs = 1;
+                        x.State = FieldState.Empty;
+                    });
+                }
+                break;
         }
     }
 
@@ -168,7 +197,8 @@ public partial class Index
             FieldOperation.Move => "mud-theme-info",
             FieldOperation.Resize => "mud-theme-info",
             FieldOperation.Delete => "mud-theme-error",
-            FieldOperation.Expand => "mud-theme-warning",
+            FieldOperation.Expand => "mud-theme-success",
+            FieldOperation.Split => "mud-theme-dark",
         };
     }
 
@@ -187,4 +217,55 @@ public partial class Index
 
         return $"{horizontalPosition} {verticalPosition}";
     }
+
+    private async Task LoadTemplate(Guid id)
+    {
+        var response = await Http.GetFromJsonAsync<FormDesigner>($"templates/load/{id}");
+        if (response == null) return;
+        FormDesignerData = response;
+        RestoreForm();
+    }
+
+    private void RestoreForm()
+    {
+        int ixItem = 0;
+        int joins = 0;
+
+        //FormDesignerData.Items.Where(x => x.State == FieldState.Hold).ToList()
+        //    .ForEach(x => x.ComponentType = Type.GetType($"{x.TypeName}"));
+
+        for (int rowId = 1; rowId <= FormDesignerData.Rows; rowId++)
+        {
+            for (int colId = 1; colId <= 12; colId++)
+            {
+                if (FormDesignerData.Items.Any(x => x.RowId == rowId && x.ColId == colId))
+                {
+                    var item = FormDesignerData.Items.Single(x => x.RowId == rowId && x.ColId == colId);
+                    item.ComponentType = Type.GetType($"{item.TypeName}");
+
+                    if (item.Xs > 1) joins = item.Xs;
+                }
+                else
+                {
+                    ixItem = ((rowId - 1) * 12) + (colId - 1);
+
+                    FormDesignerData.Items.Insert(ixItem, new FormComponent()
+                    {
+                        Id = Guid.NewGuid(),
+                        RowId = rowId,
+                        ColId = colId,
+                        Xs = 1,
+                        Sm = 1,
+                        Md = 1,
+                        Lg = 1,
+                        Position = FieldPosition.MediumCenter,
+                        State = (joins > 1) ? FieldState.Disabled : FieldState.Empty
+                    });
+
+                    joins--;
+                }
+            }
+        }
+    }
+
 }

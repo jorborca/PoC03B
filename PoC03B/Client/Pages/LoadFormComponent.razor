@@ -1,0 +1,19 @@
+﻿@page "/Load"
+
+<PageTitle>Load DynamicForm</PageTitle>
+
+<MudTable Items="@FormHistory" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@loading" 
+    LoadingProgressColor="Color.Info">
+    <HeaderContent>
+        <MudTh>Date</MudTh>
+        <MudTh>Name</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Date">@context.SavedDate</MudTd>
+        <MudTd DataLabel="Name">@context.Name</MudTd>
+        <MudTd>
+            <MudIconButton Icon="@Icons.Material.Outlined.Edit" Size="Size.Medium" Color="Color.Info" 
+                OnClick="@(() => OnClick_EditTemplate(context.Id))" />
+        </MudTd>
+    </RowTemplate>
+</MudTable>

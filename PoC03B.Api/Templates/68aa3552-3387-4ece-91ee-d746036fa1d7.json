@@ -1,0 +1,1 @@
+{"Id":"68aa3552-3387-4ece-91ee-d746036fa1d7","Code":"DynamicForm_1","Name":"DynamicForm_1","Description":null,"Rows":1,"Items":[{"Id":"c962d541-9f9c-4160-8d48-79a3d20917e9","RowId":1,"ColId":2,"TypeName":"PoC03B.Client.Shared.Editors.TextBoxComponent","Parameters":null,"Xs":2,"Sm":1,"Md":1,"Lg":1,"Position":4,"State":1}]}

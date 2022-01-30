@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace PoC03B.Shared.Models;
 
-public class FormComponentModel
+public class FormComponent
 {
     public Guid Id { get; set; }
     public int RowId { get; set; }

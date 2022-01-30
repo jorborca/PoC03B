@@ -1,1 +1,35 @@
-{"Id":"07dd67a5-ce17-417f-8fc1-30234d34de72","Code":"DynamicForm_1","Name":"DynamicForm_1","Description":null,"Rows":1,"Items":[{"Id":"7006754c-2073-450b-a455-43b374c5a246","RowId":1,"ColId":2,"TypeName":"PoC03B.Client.Shared.Editors.SelectComponent","Parameters":null,"Xs":1,"Sm":1,"Md":1,"Lg":1,"Position":4,"State":1}]}
+{
+  "Id": "49f41dd5-dce6-479d-a5a8-cf50692e77cf",
+  "Code": "DynamicForm_1",
+  "Name": "DynamicForm_1",
+  "Description": null,
+  "Rows": 2,
+  "Items": [
+    {
+      "Id": "0a4571a9-604b-44c5-9da6-48fac46f4a5d",
+      "RowId": 1,
+      "ColId": 2,
+      "TypeName": "PoC03B.Client.Shared.Editors.SelectComponent",
+      "Parameters": null,
+      "Xs": 3,
+      "Sm": 1,
+      "Md": 1,
+      "Lg": 1,
+      "Position": 4,
+      "State": 1
+    },
+    {
+      "Id": "9cd71202-2c3b-48ae-9f4e-7e31745e45e3",
+      "RowId": 2,
+      "ColId": 6,
+      "TypeName": "PoC03B.Client.Shared.Editors.SelectComponent",
+      "Parameters": null,
+      "Xs": 3,
+      "Sm": 1,
+      "Md": 1,
+      "Lg": 1,
+      "Position": 4,
+      "State": 1
+    }
+  ]
+}

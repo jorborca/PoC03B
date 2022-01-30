@@ -42,7 +42,7 @@
       "RowId": 2
     },
     {
-      "TypeName": "PoC03B.Client.Shared.Editors.RadioComponent",
+      "TypeName": "PoC03B.Client.Shared.Editors.ButtonComponent",
       "Parameters": {
         "Id": "btnAceptar",
         "Label": "Aceptar",

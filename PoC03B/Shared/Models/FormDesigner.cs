@@ -2,7 +2,7 @@
 
 namespace PoC03B.Shared.Models
 {
-    public class FormDesignerModel
+    public class FormDesigner
     {
         public Guid Id { get; set; }
         public string Code { get; set; }
@@ -13,12 +13,12 @@ namespace PoC03B.Shared.Models
         public string? DragByTypeName { get; set; }
         [JsonIgnore] 
         public Guid? DragByID { get; set; }
-        public List<FormComponentModel> Items { get; set; } = new();
+        public List<FormComponent> Items { get; set; } = new();
 
-        public FormDesignerModel Clone()
+        public FormDesigner Clone()
         {
-            FormDesignerModel other = (FormDesignerModel)this.MemberwiseClone();
-            other.Items = new List<FormComponentModel>(this.Items);
+            FormDesigner other = (FormDesigner)this.MemberwiseClone();
+            other.Items = new List<FormComponent>(this.Items);
             return other;
             //return (FormDesignerModel)this.Clone();
         }

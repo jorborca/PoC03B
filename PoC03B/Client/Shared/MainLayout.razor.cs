@@ -11,7 +11,7 @@ public partial class MainLayout
     [Inject] HttpClient Http { get; set; }
     [Inject] ISnackbar SnackBar { get; set; }
 
-    private FormDesignerModel FormDesignerData { get; set; }
+    private FormDesigner FormDesignerData { get; set; }
     bool InDesign = true;
 
     protected override async Task OnInitializedAsync()
@@ -32,7 +32,7 @@ public partial class MainLayout
 
     private void OnClick_NewTemplate()
     {
-        FormDesignerData = new FormDesignerModel
+        FormDesignerData = new FormDesigner
         {
             Id = Guid.NewGuid(),
             Code = "DynamicForm_1",
@@ -45,24 +45,14 @@ public partial class MainLayout
 
     private async Task OnClick_SaveTemplate()
     {
-        FormDesignerModel cleanTemplate = FormDesignerData.Clone();
+        FormDesigner cleanTemplate = FormDesignerData.Clone();
 
         cleanTemplate.Items.RemoveAll(x => x.State != FieldState.Hold);
-
         await Http.PostAsJsonAsync("templates/save", cleanTemplate);
 
+        await SaveHistory(cleanTemplate.Id, cleanTemplate.Name);
+
         SnackBar.Add($"Se guardó la plantilla [{cleanTemplate.Name}]");
-    }
-
-    private async Task OnClick_LoadTemplate()
-    {
-        var response = await Http.GetFromJsonAsync<FormDesignerModel>("templates/load/DynamicForm_1");
-
-        if (response == null) return;
-
-        FormDesignerData = response;
-
-        RestoreForm();
     }
 
     private void OnClick_InDesign()
@@ -78,7 +68,7 @@ public partial class MainLayout
         {
             for (int colId = 1; colId <= 12; colId++)
             {
-                FormDesignerData.Items.Add(new FormComponentModel()
+                FormDesignerData.Items.Add(new FormComponent()
                 {
                     Id = Guid.NewGuid(),
                     RowId = rowId,
@@ -107,30 +97,27 @@ public partial class MainLayout
         }
     }
 
-    private void RestoreForm()
+    private async Task SaveHistory(Guid id, string name)
     {
-        int rowId = FormDesignerData.Rows;
+        var formHistory = await Http.GetFromJsonAsync<List<FormHistory>>("history/load");
+        if (formHistory != null) return;
 
-        FormDesignerData.Items.Where(x => x.TypeName != null).ToList().ForEach(x => x.ComponentType = Type.GetType($"{x.TypeName}"));
+        var history = formHistory.First(x => x.Id == id);
 
-
-        if (!FormDesignerData.Items.Any(x => x.RowId == rowId))
+        if(history == null)
         {
-            for (int colId = 1; colId <= 12; colId++)
+            formHistory.Add(new FormHistory()
             {
-                FormDesignerData.Items.Add(new FormComponentModel()
-                {
-                    Id = Guid.NewGuid(),
-                    RowId = rowId,
-                    ColId = colId,
-                    Xs = 1,
-                    Sm = 1,
-                    Md = 1,
-                    Lg = 1,
-                    Position = FieldPosition.MediumCenter,
-                    State = FieldState.Empty
-                });
-            }
+                Id = id,
+                Name = name,
+                SavedDate = DateTime.Now
+            });
         }
+        else
+        {
+            history.SavedDate = DateTime.Now;
+        }
+
+        await Http.PostAsJsonAsync("history/save", formHistory);
     }
 }

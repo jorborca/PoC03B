@@ -1,5 +1,6 @@
 ﻿namespace PoC03B.Client.Shared;
 
+using System.Net;
 using System.Net.Http.Json;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
@@ -8,15 +9,14 @@ using PoC03B.Shared.Models;
 
 public partial class MainLayout
 {
+    [Inject] NavigationManager NavigationManager { get; set; }
     [Inject] HttpClient Http { get; set; }
     [Inject] ISnackbar SnackBar { get; set; }
 
-    private FormDesigner FormDesignerData { get; set; }
-    bool InDesign = true;
-
+    protected FormDesigner FormDesignerData { get; set; } = new();
+    
     protected override async Task OnInitializedAsync()
     {
-        OnClick_NewTemplate();
     }
 
     private void OnClick_AddRow()
@@ -30,17 +30,27 @@ public partial class MainLayout
         RemoveFormRow();
     }
 
+    private void OnClick_SelectTemplate()
+    {
+        FormDesignerData.State = FormState.Selection;
+
+        NavigationManager.NavigateTo($"/");
+    }
+
     private void OnClick_NewTemplate()
     {
         FormDesignerData = new FormDesigner
         {
             Id = Guid.NewGuid(),
-            Code = "DynamicForm_1",
-            Name = "DynamicForm_1",
+            Name = "Demo",
+            Description = "Demo",
             Rows = 1,
+            State = FormState.Design
         };
 
         AddFormRow();
+
+        NavigationManager.NavigateTo($"/Edit");
     }
 
     private async Task OnClick_SaveTemplate()
@@ -50,14 +60,19 @@ public partial class MainLayout
         cleanTemplate.Items.RemoveAll(x => x.State != FieldState.Hold);
         await Http.PostAsJsonAsync("templates/save", cleanTemplate);
 
-        await SaveHistory(cleanTemplate.Id, cleanTemplate.Name);
+        await SaveHistory(cleanTemplate.Id, cleanTemplate.Name, cleanTemplate.Description);
 
         SnackBar.Add($"Se guardó la plantilla [{cleanTemplate.Name}]");
     }
 
-    private void OnClick_InDesign()
+    private void OnClick_DesignMode()
     {
-        InDesign = !InDesign;
+        FormDesignerData.State = FormState.Design;
+    }
+
+    private void OnClick_ViewMode()
+    {
+        FormDesignerData.State = FormState.View;
     }
 
     private void AddFormRow()
@@ -97,27 +112,49 @@ public partial class MainLayout
         }
     }
 
-    private async Task SaveHistory(Guid id, string name)
+    private async Task SaveHistory(Guid id, string name, string description)
     {
-        var formHistory = await Http.GetFromJsonAsync<List<FormHistory>>("history/load");
-        if (formHistory != null) return;
+        bool Adding = false;
+        List<FormHistory> formHistory = new();
+        var response = await Http.GetAsync("history/load");
 
-        var history = formHistory.First(x => x.Id == id);
+        switch(response.StatusCode)
+        {
+            case HttpStatusCode.OK:
+                formHistory = await response.Content.ReadFromJsonAsync<List<FormHistory>>();
 
-        if(history == null)
+                if (formHistory.Any((x => x.Id == id)))
+                {
+                    var history = formHistory.First(x => x.Id == id);
+                    history.SavedDate = DateTime.Now;
+                }
+                else
+                {
+                    Adding = true;
+                }
+                break;
+
+            case HttpStatusCode.NotFound:
+                Adding = true;
+                break;
+
+            default:
+            case HttpStatusCode.BadRequest:
+                return;
+        }
+
+        if(Adding)
         {
             formHistory.Add(new FormHistory()
             {
                 Id = id,
                 Name = name,
+                Description = description,
                 SavedDate = DateTime.Now
             });
-        }
-        else
-        {
-            history.SavedDate = DateTime.Now;
         }
 
         await Http.PostAsJsonAsync("history/save", formHistory);
     }
+
 }

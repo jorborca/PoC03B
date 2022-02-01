@@ -28,7 +28,8 @@
 </MudNavMenu>
 
 @code {
-    [CascadingParameter(Name = "FormDesignerData")] protected FormDesigner FormDesignerData { get; set; }
+    [CascadingParameter(Name = "FormDesignerData")] 
+    protected FormDesigner FormDesignerData { get; set; }
 
     private void OnDragStart(string typeName)
     {

@@ -16,13 +16,21 @@ public class HistoryEndpoint
 
     public async Task<IResult> LoadHistoryAsync()
     {
-        string filePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "History.json");
-        string jsonHistory = await File.ReadAllTextAsync(filePath);
+        try
+        {
+            string filePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "History.json");
 
-        var history = JsonSerializer.Deserialize<List<FormHistory>>(jsonHistory);
+            string jsonHistory = await File.ReadAllTextAsync(filePath);
 
-        if (history == null) return Results.NotFound();
+            var history = JsonSerializer.Deserialize<List<FormHistory>>(jsonHistory);
+            
+            if (history == null) return Results.BadRequest();
 
-        return Results.Ok(history);
+            return Results.Ok(history);
+        }
+        catch (Exception)
+        {
+            return Results.NotFound();
+        }
     }
 }

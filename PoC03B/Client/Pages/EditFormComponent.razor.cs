@@ -2,6 +2,7 @@
 
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using PoC03B.Client.ViewModels;
 using PoC03B.Shared.Enums;
 using PoC03B.Shared.Models;
 using System.Net.Http.Json;
@@ -9,14 +10,10 @@ using System.Threading.Tasks;
 
 public partial class EditFormComponent
 {
-    [Inject] HttpClient Http { get; set; }
+    [Inject] protected FormDesignerViewModel FormDesignerViewModel { get; set; }
     [Inject] ISnackbar Snackbar { get; set; }
 
-    [CascadingParameter(Name = "FormDesignerData")]
-    protected FormDesigner FormDesignerData { get; set; }
-
-    [Parameter]
-    public string? idTemplate { get; set; }
+    [Parameter] public string? idTemplate { get; set; }
 
     List<FormComponent> GetFormComponentsByRow(int rowId) => FormDesignerData.Items.Where(x => x.RowId == rowId && x.State != FieldState.Disabled).ToList();
     FieldOperation MainOperation = FieldOperation.Move;

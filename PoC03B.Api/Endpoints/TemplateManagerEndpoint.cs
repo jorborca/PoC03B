@@ -7,7 +7,8 @@ public class TemplateManagerEndpoint
 {
     public async Task<IResult> SaveTemplateAsync(FormDesigner template)
     {
-        string filePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", $"{template.Id}.json");
+        //{ template.Id}
+        string filePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", $"DynamicForm_1.json");
         string jsonTemplate = JsonSerializer.Serialize(template); 
         await File.WriteAllTextAsync(filePath, jsonTemplate);
 

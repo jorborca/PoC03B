@@ -1,51 +1,47 @@
 ﻿@inherits LayoutComponentBase
 
-<CascadingValue Value="FormDesignerData" Name="FormDesignerData">
-    <MudLayout>
-            <MudAppBar Color="Color.Info" Elevation="1" Dense="true" ToolBarClass="pr-1">
-                @*<MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />*@
-                <MudText Typo="Typo.h6">DynaForms</MudText>
-                @*<MudDivider Vertical="true" FlexItem="true" Class="ml-11 mr-5"/>*@
-                @if (FormDesignerData.State == FormState.Selection || FormDesignerData.State == FormState.Design || FormDesignerData.State == FormState.View)
-                {
-                    <MudIconButton Icon="@Icons.Material.Outlined.Home" Class="ml-12" Size="Size.Medium" Color="Color.Inherit" OnClick="OnClick_SelectTemplate"/>
-                    <MudIconButton Icon="@Icons.Material.Outlined.CreateNewFolder" Size="Size.Medium" Color="Color.Inherit" OnClick="OnClick_NewTemplate" />
-                }
+<MudLayout>
+    <MudAppBar Color="Color.Info" Elevation="1" Dense="true" ToolBarClass="pr-1">
+        @*<MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />*@
+        <MudText Typo="Typo.h6">DynaForms</MudText>
+        @*<MudDivider Vertical="true" FlexItem="true" Class="ml-11 mr-5"/>*@
+        @if (FormDesignerViewModel.CheckState(FormState.Selection) || FormDesignerViewModel.CheckState(FormState.Design) || FormDesignerViewModel.CheckState(FormState.View))
+        {
+            <MudIconButton Icon="@Icons.Material.Outlined.Home" Class="ml-12" Size="Size.Medium" Color="Color.Inherit" OnClick="OnClick_SelectForm" />
+            <MudIconButton Icon="@Icons.Material.Outlined.CreateNewFolder" Size="Size.Medium" Color="Color.Inherit" OnClick="OnClick_NewForm" />
+            @*<MudIconButton Icon="@Icons.Material.Outlined.DriveFolderUpload" Size="Size.Medium" Color="Color.Inherit" OnClick="OnClick_LoadForm" />*@
+        }
 
-                @if(FormDesignerData.State == FormState.Design)
-                {
-                    <MudIconButton Icon="@Icons.Material.Outlined.Save" Size="Size.Medium" Color="Color.Inherit" OnClick="OnClick_SaveTemplate" />
-                    <MudDivider DividerType="DividerType.Middle" Vertical="true"></MudDivider>
-                    <MudIconButton Icon="@Icons.Material.Outlined.RemoveCircle" Size="Size.Medium" Color="Color.Inherit" OnClick="OnClick_RemoveRow" />
-                    <MudText Typo="Typo.body1">@FormDesignerData.Rows</MudText>
-                    <MudIconButton Icon="@Icons.Material.Outlined.AddCircle" Size="Size.Medium" Color="Color.Inherit" OnClick="OnClick_AddRow" />
-                    <MudSpacer />
-                    <MudIconButton Link="view" Icon="@Icons.Material.Outlined.Preview" Size="Size.Medium" DisableElevation="true"
-                        Color="Color.Dark" Variant="@(FormDesignerData.State == FormState.View ? Variant.Filled : Variant.Outlined)" Class="rounded-0" 
-                        OnClick="@OnClick_ViewMode"/>
-                }
+        @if (FormDesignerViewModel.CheckState(FormState.Design))
+        {
+            <MudIconButton Icon="@Icons.Material.Outlined.Save" Size="Size.Medium" Color="Color.Inherit" OnClick="OnClick_SaveForm" />
+            @*<MudDivider DividerType="DividerType.Middle" Vertical="true"></MudDivider>*@
+            <MudSpacer />
+            <MudIconButton Link="view" Icon="@Icons.Material.Outlined.Preview" Size="Size.Medium" DisableElevation="true"
+                       Color="Color.Dark" Variant="@(FormDesignerViewModel.GetState() == FormState.View ? Variant.Filled : Variant.Outlined)" Class="rounded-0"
+                       OnClick="@OnClick_ViewState" />
+        }
 
-                @if(FormDesignerData.State == FormState.View)
-                {
-                    <MudSpacer />
-                    <MudIconButton Link="edit" Icon="@Icons.Material.Outlined.EditNote" Size="Size.Medium" DisableElevation="true"
-                        Color="Color.Dark" Variant="@(FormDesignerData.State == FormState.Design || FormDesignerData.State == FormState.Selection ? Variant.Filled : Variant.Outlined)" Class="rounded-0" 
-                        OnClick="@OnClick_DesignMode"/>
-                }
-            </MudAppBar>
-            @if (FormDesignerData.State == FormState.Design)
-            {
-                <MudDrawer Open="true" Fixed="true" Elevation="1" Variant="@DrawerVariant.Mini" ClipMode="DrawerClipMode.Docked" 
-                    OpenMiniOnHover="true" Color="Color.Dark">
-                    <NavMenu />
-                </MudDrawer>
-            }
-            <MudMainContent Class="mt-7 px-7">
-                @Body
-                @*<MudContainer>
-                </MudContainer>*@
-            </MudMainContent>
-            @*<MudDrawerContainer Class="mud-height-full">
-            </MudDrawerContainer>*@
-    </MudLayout>
-</CascadingValue>
+        @if (FormDesignerViewModel.CheckState(FormState.View))
+        {
+            <MudSpacer />
+            <MudIconButton Link="edit" Icon="@Icons.Material.Outlined.EditNote" Size="Size.Medium" DisableElevation="true"
+                       Color="Color.Dark" Variant="@(FormDesignerViewModel.GetState() == FormState.Design || FormDesignerViewModel.GetState() == FormState.Selection ? Variant.Filled : Variant.Outlined)" Class="rounded-0"
+                       OnClick="@OnClick_DesignState" />
+        }
+    </MudAppBar>
+    @if (FormDesignerViewModel.CheckState(FormState.Design))
+    {
+        <MudDrawer Open="true" Fixed="true" Elevation="1" Variant="@DrawerVariant.Mini" ClipMode="DrawerClipMode.Docked"
+               OpenMiniOnHover="true" Color="Color.Dark">
+            <NavMenu />
+        </MudDrawer>
+    }
+    <MudMainContent Class="mt-7 px-7">
+        @Body
+        @*<MudContainer>
+            </MudContainer>*@
+    </MudMainContent>
+    @*<MudDrawerContainer Class="mud-height-full">
+        </MudDrawerContainer>*@
+</MudLayout>

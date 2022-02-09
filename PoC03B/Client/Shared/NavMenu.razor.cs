@@ -5,7 +5,7 @@ namespace PoC03B.Client.Shared;
 
 public partial class NavMenu
 {
-    [Inject] protected FormDesignerViewModel FormDesignerViewModel { get; set; }
+    [Inject] protected IFormDesignerViewModel FormDesignerViewModel { get; set; }
 
     private void OnDragStart(string typeName)
     {

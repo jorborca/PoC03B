@@ -5,7 +5,7 @@ using System.Net.Http.Json;
 
 namespace PoC03B.Client.ViewModels
 {
-    public class FormDesignerViewModel
+    public class FormDesignerViewModel : IFormDesignerViewModel
     {
         public FormDesigner FormDesignerData { get; set; }
         public HttpClient HttpClient { get; }
@@ -79,6 +79,136 @@ namespace PoC03B.Client.ViewModels
             FormDesignerData.DragByTypeName = typeName;
         }
 
+        public void SetDragID(Guid id)
+        {
+            FormDesignerData.DragByID = id;
+        }
+
+        public void ProcessOperation(FieldOperation mainOperation, Guid? idOriginComponent, Guid? idTargetComponent)
+        {
+            FormComponent originComponent = new();
+            FormComponent targetComponent = new();
+
+            if (FormDesignerData.DragByID != null)
+            {
+                idOriginComponent = FormDesignerData.DragByID;
+                FormDesignerData.DragByID = null;
+            }
+
+            if (idOriginComponent != null)
+            {
+                originComponent = FormDesignerData.Items.Single(x => x.Id == idOriginComponent);
+            }
+
+            if (idTargetComponent != null)
+            {
+                targetComponent = FormDesignerData.Items.Single(x => x.Id == idTargetComponent);
+            }
+
+            switch (mainOperation)
+            {
+                case FieldOperation.Move:
+                    Type? backupComponentType = targetComponent.ComponentType;
+                    string? backupTypeName = targetComponent.TypeName;
+
+                    if (FormDesignerData.DragByTypeName != null)
+                    {
+                        targetComponent.TypeName = FormDesignerData.DragByTypeName;
+                        targetComponent.ComponentType = Type.GetType($"{FormDesignerData.DragByTypeName}");
+                        targetComponent.State = FieldState.Hold;
+                        FormDesignerData.DragByTypeName = null;
+                    }
+                    else
+                    {
+                        targetComponent.TypeName = originComponent.TypeName;
+                        targetComponent.ComponentType = originComponent.ComponentType;
+                        targetComponent.State = FieldState.Hold;
+
+                        // Restore and Split the collapsed fields
+                        List<FormComponent> itemsToSplit = FormDesignerData.Items.Where(
+                            x => x.RowId == originComponent.RowId
+                            && x.State == FieldState.Disabled
+                            && x.ColId > originComponent.ColId
+                            && x.ColId <= originComponent.ColId + originComponent.Xs
+                        ).ToList();
+
+                        itemsToSplit.ForEach(x =>
+                        {
+                            x.State = FieldState.Empty;
+                        });
+
+                        originComponent.ComponentType = backupComponentType;
+                        originComponent.TypeName = backupTypeName;
+                        originComponent.State = FieldState.Empty;
+                        originComponent.Xs = 1;
+                    }
+                    break;
+
+                case FieldOperation.Resize:
+                    //Snackbar.Add($"Origin: {originComponent.ColId}-{originComponent.Xs}");
+                    //Snackbar.Add($"Target: {targetComponent.ColId}-{targetComponent.Xs}");
+
+                    // Join fields
+                    List<FormComponent> itemsToJoin = FormDesignerData.Items.Where(
+                        x => x.RowId == originComponent.RowId
+                        && x.State == FieldState.Empty
+                        && x.ColId > originComponent.ColId
+                        && x.ColId <= targetComponent.ColId
+                    ).ToList();
+
+                    itemsToJoin.ForEach(x =>
+                    {
+                        x.State = FieldState.Disabled;
+                        originComponent.Xs++;
+                    });
+                    break;
+
+                case FieldOperation.Delete: // Eliminar Item
+                    FormDesignerData.Items.Remove(originComponent);
+                    break;
+
+                case FieldOperation.Expand:
+                    var limitComponent = FormDesignerData.Items.FirstOrDefault(
+                        x => x.RowId == originComponent.RowId
+                        && x.ColId > originComponent.ColId
+                        && x.State == FieldState.Hold,
+                        new FormComponent
+                        {
+                            ColId = 12
+                        }
+                    );
+
+                    List<FormComponent> itemsToExpand = FormDesignerData.Items.Where(
+                        x => x.RowId == originComponent.RowId
+                        && x.ColId > originComponent.ColId
+                        && x.ColId <= limitComponent.ColId
+                        && x.State == FieldState.Empty
+                    ).ToList();
+
+                    itemsToExpand.ForEach(x =>
+                    {
+                        x.State = FieldState.Disabled;
+                        originComponent.Xs++;
+                    });
+                    break;
+
+                case FieldOperation.Split:
+                    if (originComponent.Xs > 1)
+                    {
+                        FormDesignerData.Items.Where(
+                            x => x.RowId == originComponent.RowId
+                            && x.ColId > originComponent.ColId
+                            && x.ColId <= originComponent.ColId + originComponent.Xs)
+                        .ToList().ForEach(x =>
+                        {
+                            originComponent.Xs = 1;
+                            x.State = FieldState.Empty;
+                        });
+                    }
+                    break;
+            }
+        }
+
 
         public void NewForm()
         {
@@ -94,10 +224,15 @@ namespace PoC03B.Client.ViewModels
             AddRow(0);
         }
 
-        public void LoadForm()
+        public async Task LoadForm(string id)
         {
             int ixItem = 0;
             int joins = 0;
+
+            var response = await HttpClient.GetFromJsonAsync<FormDesigner>($"templates/load/{id}");
+            if (response == null) return;
+
+            FormDesignerData = response;
 
             //FormDesignerData.Items.Where(x => x.State == FieldState.Hold).ToList()
             //    .ForEach(x => x.ComponentType = Type.GetType($"{x.TypeName}"));
@@ -204,6 +339,12 @@ namespace PoC03B.Client.ViewModels
             }
 
             await HttpClient.PostAsJsonAsync("history/save", formHistory);
+        }
+
+
+        public List<FormComponent> GetFormComponentsByRow(int rowId)
+        {
+            return FormDesignerData.Items.Where(x => x.RowId == rowId && x.State != FieldState.Disabled).ToList();
         }
 
     }

@@ -9,7 +9,7 @@ namespace PoC03B.Client.Pages;
 
 public partial class Index
 {
-    [Inject] protected FormDesignerViewModel FormDesignerViewModel { get; set; }
+    [Inject] protected IFormDesignerViewModel FormDesignerViewModel { get; set; }
     [Inject] protected NavigationManager NavigationManager { get; set; }
 
     List<FormHistory>? FormHistory { get; set; } = new();

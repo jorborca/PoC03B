@@ -7,7 +7,7 @@ using PoC03B.Shared.Enums;
 
 public partial class MainLayout
 {
-    [Inject] protected FormDesignerViewModel FormDesignerViewModel { get; set; }
+    [Inject] protected IFormDesignerViewModel FormDesignerViewModel { get; set; }
     [Inject] protected NavigationManager NavigationManager { get; set; }
     [Inject] protected ISnackbar SnackBar { get; set; }
 

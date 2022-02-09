@@ -1,11 +1,11 @@
-﻿@page "/Edit/{idTemplate?}"
+﻿@page "/Edit/{idForm?}"
 
 <PageTitle>Edit DynamicForm</PageTitle>
 
-@for(int rowId = 1; rowId <= FormDesignerData.Rows; rowId++)
+@for(int rowId = 1; rowId <= FormDesignerViewModel.GetRowsCount(); rowId++)
 {
     <div class="mud-grid mud-grid-spacing-xs-0 mud-grid-justify-xs-flex-start">
-        <Virtualize Items="GetFormComponentsByRow(rowId)" Context="formComponent">
+        <Virtualize Items="FormDesignerViewModel.GetFormComponentsByRow(rowId)" Context="formComponent">
             <MudItem xs="@formComponent.Xs" Class="@($"{GetPositionClass(formComponent.Position)} dropzone {@dropClass}")"
                 ondragover="event.preventDefault();"
                 ondragstart="event.dataTransfer.setData('', event.target.id);"

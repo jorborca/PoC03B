@@ -11,6 +11,6 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddMudServices();
 //builder.HostEnvironment.BaseAddress
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7241") });
-builder.Services.AddSingleton<FormDesignerViewModel>();
+builder.Services.AddSingleton<IFormDesignerViewModel, FormDesignerViewModel>();
 
 await builder.Build().RunAsync();

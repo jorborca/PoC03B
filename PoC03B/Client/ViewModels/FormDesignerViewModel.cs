@@ -7,27 +7,27 @@ namespace PoC03B.Client.ViewModels
 {
     public class FormDesignerViewModel : IFormDesignerViewModel
     {
-        public FormDesigner FormDesignerData { get; set; }
-        public HttpClient HttpClient { get; }
+        public FormDesigner _FormDesignerData { get; set; }
+        public HttpClient _HttpClient { get; }
 
         public FormDesignerViewModel(HttpClient httpClient)
         {
-            FormDesignerData = new();
-            HttpClient = httpClient;
+            _FormDesignerData = new();
+            _HttpClient = httpClient;
         }
 
         public void AddRow(int increment)
         {
-            FormDesignerData.Rows += increment;
+            _FormDesignerData.Rows += increment;
 
-            if (!FormDesignerData.Items.Any(x => x.RowId == FormDesignerData.Rows))
+            if (!_FormDesignerData.Items.Any(x => x.RowId == _FormDesignerData.Rows))
             {
                 for (int colId = 1; colId <= 12; colId++)
                 {
-                    FormDesignerData.Items.Add(new FormComponent()
+                    _FormDesignerData.Items.Add(new FormComponent()
                     {
                         Id = Guid.NewGuid(),
-                        RowId = FormDesignerData.Rows,
+                        RowId = _FormDesignerData.Rows,
                         ColId = colId,
                         Xs = 1,
                         Sm = 1,
@@ -42,46 +42,46 @@ namespace PoC03B.Client.ViewModels
 
         public void RemoveRow()
         {
-            if (FormDesignerData.Rows == 1) return;
+            if (_FormDesignerData.Rows == 1) return;
 
-            int rowId = FormDesignerData.Rows;
+            int rowId = _FormDesignerData.Rows;
 
-            if (!FormDesignerData.Items.Any(x => x.RowId == rowId && x.State == FieldState.Hold))
+            if (!_FormDesignerData.Items.Any(x => x.RowId == rowId && x.State == FieldState.Hold))
             {
-                FormDesignerData.Items.RemoveAll(x => x.RowId == rowId);
-                FormDesignerData.Rows--;
+                _FormDesignerData.Items.RemoveAll(x => x.RowId == rowId);
+                _FormDesignerData.Rows--;
             }
         }
 
         public int GetRowsCount()
         {
-            return FormDesignerData.Rows;
+            return _FormDesignerData.Rows;
         }
 
 
         public void SetState(FormState state)
         {
-            FormDesignerData.State = state;
+            _FormDesignerData.State = state;
         }
 
         public FormState GetState()
         {
-            return FormDesignerData.State;
+            return _FormDesignerData.State;
         }
 
         public bool CheckState(FormState state)
         {
-            return FormDesignerData.State == state;
+            return _FormDesignerData.State == state;
         }
 
         public void SetDragTypeName(string typeName)
         {
-            FormDesignerData.DragByTypeName = typeName;
+            _FormDesignerData.DragByTypeName = typeName;
         }
 
         public void SetDragID(Guid id)
         {
-            FormDesignerData.DragByID = id;
+            _FormDesignerData.DragByID = id;
         }
 
         public void ProcessOperation(FieldOperation mainOperation, Guid? idOriginComponent, Guid? idTargetComponent)
@@ -89,20 +89,20 @@ namespace PoC03B.Client.ViewModels
             FormComponent originComponent = new();
             FormComponent targetComponent = new();
 
-            if (FormDesignerData.DragByID != null)
+            if (_FormDesignerData.DragByID != null)
             {
-                idOriginComponent = FormDesignerData.DragByID;
-                FormDesignerData.DragByID = null;
+                idOriginComponent = _FormDesignerData.DragByID;
+                _FormDesignerData.DragByID = null;
             }
 
             if (idOriginComponent != null)
             {
-                originComponent = FormDesignerData.Items.Single(x => x.Id == idOriginComponent);
+                originComponent = _FormDesignerData.Items.Single(x => x.Id == idOriginComponent);
             }
 
             if (idTargetComponent != null)
             {
-                targetComponent = FormDesignerData.Items.Single(x => x.Id == idTargetComponent);
+                targetComponent = _FormDesignerData.Items.Single(x => x.Id == idTargetComponent);
             }
 
             switch (mainOperation)
@@ -111,12 +111,12 @@ namespace PoC03B.Client.ViewModels
                     Type? backupComponentType = targetComponent.ComponentType;
                     string? backupTypeName = targetComponent.TypeName;
 
-                    if (FormDesignerData.DragByTypeName != null)
+                    if (_FormDesignerData.DragByTypeName != null)
                     {
-                        targetComponent.TypeName = FormDesignerData.DragByTypeName;
-                        targetComponent.ComponentType = Type.GetType($"{FormDesignerData.DragByTypeName}");
+                        targetComponent.TypeName = _FormDesignerData.DragByTypeName;
+                        targetComponent.ComponentType = Type.GetType($"{_FormDesignerData.DragByTypeName}");
                         targetComponent.State = FieldState.Hold;
-                        FormDesignerData.DragByTypeName = null;
+                        _FormDesignerData.DragByTypeName = null;
                     }
                     else
                     {
@@ -125,7 +125,7 @@ namespace PoC03B.Client.ViewModels
                         targetComponent.State = FieldState.Hold;
 
                         // Restore and Split the collapsed fields
-                        List<FormComponent> itemsToSplit = FormDesignerData.Items.Where(
+                        List<FormComponent> itemsToSplit = _FormDesignerData.Items.Where(
                             x => x.RowId == originComponent.RowId
                             && x.State == FieldState.Disabled
                             && x.ColId > originComponent.ColId
@@ -149,7 +149,7 @@ namespace PoC03B.Client.ViewModels
                     //Snackbar.Add($"Target: {targetComponent.ColId}-{targetComponent.Xs}");
 
                     // Join fields
-                    List<FormComponent> itemsToJoin = FormDesignerData.Items.Where(
+                    List<FormComponent> itemsToJoin = _FormDesignerData.Items.Where(
                         x => x.RowId == originComponent.RowId
                         && x.State == FieldState.Empty
                         && x.ColId > originComponent.ColId
@@ -164,11 +164,11 @@ namespace PoC03B.Client.ViewModels
                     break;
 
                 case FieldOperation.Delete: // Eliminar Item
-                    FormDesignerData.Items.Remove(originComponent);
+                    _FormDesignerData.Items.Remove(originComponent);
                     break;
 
                 case FieldOperation.Expand:
-                    var limitComponent = FormDesignerData.Items.FirstOrDefault(
+                    var limitComponent = _FormDesignerData.Items.FirstOrDefault(
                         x => x.RowId == originComponent.RowId
                         && x.ColId > originComponent.ColId
                         && x.State == FieldState.Hold,
@@ -178,7 +178,7 @@ namespace PoC03B.Client.ViewModels
                         }
                     );
 
-                    List<FormComponent> itemsToExpand = FormDesignerData.Items.Where(
+                    List<FormComponent> itemsToExpand = _FormDesignerData.Items.Where(
                         x => x.RowId == originComponent.RowId
                         && x.ColId > originComponent.ColId
                         && x.ColId <= limitComponent.ColId
@@ -195,7 +195,7 @@ namespace PoC03B.Client.ViewModels
                 case FieldOperation.Split:
                     if (originComponent.Xs > 1)
                     {
-                        FormDesignerData.Items.Where(
+                        _FormDesignerData.Items.Where(
                             x => x.RowId == originComponent.RowId
                             && x.ColId > originComponent.ColId
                             && x.ColId <= originComponent.ColId + originComponent.Xs)
@@ -212,7 +212,7 @@ namespace PoC03B.Client.ViewModels
 
         public void NewForm()
         {
-            FormDesignerData = new FormDesigner
+            _FormDesignerData = new FormDesigner
             {
                 Id = Guid.NewGuid(),
                 Name = "Demo",
@@ -229,21 +229,21 @@ namespace PoC03B.Client.ViewModels
             int ixItem = 0;
             int joins = 0;
 
-            var response = await HttpClient.GetFromJsonAsync<FormDesigner>($"templates/load/{id}");
+            var response = await _HttpClient.GetFromJsonAsync<FormDesigner>($"templates/load/{id}");
             if (response == null) return;
 
-            FormDesignerData = response;
+            _FormDesignerData = response;
 
             //FormDesignerData.Items.Where(x => x.State == FieldState.Hold).ToList()
             //    .ForEach(x => x.ComponentType = Type.GetType($"{x.TypeName}"));
 
-            for (int rowId = 1; rowId <= FormDesignerData.Rows; rowId++)
+            for (int rowId = 1; rowId <= _FormDesignerData.Rows; rowId++)
             {
                 for (int colId = 1; colId <= 12; colId++)
                 {
-                    if (FormDesignerData.Items.Any(x => x.RowId == rowId && x.ColId == colId))
+                    if (_FormDesignerData.Items.Any(x => x.RowId == rowId && x.ColId == colId))
                     {
-                        var item = FormDesignerData.Items.Single(x => x.RowId == rowId && x.ColId == colId);
+                        var item = _FormDesignerData.Items.Single(x => x.RowId == rowId && x.ColId == colId);
                         item.ComponentType = Type.GetType($"{item.TypeName}");
 
                         if (item.Xs > 1) joins = item.Xs;
@@ -252,7 +252,7 @@ namespace PoC03B.Client.ViewModels
                     {
                         ixItem = (rowId - 1) * 12 + (colId - 1);
 
-                        FormDesignerData.Items.Insert(ixItem, new FormComponent()
+                        _FormDesignerData.Items.Insert(ixItem, new FormComponent()
                         {
                             Id = Guid.NewGuid(),
                             RowId = rowId,
@@ -273,10 +273,10 @@ namespace PoC03B.Client.ViewModels
 
         public async Task SaveForm()
         {
-            FormDesigner cleanTemplate = FormDesignerData.Clone();
+            FormDesigner cleanTemplate = _FormDesignerData.Clone();
 
             cleanTemplate.Items.RemoveAll(x => x.State != FieldState.Hold);
-            await HttpClient.PostAsJsonAsync("templates/save", cleanTemplate);
+            await _HttpClient.PostAsJsonAsync("templates/save", cleanTemplate);
 
             await SaveHistory(cleanTemplate.Id, cleanTemplate.Name, cleanTemplate.Description);
         }
@@ -284,7 +284,7 @@ namespace PoC03B.Client.ViewModels
 
         public async Task<List<FormHistory>?> LoadHistory()
         {
-            var response = await HttpClient.GetAsync("history/load");
+            var response = await _HttpClient.GetAsync("history/load");
 
             if (response.StatusCode != HttpStatusCode.OK)
             {
@@ -300,7 +300,7 @@ namespace PoC03B.Client.ViewModels
         {
             bool Adding = false;
             List<FormHistory> formHistory = new();
-            var response = await HttpClient.GetAsync("history/load");
+            var response = await _HttpClient.GetAsync("history/load");
 
             switch (response.StatusCode)
             {
@@ -338,13 +338,13 @@ namespace PoC03B.Client.ViewModels
                 });
             }
 
-            await HttpClient.PostAsJsonAsync("history/save", formHistory);
+            await _HttpClient.PostAsJsonAsync("history/save", formHistory);
         }
 
 
         public List<FormComponent> GetFormComponentsByRow(int rowId)
         {
-            return FormDesignerData.Items.Where(x => x.RowId == rowId && x.State != FieldState.Disabled).ToList();
+            return _FormDesignerData.Items.Where(x => x.RowId == rowId && x.State != FieldState.Disabled).ToList();
         }
 
     }

@@ -1,4 +1,4 @@
-﻿namespace PoC03B.Client.Pages;
+﻿namespace PoC03B.Client.Pages.Renderer.Views;
 
 using MudBlazor;
 using PoC03B.Shared;

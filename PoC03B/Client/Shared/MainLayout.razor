@@ -5,6 +5,7 @@
         @*<MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />*@
         <MudText Typo="Typo.h6">DynaForms</MudText>
         @*<MudDivider Vertical="true" FlexItem="true" Class="ml-11 mr-5"/>*@
+
         @if (FormDesignerViewModel.CheckState(FormState.Selection) || FormDesignerViewModel.CheckState(FormState.Design) || FormDesignerViewModel.CheckState(FormState.View))
         {
             <MudIconButton Icon="@Icons.Material.Outlined.Home" Class="ml-12" Size="Size.Medium" Color="Color.Inherit" OnClick="OnClick_SelectForm" />
@@ -19,7 +20,7 @@
             <MudSpacer />
             <MudIconButton Link="view" Icon="@Icons.Material.Outlined.Preview" Size="Size.Medium" DisableElevation="true"
                        Color="Color.Dark" Variant="@(FormDesignerViewModel.GetState() == FormState.View ? Variant.Filled : Variant.Outlined)" Class="rounded-0"
-                       OnClick="@OnClick_ViewState" />
+                       OnClick="@OnClick_ViewMode" />
         }
 
         @if (FormDesignerViewModel.CheckState(FormState.View))
@@ -27,7 +28,7 @@
             <MudSpacer />
             <MudIconButton Link="edit" Icon="@Icons.Material.Outlined.EditNote" Size="Size.Medium" DisableElevation="true"
                        Color="Color.Dark" Variant="@(FormDesignerViewModel.GetState() == FormState.Design || FormDesignerViewModel.GetState() == FormState.Selection ? Variant.Filled : Variant.Outlined)" Class="rounded-0"
-                       OnClick="@OnClick_DesignState" />
+                       OnClick="@OnClick_DesignMode" />
         }
     </MudAppBar>
     @if (FormDesignerViewModel.CheckState(FormState.Design))

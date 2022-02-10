@@ -1,15 +1,16 @@
 ﻿<MudNavMenu Class="mud-width-full">
     <div class="pa-3">
-        <MudChip Color="Color.Warning" Class="mud-width-full ma-0 pa-0">
-            <MudGrid Spacing="0" Justify="Justify.SpaceEvenly">
-                <MudItem xs="4" Class="align-items-center">
+        <MudChip Color="Color.Info" Class="mud-width-full ma-0 pa-0">
+            <MudGrid Spacing="0" Justify="Justify.SpaceEvenly" Class="align-center">
+                <MudItem xs="4" Class="d-flex justify-center">
                     <MudIconButton Icon="@Icons.Material.Outlined.RemoveCircle" Size="Size.Medium" Color="Color.Inherit" OnClick="OnClick_RemoveRow" />
                 </MudItem>
-                <MudItem xs="4" >
-                    <MudText Typo="Typo.body1">@FormDesignerViewModel.GetRowsCount()</MudText>
+                <MudItem xs="4" Class="d-flex justify-center">
+                    <MudText Typo="Typo.subtitle1" Align="Align.Center">@FormDesignerViewModel.GetRowsCount()</MudText>
                 </MudItem>
-                <MudItem xs="4">
-                    <MudIconButton Icon="@Icons.Material.Outlined.AddCircle" Size="Size.Medium" Color="Color.Inherit" OnClick="OnClick_AddRow" />                </MudItem>
+                <MudItem xs="4" Class="d-flex justify-center">
+                    <MudIconButton Icon="@Icons.Material.Outlined.AddCircle" Size="Size.Medium" Color="Color.Inherit" OnClick="OnClick_AddRow" />
+                </MudItem>
             </MudGrid>
         </MudChip>
     </div>

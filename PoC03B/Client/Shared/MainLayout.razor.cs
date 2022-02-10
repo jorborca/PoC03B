@@ -13,9 +13,8 @@ public partial class MainLayout
 
     private void OnClick_NewForm()
     {
-        FormDesignerViewModel.NewForm();
-
-        NavigationManager.NavigateTo($"/Edit");
+        NavigationManager.NavigateTo($"/Edit", true);
+        //StateHasChanged();
     }
 
     private void OnClick_SelectForm()
@@ -32,12 +31,12 @@ public partial class MainLayout
         SnackBar.Add($"Formulario guardado.");
     }
 
-    private void OnClick_DesignState()
+    private void OnClick_DesignMode()
     {
         FormDesignerViewModel.SetState(FormState.Design);
     }
 
-    private void OnClick_ViewState()
+    private void OnClick_ViewMode()
     {
         FormDesignerViewModel.SetState(FormState.View);
     }

@@ -1,20 +1,20 @@
-﻿namespace PoC03B.Client.Pages;
+﻿namespace PoC03B.Client.Pages.Designer.Components;
 
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using PoC03B.Client.ViewModels;
 using PoC03B.Shared.Enums;
-using PoC03B.Shared.Models;
-using System.Net.Http.Json;
 using System.Threading.Tasks;
 
-public partial class EditFormComponent
+public partial class FormDesignerComponent
 {
+    //[Parameter] public FormDesigner FormDesigner { get; set; }
+
     [Inject] protected IFormDesignerViewModel FormDesignerViewModel { get; set; }
     [Inject] protected ISnackbar Snackbar { get; set; }
 
     [Parameter] public string? idForm { get; set; }
-    
+
     FieldOperation MainOperation = FieldOperation.Move;
     string dropClass = "";
 
@@ -24,7 +24,23 @@ public partial class EditFormComponent
         {
             await FormDesignerViewModel.LoadForm(idForm);
         }
+        else
+        {
+            FormDesignerViewModel.NewForm();
+        }
     }
+
+    private bool shouldRender;
+    private int rows;
+
+    protected override void OnParametersSet()
+    {
+        shouldRender = FormDesignerViewModel.GetRowsCount() != rows;
+
+        rows = FormDesignerViewModel.GetRowsCount();
+    }
+    protected override bool ShouldRender() => shouldRender;
+
 
     private void OnDragStart(FieldOperation operation, Guid idOriginComponent)
     {
@@ -103,5 +119,4 @@ public partial class EditFormComponent
 
         return $"{horizontalPosition} {verticalPosition}";
     }
-
 }

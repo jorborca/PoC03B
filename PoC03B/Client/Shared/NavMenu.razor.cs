@@ -12,9 +12,10 @@ public partial class NavMenu
         FormDesignerViewModel.SetDragTypeName(typeName);
     }
 
-    private void OnClick_AddRow()
+    private async Task OnClick_AddRow()
     {
-        FormDesignerViewModel.AddRow(1);
+        FormDesignerViewModel.AddRow();
+        StateHasChanged();
     }
 
     private void OnClick_RemoveRow()

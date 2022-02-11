@@ -1,22 +1,30 @@
-﻿@using System.Text.Json
-@using PoC03B.Shared
-@using System.Linq
+﻿<CascadingValue Value="formAction">
+    @*@for(int rowId = 1; rowId <= FormDesignerViewModel.GetRowsCount(); rowId++)
+    {
+        <div class="mud-grid mud-grid-spacing-xs-3 mud-grid-justify-xs-flex-start align-end">
+            <Virtualize Items="FormDesignerViewModel.GetFormComponentsByRow(rowId)" Context="formComponent">
+                <MudItem xs="@formComponent.Xs">
+                    <DynamicComponent Type="@formComponent.ComponentType" Parameters="@formComponent.Parameters"></DynamicComponent>
+                </MudItem>
+            </Virtualize>
+        </div>
+    }*@
 
-@inject HttpClient httpClient
-@inject ISnackbar snackBar;
+    @for(int rowId = 1; rowId <= FormDesignerViewModel.GetRowsCount(); rowId++)
+    {
+        <div class="mud-grid mud-grid-spacing-xs-0 mud-grid-justify-xs-flex-start">
+            <Virtualize Items="FormDesignerViewModel.GetFormComponentsByRow(rowId)" Context="formComponent">
+                @*Class="@($"{GetPositionClass(formComponent.Position)}")"*@
+                <MudItem xs="@formComponent.Xs">
+                    @if(formComponent.TypeName != null)
+                    {
+                        <div class="mud-badge-root mud-width-full">
+                            <DynamicComponent Type="@formComponent.ComponentType" Parameters="@formComponent.Parameters"></DynamicComponent>
+                        </div>
+                    }
+                </MudItem>
+            </Virtualize>
+        </div>
+    }
 
-@if (formComponents.Any())
-{
-    <CascadingValue Value="formAction">
-        @for(int rowId = 1; rowId <= MaxRowId(); rowId++)
-        {
-            <div class="mud-grid mud-grid-spacing-xs-3 mud-grid-justify-xs-flex-start align-end">
-                <Virtualize Items="GetFormComponentsByRow(rowId)" Context="formComponent">
-                    <MudItem xs="@formComponent.Xs">
-                        <DynamicComponent Type="@formComponent.ComponentType" Parameters="@formComponent.Parameters"></DynamicComponent>
-                    </MudItem>
-                </Virtualize>
-            </div>
-        }
-    </CascadingValue>
-}
+</CascadingValue>

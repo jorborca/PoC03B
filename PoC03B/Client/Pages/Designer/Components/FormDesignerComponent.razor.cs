@@ -8,21 +8,19 @@ using System.Threading.Tasks;
 
 public partial class FormDesignerComponent
 {
-    //[Parameter] public FormDesigner FormDesigner { get; set; }
-
     [Inject] protected IFormDesignerViewModel FormDesignerViewModel { get; set; }
     [Inject] protected ISnackbar Snackbar { get; set; }
 
-    [Parameter] public string? idForm { get; set; }
+    [Parameter] public string? FormID { get; set; }
 
     FieldOperation MainOperation = FieldOperation.Move;
     string dropClass = "";
 
     protected override async Task OnInitializedAsync()
     {
-        if (idForm != null)
+        if (FormID != null)
         {
-            await FormDesignerViewModel.LoadForm(idForm);
+            await FormDesignerViewModel.LoadForm(FormID);
         }
         else
         {

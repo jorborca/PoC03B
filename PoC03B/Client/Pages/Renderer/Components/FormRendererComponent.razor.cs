@@ -1,89 +1,86 @@
 ﻿namespace PoC03B.Client.Pages.Renderer.Components;
 
-using Microsoft.AspNetCore.Components;
-using MudBlazor;
-using PoC03B.Shared.Models;
 using System.Net.Http.Json;
 using System.Text.Json;
+using Microsoft.AspNetCore.Components;
+using PoC03B.Client.ViewModels;
+using PoC03B.Shared.Models;
+using MudBlazor;
 
 public partial class FormRendererComponent
 {
-    [Inject] HttpClient Http { get; set; }
+    [Inject] protected IFormDesignerViewModel FormDesignerViewModel { get; set; }
+    [Inject] protected ISnackbar Snackbar { get; set; }
 
-    //dynamic ViewModel { get; set; }
+    [Parameter] public string? FormID { get; set; }
 
-    List<FormComponent> formComponents = new();
     Action<string, string, object>? formAction { get; set; }
-
-    private int MaxRowId() => formComponents.Max(x => x.RowId);
-    private List<FormComponent> GetFormComponentsByRow(int rowId) => formComponents.Where(x => x.RowId == rowId).ToList();
 
     protected async override Task OnInitializedAsync()
     {
-        formAction = OnDynamicForm_Action;
+        formAction = OnForm_Action;
 
-        await GetDynamicForm();
+        await FormDesignerViewModel.LoadForm("DynamicForm_0");
+
+        //await GetForm();
     }
 
-    private async Task GetDynamicForm()
+    private async Task GetForm()
     {
         //WebHostEnvironment.WebRootPath
         //formComponents = await httpClient.GetFromJsonAsync<List<FormComponentModel>>("/DynamicForm_0.json");
-        var response = await Http.GetFromJsonAsync<FormDesigner>("templates/load/DynamicForm_0");
 
-        if (response == null) return;
+        //formComponents = response.Items;
 
-        formComponents = response.Items;
+        //if (formComponents == null) return;
 
-        if (formComponents == null) return;
+        //foreach (var formComponent in formComponents)
+        //{
+        //    formComponent.ComponentType = Type.GetType($"{formComponent.TypeName}");
 
-        foreach (var formComponent in formComponents)
-        {
-            formComponent.ComponentType = Type.GetType($"{formComponent.TypeName}");
+        //    if (formComponent?.Parameters != null)
+        //    {
+        //        foreach (var parameter in formComponent.Parameters)
+        //        {
+        //            string key = parameter.Key;
+        //            JsonElement jsonElement = (JsonElement)parameter.Value;
 
-            if (formComponent?.Parameters != null)
-            {
-                foreach (var parameter in formComponent.Parameters)
-                {
-                    string key = parameter.Key;
-                    JsonElement jsonElement = (JsonElement)parameter.Value;
+        //            if (string.IsNullOrEmpty(key) || string.IsNullOrEmpty(jsonElement.GetString()))
+        //            {
+        //                formComponent.Parameters.Remove(key);
+        //                continue;
+        //            }
 
-                    if (string.IsNullOrEmpty(key) || string.IsNullOrEmpty(jsonElement.GetString()))
-                    {
-                        formComponent.Parameters.Remove(key);
-                        continue;
-                    }
+        //            object? newParameterType = key switch
+        //            {
+        //                "Visible" => jsonElement.GetBoolean(),
+        //                _ => jsonElement.GetString()
+        //            };
 
-                    object? newParameterType = key switch
-                    {
-                        "Visible" => jsonElement.GetBoolean(),
-                        _ => jsonElement.GetString()
-                    };
+        //            if (newParameterType == null)
+        //            {
+        //                formComponent.Parameters.Remove(key);
+        //                continue;
+        //            }
 
-                    if (newParameterType == null)
-                    {
-                        formComponent.Parameters.Remove(key);
-                        continue;
-                    }
-
-                    formComponent.Parameters[key] = newParameterType;
-                }
-            }
-        }
+        //            formComponent.Parameters[key] = newParameterType;
+        //        }
+        //    }
+        //}
     }
 
-    private void OnDynamicForm_Action(string senderId, string eventType, object data)
+    private void OnForm_Action(string senderId, string eventType, object data)
     {
         string action = $"{senderId}_{eventType}";
 
         switch (action)
         {
             case "btnAceptar_OnClick":
-                snackBar.Add($"Action: {action}", Severity.Success);
+                Snackbar.Add($"Action: {action}", Severity.Success);
                 break;
 
             case "btnCancelar_OnClick":
-                snackBar.Add($"Action: {action}", Severity.Error);
+                Snackbar.Add($"Action: {action}", Severity.Error);
                 break;
         }
     }

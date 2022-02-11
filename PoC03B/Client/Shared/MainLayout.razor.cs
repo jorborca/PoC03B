@@ -13,7 +13,7 @@ public partial class MainLayout
 
     private void OnClick_NewForm()
     {
-        NavigationManager.NavigateTo($"/Edit", true);
+        NavigationManager.NavigateTo($"/Edit");
         //StateHasChanged();
     }
 

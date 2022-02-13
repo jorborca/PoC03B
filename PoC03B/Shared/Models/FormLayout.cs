@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace PoC03B.Shared.Models
 {
-    public class FormDesigner
+    public class FormLayout
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
@@ -16,9 +16,9 @@ namespace PoC03B.Shared.Models
         public List<FormComponent> Items { get; set; } = new();
         public FormState State { get; set; }
 
-        public FormDesigner Clone()
+        public FormLayout Clone()
         {
-            FormDesigner other = (FormDesigner)this.MemberwiseClone();
+            FormLayout other = (FormLayout)this.MemberwiseClone();
             other.Items = new List<FormComponent>(this.Items);
             return other;
             //return (FormDesignerModel)this.Clone();

@@ -1,0 +1,22 @@
+{
+  "Id": "deb87db2-4033-4b9f-b759-87e3480b5040",
+  "Name": "Demo",
+  "Description": "Demo",
+  "Rows": 1,
+  "Items": [
+    {
+      "Id": "af514a11-c338-4489-9709-3e23fa8b7271",
+      "RowId": 1,
+      "ColId": 1,
+      "TypeName": "PoC03B.Client.Shared.Editors.SelectComponent",
+      "Parameters": {},
+      "Xs": 1,
+      "Sm": 1,
+      "Md": 1,
+      "Lg": 1,
+      "Position": 4,
+      "State": 1
+    }
+  ],
+  "State": 1
+}

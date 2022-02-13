@@ -4,12 +4,41 @@ using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using PoC03B.Client.ViewModels;
 using PoC03B.Shared.Enums;
+using System.ComponentModel;
 
 public partial class MainLayout
 {
-    [Inject] protected IFormDesignerViewModel FormDesignerViewModel { get; set; }
+    [Inject] protected IFormLayoutViewModel FormLayoutViewModelService { get; set; }
     [Inject] protected NavigationManager NavigationManager { get; set; }
     [Inject] protected ISnackbar SnackBar { get; set; }
+
+    #region Reactive ViewModel Events
+    
+    protected override async Task OnInitializedAsync()
+    {
+        FormLayoutViewModelService.PropertyChanged += async (sender, e) => {
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+        };
+        await base.OnInitializedAsync();
+    }
+
+    async void OnPropertyChangedHandler(object sender, PropertyChangedEventArgs e)
+    {
+        await InvokeAsync(() =>
+        {
+            StateHasChanged();
+        });
+    }
+
+    public void Dispose()
+    {
+        FormLayoutViewModelService.PropertyChanged -= OnPropertyChangedHandler;
+    }
+
+    #endregion
 
     private void OnClick_NewForm()
     {
@@ -19,37 +48,26 @@ public partial class MainLayout
 
     private void OnClick_SelectForm()
     {
-        FormDesignerViewModel.SetState(FormState.Selection);
+        FormLayoutViewModelService.SetState(FormState.Selection);
 
         NavigationManager.NavigateTo($"/");
     }
 
     private async Task OnClick_SaveForm()
     {
-        await FormDesignerViewModel.SaveForm();
+        await FormLayoutViewModelService.SaveForm();
 
         SnackBar.Add($"Formulario guardado.");
     }
 
     private void OnClick_DesignMode()
     {
-        FormDesignerViewModel.SetState(FormState.Design);
+        FormLayoutViewModelService.SetState(FormState.Design);
     }
 
     private void OnClick_ViewMode()
     {
-        FormDesignerViewModel.SetState(FormState.View);
+        FormLayoutViewModelService.SetState(FormState.View);
     }
 
-    //private async Task OnClick_LoadForm()
-    //{
-    //    //var response = await HttpClient.GetFromJsonAsync<FormDesigner>("templates/load/DynamicForm_1");
-
-    //    //if (response == null) return;
-
-    //    //FormDesignerData = response;
-    //    //FormDesignerService.RestoreForm();
-
-    //    //FormDesignerService.SetState(FormState.Design);
-    //}
 }

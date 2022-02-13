@@ -4,23 +4,23 @@ using System.Net.Http.Json;
 
 namespace PoC03B.Client.Services;
 
-public class FormDesignerService : IFormDesignerService
+public class FormApiService : IFormApiService
 {
     private HttpClient _HttpClient { get; }
 
-    public FormDesignerService(HttpClient httpClient)
+    public FormApiService(HttpClient httpClient)
     {
         this._HttpClient = httpClient;
     }
 
-    public async Task<FormDesigner> GetForm(string idForm)
+    public async Task<FormLayout> GetForm(string idForm)
     {
-        var response = await _HttpClient.GetFromJsonAsync<FormDesigner>($"templates/load/{idForm}");
+        var response = await _HttpClient.GetFromJsonAsync<FormLayout>($"templates/load/{idForm}");
 
         return response;
     }
 
-    public async Task PostForm(FormDesigner cleanTemplate)
+    public async Task PostForm(FormLayout cleanTemplate)
     {
         await _HttpClient.PostAsJsonAsync("templates/save", cleanTemplate);
         await PostHistory(cleanTemplate.Id, cleanTemplate.Name, cleanTemplate.Description);

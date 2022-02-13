@@ -1,10 +1,13 @@
 ﻿using PoC03B.Shared.Enums;
 using PoC03B.Shared.Models;
+using System.ComponentModel;
 
 namespace PoC03B.Client.ViewModels
 {
-    public interface IFormDesignerViewModel
+    public interface IFormLayoutViewModel
     {
+        event PropertyChangedEventHandler PropertyChanged;
+
         void AddRow();
         void RemoveRow();
         int GetRowsCount();

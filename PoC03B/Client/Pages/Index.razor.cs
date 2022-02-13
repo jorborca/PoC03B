@@ -1,15 +1,12 @@
-﻿using Microsoft.AspNetCore.Components;
-using PoC03B.Client.ViewModels;
-using PoC03B.Shared.Enums;
-using PoC03B.Shared.Models;
-using System.Net;
-using System.Net.Http.Json;
+﻿namespace PoC03B.Client.Pages;
 
-namespace PoC03B.Client.Pages;
+using Microsoft.AspNetCore.Components;
+using PoC03B.Client.ViewModels;
+using PoC03B.Shared.Models;
 
 public partial class Index
 {
-    [Inject] protected IFormDesignerViewModel FormDesignerViewModel { get; set; }
+    [Inject] protected IFormLayoutViewModel FormDesignerViewModel { get; set; }
     [Inject] protected NavigationManager NavigationManager { get; set; }
 
     List<FormHistory>? FormHistory { get; set; } = new();

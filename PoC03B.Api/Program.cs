@@ -41,7 +41,7 @@ app.UseCors("AllOrigins");
 
 var templateManagerEndpoint = new TemplateManagerEndpoint();
 app.MapGet("/templates/load/{id}", (string id) => templateManagerEndpoint.LoadTemplateAsync(id)).WithName("LoadTemplate");
-app.MapPost("/templates/save", ([FromBody] FormDesigner template) => templateManagerEndpoint.SaveTemplateAsync(template)).WithName("SaveTemplate");
+app.MapPost("/templates/save", ([FromBody] FormLayout template) => templateManagerEndpoint.SaveTemplateAsync(template)).WithName("SaveTemplate");
 
 var historyEndpoint = new HistoryEndpoint();
 app.MapGet("/history/load", historyEndpoint.LoadHistoryAsync).WithName("LoadHistory");

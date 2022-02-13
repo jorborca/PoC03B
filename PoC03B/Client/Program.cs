@@ -11,11 +11,11 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddMudServices();
 
-builder.Services.AddHttpClient<IFormDesignerService, FormDesignerService>(client => {
+builder.Services.AddHttpClient<IFormApiService, FormApiService>(client => {
     client.BaseAddress = new Uri("https://localhost:7241");
 });
 
-builder.Services.AddSingleton<IFormDesignerViewModel, FormDesignerViewModel>();
+builder.Services.AddSingleton<IFormLayoutViewModel, FormLayoutViewModel>();
 
 //builder.HostEnvironment.BaseAddress
 //builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7241") });

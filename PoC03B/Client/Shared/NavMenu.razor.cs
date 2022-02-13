@@ -1,26 +1,27 @@
-﻿using Microsoft.AspNetCore.Components;
-using PoC03B.Client.ViewModels;
+﻿namespace PoC03B.Client.Shared;
 
-namespace PoC03B.Client.Shared;
+using Microsoft.AspNetCore.Components;
+using PoC03B.Client.ViewModels;
 
 public partial class NavMenu
 {
-    [Inject] protected IFormDesignerViewModel FormDesignerViewModel { get; set; }
+    [CascadingParameter(Name = "FormLayoutViewModel")]
+    IFormLayoutViewModel FormLayoutViewModel { get; set; }
 
     private void OnDragStart(string typeName)
     {
-        FormDesignerViewModel.SetDragTypeName(typeName);
+        FormLayoutViewModel.SetDragTypeName(typeName);
     }
 
     private async Task OnClick_AddRow()
     {
-        FormDesignerViewModel.AddRow();
+        FormLayoutViewModel.AddRow();
         StateHasChanged();
     }
 
     private void OnClick_RemoveRow()
     {
-        FormDesignerViewModel.RemoveRow();
+        FormLayoutViewModel.RemoveRow();
     }
 
 }

@@ -1,15 +1,17 @@
 ﻿namespace PoC03B.Client.Pages.Designer.Components;
 
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using PoC03B.Client.ViewModels;
 using PoC03B.Shared.Enums;
-using System.Threading.Tasks;
 
-public partial class FormDesignerComponent
+public partial class DynamicFormDesignerComponent
 {
-    [Inject] protected IFormDesignerViewModel FormDesignerViewModel { get; set; }
     [Inject] protected ISnackbar Snackbar { get; set; }
+
+    [CascadingParameter(Name = "FormLayoutViewModel")]
+    IFormLayoutViewModel FormLayoutViewModel { get; set; }
 
     [Parameter] public string? FormID { get; set; }
 
@@ -20,30 +22,18 @@ public partial class FormDesignerComponent
     {
         if (FormID != null)
         {
-            await FormDesignerViewModel.LoadForm(FormID);
+            await FormLayoutViewModel.LoadForm(FormID);
         }
         else
         {
-            FormDesignerViewModel.NewForm();
+            FormLayoutViewModel.NewForm();
         }
     }
-
-    private bool shouldRender;
-    private int rows;
-
-    protected override void OnParametersSet()
-    {
-        shouldRender = FormDesignerViewModel.GetRowsCount() != rows;
-
-        rows = FormDesignerViewModel.GetRowsCount();
-    }
-    protected override bool ShouldRender() => shouldRender;
-
-
+   
     private void OnDragStart(FieldOperation operation, Guid idOriginComponent)
     {
         MainOperation = operation;
-        FormDesignerViewModel.SetDragID(idOriginComponent);
+        FormLayoutViewModel.SetDragID(idOriginComponent);
     }
 
     private void OnDragEnter(Guid id)
@@ -70,12 +60,12 @@ public partial class FormDesignerComponent
 
     private void OnDrop(Guid idTargetComponent)
     {
-        FormDesignerViewModel.ProcessOperation(FieldOperation.Move, null, idTargetComponent);
+        FormLayoutViewModel.ProcessOperation(MainOperation, null, idTargetComponent);
     }
 
     private void OnClick_MainOperation(Guid idOriginComponent)
     {
-        FormDesignerViewModel.ProcessOperation(MainOperation, idOriginComponent, null);
+        FormLayoutViewModel.ProcessOperation(MainOperation, idOriginComponent, null);
         MainOperation = FieldOperation.Move;
     }
 

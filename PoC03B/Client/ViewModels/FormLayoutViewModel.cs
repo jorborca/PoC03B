@@ -4,29 +4,32 @@ using PoC03B.Client.Services;
 using PoC03B.Shared.Enums;
 using PoC03B.Shared.Models;
 
-public class FormDesignerViewModel : BaseViewModel, IFormDesignerViewModel
+public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
 {
-    private FormDesigner _FormDesignerData { get; set; }
-    private IFormDesignerService _FormDesignerService { get; set; }
+    private FormLayout _FormLayout { get; set; }
+    private IFormApiService _FormApiService { get; set; }
 
-    public FormDesignerViewModel(IFormDesignerService formDesignerService)
+    public FormLayoutViewModel(IFormApiService formDesignerService)
     {
-        this._FormDesignerData = new();
-        this._FormDesignerService = formDesignerService;
+        this._FormLayout = new();
+        this._FormApiService = formDesignerService;
     }
 
     public void AddRow()
     {
-        _FormDesignerData.Rows++;
+        IsBusy = true;
 
-        if (!_FormDesignerData.Items.Any(x => x.RowId == _FormDesignerData.Rows))
+        _FormLayout.Rows++;
+
+        if (!_FormLayout.Items.Any(x => x.RowId == _FormLayout.Rows))
         {
             for (int colId = 1; colId <= 12; colId++)
             {
-                _FormDesignerData.Items.Add(new FormComponent()
+
+                _FormLayout.Items.Add(new FormComponent()
                 {
                     Id = Guid.NewGuid(),
-                    RowId = _FormDesignerData.Rows,
+                    RowId = _FormLayout.Rows,
                     ColId = colId,
                     Xs = 1,
                     Sm = 1,
@@ -37,57 +40,66 @@ public class FormDesignerViewModel : BaseViewModel, IFormDesignerViewModel
                 });
             }
         }
+
+        OnPropertyChanged(nameof(_FormLayout.Items));
+        IsBusy = false;
     }
 
     public void RemoveRow()
     {
-        if (_FormDesignerData.Rows == 1) return;
+        IsBusy = true;
 
-        int rowId = _FormDesignerData.Rows;
+        if (_FormLayout.Rows == 1) return;
 
-        if (!_FormDesignerData.Items.Any(x => x.RowId == rowId && x.State == FieldState.Hold))
+        int rowId = _FormLayout.Rows;
+
+        if (!_FormLayout.Items.Any(x => x.RowId == rowId && x.State == FieldState.Hold))
         {
-            _FormDesignerData.Items.RemoveAll(x => x.RowId == rowId);
-            _FormDesignerData.Rows--;
+            _FormLayout.Items.RemoveAll(x => x.RowId == rowId);
+            _FormLayout.Rows--;
         }
+
+        OnPropertyChanged(nameof(_FormLayout.Items));
+
+        IsBusy = false;
     }
 
     public int GetRowsCount()
     {
-        return _FormDesignerData.Rows;
+        return _FormLayout.Rows;
     }
 
 
     public void SetState(FormState state)
     {
-        _FormDesignerData.State = state;
+        _FormLayout.State = state;
     }
 
     public FormState GetState()
     {
-        return _FormDesignerData.State;
+        return _FormLayout.State;
     }
 
     public bool CheckState(FormState state)
     {
-        return _FormDesignerData.State == state;
+        return _FormLayout.State == state;
     }
 
 
     public void SetDragTypeName(string typeName)
     {
-        _FormDesignerData.DragByTypeName = typeName;
+        _FormLayout.DragByTypeName = typeName;
     }
 
     public void SetDragID(Guid id)
     {
-        _FormDesignerData.DragByID = id;
+        _FormLayout.DragByID = id;
     }
 
 
     public List<FormComponent> GetFormComponentsByRow(int rowId)
     {
-        return _FormDesignerData.Items.Where(x => x.RowId == rowId && x.State != FieldState.Disabled).ToList();
+        return _FormLayout.Items.Where(x => x.RowId == rowId && x.State != FieldState.Disabled).ToList();
     }
 
     public void ProcessOperation(FieldOperation mainOperation, Guid? idOriginComponent, Guid? idTargetComponent)
@@ -95,37 +107,38 @@ public class FormDesignerViewModel : BaseViewModel, IFormDesignerViewModel
         FormComponent originComponent = new();
         FormComponent targetComponent = new();
 
-        if (_FormDesignerData.DragByID != null)
+        if (_FormLayout.DragByID != null)
         {
-            idOriginComponent = _FormDesignerData.DragByID;
-            _FormDesignerData.DragByID = null;
+            idOriginComponent = _FormLayout.DragByID;
+            _FormLayout.DragByID = null;
         }
 
         if (idOriginComponent != null)
         {
-            originComponent = _FormDesignerData.Items.Single(x => x.Id == idOriginComponent);
+            originComponent = _FormLayout.Items.Single(x => x.Id == idOriginComponent);
         }
 
         if (idTargetComponent != null)
         {
-            targetComponent = _FormDesignerData.Items.Single(x => x.Id == idTargetComponent);
+            targetComponent = _FormLayout.Items.Single(x => x.Id == idTargetComponent);
         }
 
         switch (mainOperation)
         {
             case FieldOperation.Move:
-                Type? backupComponentType = targetComponent.ComponentType;
-                string? backupTypeName = targetComponent.TypeName;
-
-                if (_FormDesignerData.DragByTypeName != null)
+                if (_FormLayout.DragByTypeName != null)
                 {
-                    targetComponent.TypeName = _FormDesignerData.DragByTypeName;
-                    targetComponent.ComponentType = Type.GetType($"{_FormDesignerData.DragByTypeName}");
+                    targetComponent.TypeName = _FormLayout.DragByTypeName;
+                    targetComponent.ComponentType = Type.GetType($"{_FormLayout.DragByTypeName}");
+                    targetComponent.Parameters = new Dictionary<string, object>();
                     targetComponent.State = FieldState.Hold;
-                    _FormDesignerData.DragByTypeName = null;
+                    _FormLayout.DragByTypeName = null;
                 }
                 else
                 {
+                    Type? backupComponentType = targetComponent.ComponentType;
+                    string? backupTypeName = targetComponent.TypeName;
+
                     targetComponent.TypeName = originComponent.TypeName;
                     targetComponent.ComponentType = originComponent.ComponentType;
                     targetComponent.State = FieldState.Hold;
@@ -139,7 +152,7 @@ public class FormDesignerViewModel : BaseViewModel, IFormDesignerViewModel
                 //Snackbar.Add($"Target: {targetComponent.ColId}-{targetComponent.Xs}");
 
                 // Join fields
-                List<FormComponent> itemsToJoin = _FormDesignerData.Items.Where(
+                List<FormComponent> itemsToJoin = _FormLayout.Items.Where(
                     x => x.RowId == originComponent.RowId
                     && x.State == FieldState.Empty
                     && x.ColId > originComponent.ColId
@@ -158,7 +171,7 @@ public class FormDesignerViewModel : BaseViewModel, IFormDesignerViewModel
                 break;
 
             case FieldOperation.Expand:
-                var limitComponent = _FormDesignerData.Items.FirstOrDefault(
+                var limitComponent = _FormLayout.Items.FirstOrDefault(
                     x => x.RowId == originComponent.RowId
                     && x.ColId > originComponent.ColId
                     && x.State == FieldState.Hold,
@@ -168,7 +181,7 @@ public class FormDesignerViewModel : BaseViewModel, IFormDesignerViewModel
                     }
                 );
 
-                List<FormComponent> itemsToExpand = _FormDesignerData.Items.Where(
+                List<FormComponent> itemsToExpand = _FormLayout.Items.Where(
                     x => x.RowId == originComponent.RowId
                     && x.ColId > originComponent.ColId
                     && x.ColId <= limitComponent.ColId
@@ -185,7 +198,7 @@ public class FormDesignerViewModel : BaseViewModel, IFormDesignerViewModel
             case FieldOperation.Split:
                 if (originComponent.Xs > 1)
                 {
-                    _FormDesignerData.Items.Where(
+                    _FormLayout.Items.Where(
                         x => x.RowId == originComponent.RowId
                         && x.ColId > originComponent.ColId
                         && x.ColId <= originComponent.ColId + originComponent.Xs)
@@ -202,7 +215,7 @@ public class FormDesignerViewModel : BaseViewModel, IFormDesignerViewModel
     private void RestoreField(FormComponent originComponent, Type? newComponentType, string? newTypeName)
     {
         // Restore and Split the collapsed fields
-        List<FormComponent> itemsToSplit = _FormDesignerData.Items.Where(
+        List<FormComponent> itemsToSplit = _FormLayout.Items.Where(
             x => x.RowId == originComponent.RowId
             && x.State == FieldState.Disabled
             && x.ColId > originComponent.ColId
@@ -222,7 +235,7 @@ public class FormDesignerViewModel : BaseViewModel, IFormDesignerViewModel
 
     public void NewForm()
     {
-        _FormDesignerData = new FormDesigner
+        _FormLayout = new FormLayout
         {
             Id = Guid.NewGuid(),
             Name = "Demo",
@@ -236,25 +249,40 @@ public class FormDesignerViewModel : BaseViewModel, IFormDesignerViewModel
 
     public async Task LoadForm(string idForm)
     {
-        int ixItem = 0;
-        int joins = 0;
-
-        var response = await _FormDesignerService.GetForm(idForm);
+        var response = await _FormApiService.GetForm(idForm);
 
         if (response == null) return;
 
-        _FormDesignerData = response;
+        _FormLayout = response;
+
+        RestoreForm();
+    }
+
+    public async Task SaveForm()
+    {
+        FormLayout cleanTemplate = _FormLayout.Clone();
+        cleanTemplate.Items.RemoveAll(x => x.State != FieldState.Hold);
+
+        await _FormApiService.PostForm(cleanTemplate);
+    }
+
+    public void RestoreForm()
+    {
+        int ixItem = 0;
+        int joins = 0;
+
+        IsBusy = true;
 
         //FormDesignerData.Items.Where(x => x.State == FieldState.Hold).ToList()
         //.ForEach(x => x.ComponentType = Type.GetType($"{x.TypeName}"));
 
-        for (int rowId = 1; rowId <= _FormDesignerData.Rows; rowId++)
+        for (int rowId = 1; rowId <= _FormLayout.Rows; rowId++)
         {
             for (int colId = 1; colId <= 12; colId++)
             {
-                if (_FormDesignerData.Items.Any(x => x.RowId == rowId && x.ColId == colId))
+                if (_FormLayout.Items.Any(x => x.RowId == rowId && x.ColId == colId))
                 {
-                    var item = _FormDesignerData.Items.Single(x => x.RowId == rowId && x.ColId == colId);
+                    var item = _FormLayout.Items.Single(x => x.RowId == rowId && x.ColId == colId);
                     item.ComponentType = Type.GetType($"{item.TypeName}");
 
                     if (item.Xs > 1) joins = item.Xs;
@@ -263,7 +291,7 @@ public class FormDesignerViewModel : BaseViewModel, IFormDesignerViewModel
                 {
                     ixItem = (rowId - 1) * 12 + (colId - 1);
 
-                    _FormDesignerData.Items.Insert(ixItem, new FormComponent()
+                    _FormLayout.Items.Insert(ixItem, new FormComponent()
                     {
                         Id = Guid.NewGuid(),
                         RowId = rowId,
@@ -272,6 +300,7 @@ public class FormDesignerViewModel : BaseViewModel, IFormDesignerViewModel
                         Sm = 1,
                         Md = 1,
                         Lg = 1,
+                        Parameters = new Dictionary<string,object>(),
                         Position = FieldPosition.MediumCenter,
                         State = joins > 1 ? FieldState.Disabled : FieldState.Empty
                     });
@@ -280,24 +309,18 @@ public class FormDesignerViewModel : BaseViewModel, IFormDesignerViewModel
                 }
             }
         }
+
+        OnPropertyChanged(nameof(_FormLayout.Items));
+        IsBusy = false;
     }
-
-    public async Task SaveForm()
-    {
-        FormDesigner cleanTemplate = _FormDesignerData.Clone();
-        cleanTemplate.Items.RemoveAll(x => x.State != FieldState.Hold);
-
-        await _FormDesignerService.PostForm(cleanTemplate);
-    }
-
 
     public async Task<List<FormHistory>?> LoadHistory()
     {
-        return await _FormDesignerService.GetHistory();
+        return await _FormApiService.GetHistory();
     }
 
     private async Task SaveHistory(Guid id, string name, string description)
     {
-        await _FormDesignerService.PostHistory(id, name, description);
+        await _FormApiService.PostHistory(id, name, description);
     }
 }

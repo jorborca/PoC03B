@@ -5,10 +5,9 @@ namespace PoC03B.Api.Endpoints;
 
 public class TemplateManagerEndpoint
 {
-    public async Task<IResult> SaveTemplateAsync(FormDesigner template)
+    public async Task<IResult> SaveTemplateAsync(FormLayout template)
     {
-        //{ template.Id}
-        string filePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", $"DynamicForm_1.json");
+        string filePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", $"{template.Id}.json");
         string jsonTemplate = JsonSerializer.Serialize(template); 
         await File.WriteAllTextAsync(filePath, jsonTemplate);
 
@@ -24,7 +23,7 @@ public class TemplateManagerEndpoint
         string filePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", $"{id}.json");
         string jsonTemplate = await File.ReadAllTextAsync(filePath);
             
-        var template = JsonSerializer.Deserialize<FormDesigner>(jsonTemplate);
+        var template = JsonSerializer.Deserialize<FormLayout>(jsonTemplate);
 
         if (template == null) return Results.NotFound();
 

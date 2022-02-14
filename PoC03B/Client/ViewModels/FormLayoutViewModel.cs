@@ -78,7 +78,10 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
 
     public void SetState(FormState state)
     {
+        //IsBusy = true;
         _FormLayout.State = state;
+        //OnPropertyChanged(nameof(_FormLayout.State));
+        //IsBusy = false;
     }
 
     public FormState GetState()
@@ -147,12 +150,14 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
                 {
                     Type? backupComponentType = targetComponent.ComponentType;
                     string? backupTypeName = targetComponent.TypeName;
+                    IDictionary<string, object> backupParameters = targetComponent.Parameters;
 
                     targetComponent.TypeName = originComponent.TypeName;
                     targetComponent.ComponentType = originComponent.ComponentType;
+                    targetComponent.Parameters = originComponent.Parameters;
                     targetComponent.State = FieldState.Hold;
 
-                    RestoreField(originComponent, backupComponentType, backupTypeName);
+                    RestoreField(originComponent, backupComponentType, backupTypeName, backupParameters);
                 }
                 break;
 
@@ -176,7 +181,7 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
                 break;
 
             case FieldOperation.Delete: // Eliminar Item
-                RestoreField(originComponent, null, null);
+                RestoreField(originComponent, null, null, new Dictionary<string, object>());
                 break;
 
             case FieldOperation.Expand:
@@ -221,7 +226,7 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
         }
     }
 
-    private void RestoreField(FormComponent originComponent, Type? newComponentType, string? newTypeName)
+    private void RestoreField(FormComponent originComponent, Type? newComponentType, string? newTypeName, IDictionary<string, object> parameters)
     {
         // Restore and Split the collapsed fields
         List<FormComponent> itemsToSplit = _FormLayout.Items.Where(
@@ -238,6 +243,7 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
 
         originComponent.ComponentType = newComponentType;
         originComponent.TypeName = newTypeName;
+        originComponent.Parameters = parameters;
         originComponent.State = FieldState.Empty;
         originComponent.Xs = 1;
     }
@@ -284,7 +290,9 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
 
         //FormDesignerData.Items.Where(x => x.State == FieldState.Hold).ToList()
         //.ForEach(x => x.ComponentType = Type.GetType($"{x.TypeName}"));
-        _FormLayout.State = state;
+
+        _FormLayout.State = FormState.Busy;
+        //OnPropertyChanged(nameof(_FormLayout.State));
 
         for (int rowId = 1; rowId <= _FormLayout.Rows; rowId++)
         {
@@ -349,7 +357,10 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
             }
         }
 
+        _FormLayout.State = state;
+
         OnPropertyChanged(nameof(_FormLayout.Items));
+
         IsBusy = false;
     }
 

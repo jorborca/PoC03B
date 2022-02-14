@@ -24,6 +24,7 @@ namespace PoC03B.Client.ViewModels
         void NewForm();
         Task SaveForm();
         Task LoadForm(string id, FormState state);
+        void RestoreForm(FormState state);
         Task<List<FormHistory>?> LoadHistory();
 
         void ProcessOperation(FieldOperation mainOperation, Guid? idOriginComponent, Guid? idTargetComponent);

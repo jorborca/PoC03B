@@ -40,12 +40,6 @@ public partial class MainLayout
 
     #endregion
 
-    private void OnClick_NewForm()
-    {
-        NavigationManager.NavigateTo($"/Edit");
-        //StateHasChanged();
-    }
-
     private void OnClick_SelectForm()
     {
         FormLayoutViewModelService.SetState(FormState.Selection);
@@ -67,7 +61,7 @@ public partial class MainLayout
 
     private void OnClick_ViewMode()
     {
-        NavigationManager.NavigateTo($"render/{FormLayoutViewModelService.GetFormId()}");
+        NavigationManager.NavigateTo($"view/{FormLayoutViewModelService.GetFormId()}");
     }
 
 }

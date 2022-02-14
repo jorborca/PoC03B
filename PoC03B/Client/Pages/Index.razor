@@ -6,8 +6,17 @@
 {
     <MudTable Items="@FormHistory" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@loading" Outlined="false" 
         LoadingProgressColor="Color.Info">
+        <ColGroup>
+            <col style="width:5%;" />
+            <col style="width:10%;"/>
+            <col />
+            <col />
+        </ColGroup>
         <HeaderContent>
-            <MudTh></MudTh>
+            <MudTh>
+                <MudIconButton Icon="@Icons.Material.Outlined.AddCircle" Size="Size.Medium" Color="Color.Info" 
+                    OnClick="@(() => OnClick_NewForm())" />
+            </MudTh>
             <MudTh>Fecha/Hora</MudTh>
             <MudTh>Nombre</MudTh>
             <MudTh>Descripción</MudTh>

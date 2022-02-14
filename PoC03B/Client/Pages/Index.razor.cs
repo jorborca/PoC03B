@@ -19,6 +19,11 @@ public partial class Index
         loading = false;
     }
 
+    private void OnClick_NewForm()
+    {
+        NavigationManager.NavigateTo($"/Edit");
+    }
+
     private void OnClick_EditForm(Guid id)
     {
         NavigationManager.NavigateTo($"/Edit/{id}");

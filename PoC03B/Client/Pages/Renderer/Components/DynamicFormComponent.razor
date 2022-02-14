@@ -10,20 +10,23 @@
         </div>
     }*@
 
-    @for(int rowId = 1; rowId <= FormLayoutViewModel.GetRowsCount(); rowId++)
+    @if(!FormLayoutViewModel.CheckState(FormState.Busy))
     {
-        <div class="mud-grid mud-grid-spacing-xs-0 mud-grid-justify-xs-flex-start">
-            <Virtualize Items="FormLayoutViewModel.GetFormComponentsByRow(rowId)" Context="formComponent">
-                @*Class="@($"{GetPositionClass(formComponent.Position)}")"*@
-                <MudItem xs="@formComponent.Xs">
-                    @if(formComponent.TypeName != null)
-                    {
-                        <div class="mud-badge-root mud-width-full">
-                            <DynamicComponent Type="@formComponent.ComponentType" Parameters="@formComponent.Parameters"></DynamicComponent>
-                        </div>
-                    }
-                </MudItem>
-            </Virtualize>
-        </div>
+        @for(int rowId = 1; rowId <= FormLayoutViewModel.GetRowsCount(); rowId++)
+        {
+            <div class="mud-grid mud-grid-spacing-xs-3 mud-grid-justify-xs-flex-start">
+                <Virtualize Items="FormLayoutViewModel.GetFormComponentsByRow(rowId)" Context="formComponent">
+                    @*Class="@($"{GetPositionClass(formComponent.Position)}")"*@
+                    <MudItem xs="@formComponent.Xs">
+                        @if(formComponent.TypeName != null)
+                        {
+                            <div class="mud-badge-root mud-width-full">
+                                <DynamicComponent Type="@formComponent.ComponentType" Parameters="@formComponent.Parameters"></DynamicComponent>
+                            </div>
+                        }
+                    </MudItem>
+                </Virtualize>
+            </div>
+        }
     }
 </CascadingValue>

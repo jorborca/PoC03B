@@ -23,6 +23,13 @@ public partial class DynamicFormDesignerComponent
         if (FormID != null)
         {
             await FormLayoutViewModel.LoadForm(FormID, FormState.Design);
+            //if(FormID != FormLayoutViewModel.GetFormId())
+            //{
+            //}
+            //else
+            //{
+            //    FormLayoutViewModel.RestoreForm(FormState.Design);
+            //}
         }
         else
         {

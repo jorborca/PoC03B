@@ -9,7 +9,14 @@
       "RowId": 1,
       "ColId": 1,
       "TypeName": "PoC03B.Client.Shared.Editors.SelectComponent",
-      "Parameters": {},
+      "Parameters": {
+        "Id": "Text1",
+        "Label": "Texto 1",
+        "Class": "",
+        "Style": "",
+        "Text": "",
+        "Attributes": ""
+      },
       "Xs": 1,
       "Sm": 1,
       "Md": 1,
@@ -17,6 +24,5 @@
       "Position": 4,
       "State": 1
     }
-  ],
-  "State": 1
+  ]
 }

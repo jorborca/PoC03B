@@ -11,9 +11,10 @@ namespace PoC03B.Shared.Models
         public int Rows { get; set; }
         [JsonIgnore]
         public string? DragByTypeName { get; set; }
-        [JsonIgnore] 
+        [JsonIgnore]
         public Guid? DragByID { get; set; }
         public List<FormComponent> Items { get; set; } = new();
+        [JsonIgnore]
         public FormState State { get; set; }
 
         public FormLayout Clone()

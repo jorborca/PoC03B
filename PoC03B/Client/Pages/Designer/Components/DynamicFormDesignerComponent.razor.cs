@@ -22,14 +22,14 @@ public partial class DynamicFormDesignerComponent
     {
         if (FormID != null)
         {
-            await FormLayoutViewModel.LoadForm(FormID);
+            await FormLayoutViewModel.LoadForm(FormID, FormState.Design);
         }
         else
         {
             FormLayoutViewModel.NewForm();
         }
     }
-   
+
     private void OnDragStart(FieldOperation operation, Guid idOriginComponent)
     {
         MainOperation = operation;
@@ -65,8 +65,11 @@ public partial class DynamicFormDesignerComponent
 
     private void OnClick_MainOperation(Guid idOriginComponent)
     {
-        FormLayoutViewModel.ProcessOperation(MainOperation, idOriginComponent, null);
-        MainOperation = FieldOperation.Move;
+        if(MainOperation != FieldOperation.Move)
+        {
+            FormLayoutViewModel.ProcessOperation(MainOperation, idOriginComponent, null);
+            MainOperation = FieldOperation.Move;
+        }
     }
 
     private void OnChange_MainOperation()

@@ -3,6 +3,7 @@
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using PoC03B.Client.ViewModels;
+using PoC03B.Shared.Enums;
 
 public partial class DynamicFormComponent
 {
@@ -17,7 +18,10 @@ public partial class DynamicFormComponent
     {
         formAction = OnForm_Action;
 
-        await FormLayoutViewModel.LoadForm("DynamicForm_0");
+        if (FormID != null)
+        {
+            await FormLayoutViewModel.LoadForm(FormID, FormState.View);
+        }
     }
 
     private void OnForm_Action(string senderId, string eventType, object data)

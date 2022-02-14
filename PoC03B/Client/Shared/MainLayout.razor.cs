@@ -62,12 +62,12 @@ public partial class MainLayout
 
     private void OnClick_DesignMode()
     {
-        FormLayoutViewModelService.SetState(FormState.Design);
+        NavigationManager.NavigateTo($"edit/{FormLayoutViewModelService.GetFormId()}");
     }
 
     private void OnClick_ViewMode()
     {
-        FormLayoutViewModelService.SetState(FormState.View);
+        NavigationManager.NavigateTo($"render/{FormLayoutViewModelService.GetFormId()}");
     }
 
 }

@@ -18,7 +18,6 @@ public class FormComponent
     public int Sm { get; set; }
     public int Md { get; set; }
     public int Lg { get; set; }
-
     public FieldPosition Position { get; set; }
     public FieldState State { get; set; }
 

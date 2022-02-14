@@ -8,6 +8,7 @@ namespace PoC03B.Client.ViewModels
     {
         event PropertyChangedEventHandler PropertyChanged;
 
+        string GetFormId();
         void AddRow();
         void RemoveRow();
         int GetRowsCount();
@@ -22,7 +23,7 @@ namespace PoC03B.Client.ViewModels
 
         void NewForm();
         Task SaveForm();
-        Task LoadForm(string id);
+        Task LoadForm(string id, FormState state);
         Task<List<FormHistory>?> LoadHistory();
 
         void ProcessOperation(FieldOperation mainOperation, Guid? idOriginComponent, Guid? idTargetComponent);

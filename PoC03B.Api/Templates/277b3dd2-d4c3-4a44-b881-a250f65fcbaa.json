@@ -10,11 +10,11 @@
       "ColId": 1,
       "TypeName": "PoC03B.Client.Shared.Editors.TextBoxComponent",
       "Parameters": {
-        "Id": "btnAceptar",
-        "Label": "Aceptar",
+        "Id": "Text1",
+        "Label": "Texto 1",
         "Class": "",
         "Style": "",
-        "Text": "Nombre",
+        "Text": "",
         "Attributes": ""
       },
       "Xs": 1,
@@ -24,6 +24,5 @@
       "Position": 4,
       "State": 1
     }
-  ],
-  "State": 1
+  ]
 }

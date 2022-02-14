@@ -3,6 +3,7 @@
 using PoC03B.Client.Services;
 using PoC03B.Shared.Enums;
 using PoC03B.Shared.Models;
+using System.Text.Json;
 
 public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
 {
@@ -13,6 +14,11 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
     {
         this._FormLayout = new();
         this._FormApiService = formDesignerService;
+    }
+
+    public string GetFormId()
+    {
+        return _FormLayout.Id.ToString();
     }
 
     public void AddRow()
@@ -126,11 +132,14 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
         switch (mainOperation)
         {
             case FieldOperation.Move:
-                if (_FormLayout.DragByTypeName != null)
+                if (_FormLayout.DragByTypeName != null) // Drag from ToolBar
                 {
                     targetComponent.TypeName = _FormLayout.DragByTypeName;
                     targetComponent.ComponentType = Type.GetType($"{_FormLayout.DragByTypeName}");
-                    targetComponent.Parameters = new Dictionary<string, object>();
+                    targetComponent.Parameters = new Dictionary<string, object>() {
+                        { "Id", _FormLayout.DragByTypeName },
+                        { "Label", "Label" }
+                    };
                     targetComponent.State = FieldState.Hold;
                     _FormLayout.DragByTypeName = null;
                 }
@@ -247,7 +256,7 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
         AddRow();
     }
 
-    public async Task LoadForm(string idForm)
+    public async Task LoadForm(string idForm, FormState state)
     {
         var response = await _FormApiService.GetForm(idForm);
 
@@ -255,7 +264,7 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
 
         _FormLayout = response;
 
-        RestoreForm();
+        RestoreForm(state);
     }
 
     public async Task SaveForm()
@@ -266,7 +275,7 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
         await _FormApiService.PostForm(cleanTemplate);
     }
 
-    public void RestoreForm()
+    public void RestoreForm(FormState state)
     {
         int ixItem = 0;
         int joins = 0;
@@ -275,6 +284,7 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
 
         //FormDesignerData.Items.Where(x => x.State == FieldState.Hold).ToList()
         //.ForEach(x => x.ComponentType = Type.GetType($"{x.TypeName}"));
+        _FormLayout.State = state;
 
         for (int rowId = 1; rowId <= _FormLayout.Rows; rowId++)
         {
@@ -286,6 +296,35 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
                     item.ComponentType = Type.GetType($"{item.TypeName}");
 
                     if (item.Xs > 1) joins = item.Xs;
+
+                    if (item.Parameters.Any())
+                    {
+                        foreach (var parameter in item.Parameters)
+                        {
+                            string key = parameter.Key;
+                            JsonElement jsonElement = (JsonElement)parameter.Value;
+
+                            if (string.IsNullOrEmpty(key) || string.IsNullOrEmpty(jsonElement.GetString()))
+                            {
+                                item.Parameters.Remove(key);
+                                continue;
+                            }
+
+                            object? newParameterType = key switch
+                            {
+                                "Visible" => jsonElement.GetBoolean(),
+                                _ => jsonElement.GetString()
+                            };
+
+                            if (newParameterType == null)
+                            {
+                                item.Parameters.Remove(key);
+                                continue;
+                            }
+
+                            item.Parameters[key] = newParameterType;
+                        }
+                    }
                 }
                 else
                 {
@@ -300,7 +339,7 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
                         Sm = 1,
                         Md = 1,
                         Lg = 1,
-                        Parameters = new Dictionary<string,object>(),
+                        Parameters = new Dictionary<string, object>(),
                         Position = FieldPosition.MediumCenter,
                         State = joins > 1 ? FieldState.Disabled : FieldState.Empty
                     });

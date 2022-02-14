@@ -19,7 +19,7 @@
                 <MudIconButton Icon="@Icons.Material.Outlined.Save" Size="Size.Medium" Color="Color.Inherit" OnClick="OnClick_SaveForm" />
                 @*<MudDivider DividerType="DividerType.Middle" Vertical="true"></MudDivider>*@
                 <MudSpacer />
-                <MudIconButton Link="render" Icon="@Icons.Material.Outlined.Preview" Size="Size.Medium" DisableElevation="true"
+                <MudIconButton Icon="@Icons.Material.Outlined.Preview" Size="Size.Medium" DisableElevation="true"
                            Color="Color.Dark" Variant="@(FormLayoutViewModelService.GetState() == FormState.View ? Variant.Filled : Variant.Outlined)" Class="rounded-0"
                            OnClick="@OnClick_ViewMode" />
             }
@@ -27,7 +27,7 @@
             @if (FormLayoutViewModelService.CheckState(FormState.View))
             {
                 <MudSpacer />
-                <MudIconButton Link="edit" Icon="@Icons.Material.Outlined.EditNote" Size="Size.Medium" DisableElevation="true"
+                <MudIconButton Icon="@Icons.Material.Outlined.EditNote" Size="Size.Medium" DisableElevation="true"
                            Color="Color.Dark" Variant="@(FormLayoutViewModelService.GetState() == FormState.Design || FormLayoutViewModelService.GetState() == FormState.Selection ? Variant.Filled : Variant.Outlined)" Class="rounded-0"
                            OnClick="@OnClick_DesignMode" />
             }

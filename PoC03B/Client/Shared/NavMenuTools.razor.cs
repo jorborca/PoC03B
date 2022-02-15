@@ -3,7 +3,7 @@
 using Microsoft.AspNetCore.Components;
 using PoC03B.Client.ViewModels;
 
-public partial class NavMenu
+public partial class NavMenuTools
 {
     [CascadingParameter(Name = "FormLayoutViewModel")]
     IFormLayoutViewModel FormLayoutViewModel { get; set; }
@@ -16,7 +16,6 @@ public partial class NavMenu
     private async Task OnClick_AddRow()
     {
         FormLayoutViewModel.AddRow();
-        StateHasChanged();
     }
 
     private void OnClick_RemoveRow()

@@ -42,7 +42,7 @@ public partial class MainLayout
 
     private void OnClick_SelectForm()
     {
-        FormLayoutViewModelService.SetState(FormState.Selection);
+        FormLayoutViewModelService.State = FormState.Selection;
 
         NavigationManager.NavigateTo($"/");
     }
@@ -56,12 +56,12 @@ public partial class MainLayout
 
     private void OnClick_DesignMode()
     {
-        NavigationManager.NavigateTo($"edit/{FormLayoutViewModelService.GetFormId()}");
+        NavigationManager.NavigateTo($"edit/{FormLayoutViewModelService.FormId}");
     }
 
     private void OnClick_ViewMode()
     {
-        NavigationManager.NavigateTo($"view/{FormLayoutViewModelService.GetFormId()}");
+        NavigationManager.NavigateTo($"view/{FormLayoutViewModelService.FormId}");
     }
 
 }

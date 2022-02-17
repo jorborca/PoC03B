@@ -19,6 +19,7 @@ public class FormComponent
     public int Md { get; set; }
     public int Lg { get; set; }
     public FieldPosition Position { get; set; }
+
     public FieldState State { get; set; }
 
     //public FormComponentModel Clone()

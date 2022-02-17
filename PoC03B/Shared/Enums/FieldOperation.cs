@@ -2,11 +2,13 @@
 {
     public enum FieldOperation
     {
-        Move = 0,
-        Delete = 1,
-        Expand = 2,
-        Split = 3,
-        Resize = 10,
+        Select = 1,
+        Delete = 2,
+        Expand = 3,
+        Split = 4,
+
+        Move = 10,
+        Resize = 11,
     }
 
 }

@@ -3,6 +3,7 @@
 using PoC03B.Client.Services;
 using PoC03B.Shared.Enums;
 using PoC03B.Shared.Models;
+using System.Reflection;
 using System.Text.Json;
 
 public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
@@ -16,10 +17,48 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
         this._FormApiService = formDesignerService;
     }
 
-    public string GetFormId()
+    #region Properties
+
+    public string FormId
     {
-        return _FormLayout.Id.ToString();
+        get { return _FormLayout.Id.ToString(); }
     }
+
+    public Guid? SelectedId
+    {
+        get { return _FormLayout.SelectedId; }
+        set {
+            IsBusy = true;
+            _FormLayout.SelectedId = value;
+            OnPropertyChanged(nameof(_FormLayout.SelectedId));
+            IsBusy = false;
+        }
+    }
+
+    public int RowsCount
+    {
+        get { return _FormLayout.Rows; }
+    }
+
+    public string DragTypeName
+    {
+        set { _FormLayout.DragByTypeName = value; }
+    }
+
+    public Guid DragID
+    {
+        set { _FormLayout.DragById = value; }
+    }
+
+    public FormState State
+    {
+        get { return _FormLayout.State; }
+        set { _FormLayout.State = value; }
+    }
+
+    #endregion
+
+    #region Methods
 
     public void AddRow()
     {
@@ -70,41 +109,10 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
         IsBusy = false;
     }
 
-    public int GetRowsCount()
-    {
-        return _FormLayout.Rows;
-    }
-
-
-    public void SetState(FormState state)
-    {
-        //IsBusy = true;
-        _FormLayout.State = state;
-        //OnPropertyChanged(nameof(_FormLayout.State));
-        //IsBusy = false;
-    }
-
-    public FormState GetState()
-    {
-        return _FormLayout.State;
-    }
-
     public bool CheckState(FormState state)
     {
         return _FormLayout.State == state;
     }
-
-
-    public void SetDragTypeName(string typeName)
-    {
-        _FormLayout.DragByTypeName = typeName;
-    }
-
-    public void SetDragID(Guid id)
-    {
-        _FormLayout.DragByID = id;
-    }
-
 
     public List<FormComponent> GetFormComponentsByRow(int rowId)
     {
@@ -116,33 +124,76 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
         FormComponent originComponent = new();
         FormComponent targetComponent = new();
 
-        if (_FormLayout.DragByID != null)
+        if (mainOperation != FieldOperation.Select)
         {
-            idOriginComponent = _FormLayout.DragByID;
-            _FormLayout.DragByID = null;
-        }
+            if (_FormLayout.DragById != null)
+            {
+                idOriginComponent = _FormLayout.DragById;
+                _FormLayout.DragById = null;
+            }
 
-        if (idOriginComponent != null)
-        {
-            originComponent = _FormLayout.Items.Single(x => x.Id == idOriginComponent);
-        }
+            if (idOriginComponent != null)
+            {
+                originComponent = _FormLayout.Items.Single(x => x.Id == idOriginComponent);
+            }
 
-        if (idTargetComponent != null)
-        {
-            targetComponent = _FormLayout.Items.Single(x => x.Id == idTargetComponent);
+            if (idTargetComponent != null)
+            {
+                targetComponent = _FormLayout.Items.Single(x => x.Id == idTargetComponent);
+            }
         }
 
         switch (mainOperation)
         {
+            case FieldOperation.Select:
+                //SetValue(ref _FormLayout.SelectedId, idOriginComponent);
+                //_FormLayout.SelectedId = idOriginComponent;
+                SelectedId = idOriginComponent;
+                break;
+
             case FieldOperation.Move:
                 if (_FormLayout.DragByTypeName != null) // Drag from ToolBar
                 {
                     targetComponent.TypeName = _FormLayout.DragByTypeName;
-                    targetComponent.ComponentType = Type.GetType($"{_FormLayout.DragByTypeName}");
-                    targetComponent.Parameters = new Dictionary<string, object>() {
-                        { "Id", _FormLayout.DragByTypeName },
-                        { "Label", "Label" }
-                    };
+                    Type? componentType = Type.GetType($"{_FormLayout.DragByTypeName}");
+                    targetComponent.ComponentType = componentType;
+
+                    try
+                    {
+                        if (componentType != null)
+                        {
+                            var parameters = componentType.GetProperties();
+
+                            //foreach (var propertyInfo in targetComponent.ComponentType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+                            //{
+                            //    string name = propertyInfo.Name;
+                            //    string type = propertyInfo.PropertyType.FullName;
+                            //    if (name == "Label")
+                            //    {
+                            //        object? value = propertyInfo.GetValue(targetComponent.Parameters);
+                            //    }
+                            //}
+
+                            parameters.ToList().ForEach(x =>
+                            {
+                                if (x.Name != "Attributes")
+                                {
+                                    targetComponent.Parameters = new Dictionary<string, object>() {
+                                        {
+                                            x.Name,
+                                            x.PropertyType.FullName
+                                            //x.GetValue(targetComponent.ComponentType)
+                                        }
+                                    };
+                                }
+                            });
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw;
+                    }
+
                     targetComponent.State = FieldState.Hold;
                     _FormLayout.DragByTypeName = null;
                 }
@@ -246,6 +297,11 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
         originComponent.Parameters = parameters;
         originComponent.State = FieldState.Empty;
         originComponent.Xs = 1;
+    }
+
+    public IDictionary<string, object> GetParametersComponent()
+    {
+        return _FormLayout.Items.Single(x => x.Id == SelectedId).Parameters;
     }
 
     public void NewForm()
@@ -373,4 +429,7 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
     {
         await _FormApiService.PostHistory(id, name, description);
     }
+
+    #endregion
+     
 }

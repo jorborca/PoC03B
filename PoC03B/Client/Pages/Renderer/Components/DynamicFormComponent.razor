@@ -12,7 +12,7 @@
 
     @if(!FormLayoutViewModel.CheckState(FormState.Busy))
     {
-        @for(int rowId = 1; rowId <= FormLayoutViewModel.GetRowsCount(); rowId++)
+        @for(int rowId = 1; rowId <= FormLayoutViewModel.RowsCount; rowId++)
         {
             <div class="mud-grid mud-grid-spacing-xs-3 mud-grid-justify-xs-flex-start">
                 <Virtualize Items="FormLayoutViewModel.GetFormComponentsByRow(rowId)" Context="formComponent">

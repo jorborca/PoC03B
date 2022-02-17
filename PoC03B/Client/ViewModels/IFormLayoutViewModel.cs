@@ -8,17 +8,17 @@ namespace PoC03B.Client.ViewModels
     {
         event PropertyChangedEventHandler PropertyChanged;
 
-        string GetFormId();
+        string FormId { get; }
+        int RowsCount { get; }
+        Guid? SelectedId { get; set; }
+        string DragTypeName { set; }
+        Guid DragID { set; }
+        FormState State { get; set; }
+
         void AddRow();
         void RemoveRow();
-        int GetRowsCount();
         List<FormComponent> GetFormComponentsByRow(int rowId);
-
-        void SetDragID(Guid id);
-        void SetDragTypeName(string typeName);
-
-        FormState GetState();
-        void SetState(FormState state);
+        IDictionary<string, object> GetParametersComponent();
         bool CheckState(FormState state);
 
         void NewForm();

@@ -9,11 +9,18 @@ namespace PoC03B.Shared.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public int Rows { get; set; }
+        
         [JsonIgnore]
         public string? DragByTypeName { get; set; }
+        
         [JsonIgnore]
-        public Guid? DragByID { get; set; }
+        public Guid? DragById { get; set; }
+
+        [JsonIgnore]
+        public Guid? SelectedId { get; set; }
+        
         public List<FormComponent> Items { get; set; } = new();
+        
         [JsonIgnore]
         public FormState State { get; set; }
 

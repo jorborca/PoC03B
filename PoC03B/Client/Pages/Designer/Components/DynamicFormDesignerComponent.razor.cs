@@ -15,8 +15,7 @@ public partial class DynamicFormDesignerComponent
 
     [Parameter] public string? FormID { get; set; }
 
-    FieldOperation MainOperation = FieldOperation.Move;
-    string dropClass = "";
+    FieldOperation MainOperation = FieldOperation.Select;
 
     protected override async Task OnInitializedAsync()
     {
@@ -39,11 +38,15 @@ public partial class DynamicFormDesignerComponent
 
     private void OnDragStart(FieldOperation operation, Guid idOriginComponent)
     {
-        MainOperation = operation;
-        FormLayoutViewModel.SetDragID(idOriginComponent);
+        if(MainOperation == FieldOperation.Select)
+        {
+            MainOperation = operation;
+            FormLayoutViewModel.SelectedId = null;
+            FormLayoutViewModel.DragID = idOriginComponent;
+        }
     }
 
-    private void OnDragEnter(Guid id)
+    private void OnDragEnter(Guid idOriginComponent)
     {
         //if (AllowedStatuses != null && !AllowedStatuses.Contains(Container.Payload.Status))
         //{
@@ -67,7 +70,13 @@ public partial class DynamicFormDesignerComponent
 
     private void OnDrop(Guid idTargetComponent)
     {
+        if(MainOperation == FieldOperation.Select)
+        {
+            MainOperation = FieldOperation.Move;
+        }
+
         FormLayoutViewModel.ProcessOperation(MainOperation, null, idTargetComponent);
+        MainOperation = FieldOperation.Select;
     }
 
     private void OnClick_MainOperation(Guid idOriginComponent)
@@ -75,25 +84,26 @@ public partial class DynamicFormDesignerComponent
         if(MainOperation != FieldOperation.Move)
         {
             FormLayoutViewModel.ProcessOperation(MainOperation, idOriginComponent, null);
-            MainOperation = FieldOperation.Move;
+            MainOperation = FieldOperation.Select;
         }
     }
 
     private void OnChange_MainOperation()
     {
         MainOperation++;
-        if (MainOperation > FieldOperation.Split) MainOperation = 0;
+        if (MainOperation > FieldOperation.Split) MainOperation = FieldOperation.Select;
     }
 
     private void OnMouseLeave_MainOperation()
     {
-        MainOperation = FieldOperation.Move;
+        MainOperation = FieldOperation.Select;
     }
 
     private string GetMainOperationColor()
     {
         return MainOperation switch
         {
+            FieldOperation.Select => "mud-theme-info",
             FieldOperation.Move => "mud-theme-info",
             FieldOperation.Resize => "mud-theme-info",
             FieldOperation.Delete => "mud-theme-error",
@@ -117,4 +127,10 @@ public partial class DynamicFormDesignerComponent
 
         return $"{horizontalPosition} {verticalPosition}";
     }
+
+    private string GetSelectedClass(Guid idOriginComponent)
+    {
+        return (FormLayoutViewModel.SelectedId.Equals(idOriginComponent)) ? "is-selected" : string.Empty;
+    }
+
 }

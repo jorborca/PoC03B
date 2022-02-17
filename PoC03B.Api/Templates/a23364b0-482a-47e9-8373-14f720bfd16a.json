@@ -1,18 +1,15 @@
 {
-  "Id": "277b3dd2-d4c3-4a44-b881-a250f65fcbaa",
+  "Id": "a23364b0-482a-47e9-8373-14f720bfd16a",
   "Name": "Demo",
   "Description": "Demo",
   "Rows": 1,
   "Items": [
     {
-      "Id": "fc423c81-edc9-4f64-aae5-bf35641f8007",
+      "Id": "2765cdae-e30b-4971-86f9-b79c44a30c2c",
       "RowId": 1,
       "ColId": 1,
       "TypeName": "PoC03B.Client.Shared.Editors.TextBoxComponent",
-      "Parameters": {
-        "Id": "Text1",
-        "Label": "Texto 1"
-      },
+      "Parameters": { "Text": "System.String" },
       "Xs": 1,
       "Sm": 1,
       "Md": 1,
@@ -21,15 +18,12 @@
       "State": 1
     },
     {
-      "Id": "52524605-0e97-4a16-bb4a-7a4f51c8dc14",
+      "Id": "1f763b62-8a08-4bd9-9149-c1bbe156bd28",
       "RowId": 1,
-      "ColId": 3,
+      "ColId": 2,
       "TypeName": "PoC03B.Client.Shared.Editors.SelectComponent",
-      "Parameters": {
-        "Id": "PoC03B.Client.Shared.Editors.SelectComponent",
-        "Label": "Label"
-      },
-      "Xs": 2,
+      "Parameters": { "Text": "System.String" },
+      "Xs": 1,
       "Sm": 1,
       "Md": 1,
       "Lg": 1,

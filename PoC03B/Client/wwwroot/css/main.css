@@ -62,12 +62,35 @@
     outline: solid 1px black;
 }
 
-.parameters-menu {
-    display: flex !important;
+
+/***** Parameters Menu ******/
+
+.parameters-menu-items {
+    align-items: center !important;
+}
+
+.parameters-menu-items input {
+    padding: 4px !important;
+    /*display: flex !important;
     border: 1px solid #75868a;
-    /*min-height: 30px;
+    min-height: 30px;
     align-items: center;
     margin-top: -1px;
     margin-left: -1px;
     padding: 5px 5px 5px 5px;*/
 }
+
+    .parameters-menu-items .mud-input > input.mud-input-root, div.mud-input-slot.mud-input-root {
+        background-color: aliceblue;
+        border-radius: var(--mud-default-borderradius);
+        font-size: 0.8em;
+    }
+
+    .parameters-menu-items .mud-input-control {
+        margin-top: 0;
+    }
+
+/*    .mud-input.mud-input-outlined .mud-input-outlined-border {
+        background-color: antiquewhite;
+        color: black;
+    }*/

@@ -18,7 +18,10 @@
             @if (FormLayoutViewModelService.CheckState(FormState.Design))
             {
                 <MudIconButton Icon="@Icons.Material.Outlined.Save" Size="Size.Medium" Color="Color.Inherit" OnClick="OnClick_SaveForm" />
-                @*<MudDivider DividerType="DividerType.Middle" Vertical="true"></MudDivider>*@
+                <MudDivider DividerType="DividerType.Middle" Vertical="true"></MudDivider>
+                <MudIconButton Icon="@Icons.Material.Outlined.RemoveCircle" Size="Size.Medium" Color="Color.Inherit" OnClick="OnClick_RemoveRow" />
+                <MudText Typo="Typo.subtitle1" Align="Align.Center">@FormLayoutViewModelService.RowsCount</MudText>
+                <MudIconButton Icon="@Icons.Material.Outlined.AddCircle" Size="Size.Medium" Color="Color.Inherit" OnClick="OnClick_AddRow" />
                 <MudSpacer />
                 <MudIconButton Icon="@Icons.Material.Outlined.Preview" Size="Size.Medium" Color="Color.Inherit" OnClick="@OnClick_ViewMode" />
             }
@@ -36,7 +39,7 @@
                 <ToolsMenu></ToolsMenu>
             </MudDrawer>
             <MudDrawer Open="true" Fixed="true" Elevation="1" Variant="@DrawerVariant.Mini" ClipMode="DrawerClipMode.Docked"
-                   OpenMiniOnHover="true" Color="Color.Dark" Anchor="Anchor.Right">
+                   OpenMiniOnHover="true" Color="Color.Tertiary" Anchor="Anchor.Right">
                 <ParametersMenu></ParametersMenu>
             </MudDrawer>
         }

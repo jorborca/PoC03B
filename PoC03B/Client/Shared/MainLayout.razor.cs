@@ -40,6 +40,16 @@ public partial class MainLayout
 
     #endregion
 
+    private async Task OnClick_AddRow()
+    {
+        FormLayoutViewModelService.AddRow();
+    }
+
+    private void OnClick_RemoveRow()
+    {
+        FormLayoutViewModelService.RemoveRow();
+    }
+
     private void OnClick_SelectForm()
     {
         FormLayoutViewModelService.State = FormState.Selection;

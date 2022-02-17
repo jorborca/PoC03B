@@ -1,13 +1,15 @@
 ﻿@if(FormLayoutViewModel.SelectedId != null)
 {
-    <Virtualize Items="FormLayoutViewModel.GetParametersComponent()" Context="componentParameter">
-        <MudGrid Spacing="0" Class="px-3 py-2">
-            <MudItem xs="5">
+    @*mud-grid mud-grid-spacing-xs-0 mud-grid-justify-xs-flex-start px-3 py-2 parameters-menu-items*@
+    <MudGrid Spacing="0" Class="px-3 py-2 parameters-menu-items">
+        <Virtualize Items="FormLayoutViewModel.GetParametersComponent()" Context="componentParameter">
+            <MudItem xs="4" Class="mb-1">
                 <MudText Align="Align.Center" Typo="Typo.caption">@componentParameter.Key</MudText>
             </MudItem>
-            <MudItem xs="7">
-                <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" T="string" Text="@componentParameter.Value.ToString()"></MudTextField>
+            <MudItem xs="8" Class="mb-1">
+                @*@componentParameter.Value.ToString()*@
+                <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" T="string" Text="Test"></MudTextField>
             </MudItem>
-        </MudGrid>
-    </Virtualize>
+        </Virtualize>
+    </MudGrid>
 }

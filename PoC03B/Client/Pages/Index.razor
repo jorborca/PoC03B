@@ -1,7 +1,7 @@
 ﻿@page "/"
 
 <PageTitle>Index DynamicForm</PageTitle>
-
+<MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" T="string" Text="Test"></MudTextField>
 @if(FormHistory != null)
 {
     <MudTable Items="@FormHistory" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@loading" Outlined="false" 

@@ -13,14 +13,4 @@ public partial class ToolsMenu
         FormLayoutViewModel.DragTypeName = typeName;
     }
 
-    private async Task OnClick_AddRow()
-    {
-        FormLayoutViewModel.AddRow();
-    }
-
-    private void OnClick_RemoveRow()
-    {
-        FormLayoutViewModel.RemoveRow();
-    }
-
 }

@@ -1,20 +1,4 @@
 ﻿<MudNavMenu Class="mud-width-full">
-    <div class="pa-3">
-        <MudChip Color="Color.Info" Class="mud-width-full ma-0 pa-0">
-            <MudGrid Spacing="0" Justify="Justify.SpaceEvenly" Class="align-center">
-                <MudItem xs="4" Class="d-flex justify-center">
-                    <MudIconButton Icon="@Icons.Material.Outlined.RemoveCircle" Size="Size.Medium" Color="Color.Inherit" OnClick="OnClick_RemoveRow" />
-                </MudItem>
-                <MudItem xs="4" Class="d-flex justify-center">
-                    <MudText Typo="Typo.subtitle1" Align="Align.Center">@FormLayoutViewModel.RowsCount</MudText>
-                </MudItem>
-                <MudItem xs="4" Class="d-flex justify-center">
-                    <MudIconButton Icon="@Icons.Material.Outlined.AddCircle" Size="Size.Medium" Color="Color.Inherit" OnClick="OnClick_AddRow" />
-                </MudItem>
-            </MudGrid>
-        </MudChip>
-    </div>
-
     <MudNavGroup Title="Editors" Expanded="true">
         <MudNavLink draggable="true" Match="NavLinkMatch.All"  Icon="@Icons.Filled.TextFields" 
             @ondragstart="@(() => OnDragStart("PoC03B.Client.Shared.Editors.TextBoxComponent"))">

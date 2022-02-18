@@ -1,0 +1,50 @@
+﻿<MudDialog ClassContent="px-5 pt-5 pb-0" ClassActions="px-5 pt-3 pb-4 parameters-menu-items">
+    <TitleContent>
+        Seleccione el tipo de componente
+    </TitleContent>
+    <DialogContent>
+        <MudGrid Spacing="1">
+            <MudItem>
+                <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.TextFields" Color="Color.Info"
+                    OnClick="@(() => OnClick_ComponentType("PoC03B.Client.Shared.Editors.TextBoxComponent"))">
+                    TextField
+                </MudButton>
+            </MudItem>
+            <MudItem>
+                <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.ListAlt" Color="Color.Info"
+                    OnClick="@(() => OnClick_ComponentType("PoC03B.Client.Shared.Editors.SelectComponent"))">
+                    Select
+                </MudButton>
+            </MudItem>
+            <MudItem>
+                <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.RadioButtonChecked" Color="Color.Info"
+                    OnClick="@(() => OnClick_ComponentType("PoC03B.Client.Shared.Editors.RadioComponent"))">
+                    Radio
+                </MudButton>
+            </MudItem>
+            <MudItem>
+                <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.Checklist" Color="Color.Info"
+                    OnClick="@(() => OnClick_ComponentType("PoC03B.Client.Shared.Editors.CheckBoxComponent"))">
+                    Check
+                </MudButton>
+            </MudItem>
+            <MudItem>
+                <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.SwitchLeft" Color="Color.Info"
+                    OnClick="@(() => OnClick_ComponentType("PoC03B.Client.Shared.Editors.SwitchComponent"))">
+                    Switch
+                </MudButton>
+            </MudItem>
+            <MudItem>
+                <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.SmartButton" Color="Color.Info"
+                    OnClick="@(() => OnClick_ComponentType("PoC03B.Client.Shared.Editors.ButtonComponent"))">
+                    Button
+                </MudButton>
+            </MudItem>
+        </MudGrid>
+
+        <MudDivider Class="mt-4" DividerType="DividerType.FullWidth"></MudDivider>
+    </DialogContent>
+    @*<DialogActions>
+        <MudIconButton Icon="@Icons.Material.Filled.Cancel" Size="Size.Large" DisableRipple="true" Variant="Variant.Text" Color="Color.Error" @onclick="Cancel"></MudIconButton>
+    </DialogActions>*@
+</MudDialog>

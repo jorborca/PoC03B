@@ -1,4 +1,6 @@
-﻿.dropzone {
+﻿/***** drop-zone ******/
+
+.drop-zone {
     display: flex !important;
     border: 1px dashed #75868a;
     min-height: 30px;
@@ -9,63 +11,67 @@
     z-index: 1;
 }
 
-    .dropzone:hover {
+    .drop-zone:hover {
         border: 1px dashed red;
         z-index: 2;
     }
 
-    .dropzone.no-drop {
+    .drop-zone.no-drop {
         border: 2px dashed red;
     }
 
-    .dropzone.can-drop {
+    .drop-zone.can-drop {
         border: 2px dashed green;
     }
 
-    .dropzone.is-selected {
+    .drop-zone.is-selected {
         border: 2px dashed blue;
         z-index: 3;
     }
 
-    .dropzone .mud-input-control.mud-input-input-control {
+    .drop-zone .mud-input-control.mud-input-input-control {
         margin-top: 0;
     }
 
-    /*.dropzone .mud-input-control > .mud-input-control-input-container > div.mud-input.mud-input-text {
+    /*.drop-zone .mud-input-control > .mud-input-control-input-container > div.mud-input.mud-input-text {
         margin-top: 0;
     }*/
 
-.mud-badge-root .menuzone {
+
+/***** Menu Zone ******/
+
+.mud-badge-root .menu-zone {
     visibility: hidden;
     opacity: 0;
     transition: visibility 0.2s linear,opacity 0.2s linear;
 }
 
-.mud-badge-root:hover .menuzone {
+.mud-badge-root:hover .menu-zone {
     cursor: pointer;
     visibility: visible;
     opacity: 1;
     z-index: 4 !important;
 }
 
-.menuzone > .mud-badge.mud-badge-icon .mud-icon-badge {
+.menu-zone > .mud-badge.mud-badge-icon .mud-icon-badge {
     font-size: 16px;
     margin-inline-start: -4px;
     margin-top: -2px;
 }
 
-.menuzone > .mud-badge {
+.menu-zone > .mud-badge {
     font-size: 16px;
 }
 
-.menuzone-button-focus:hover {
+.menu-zone-button-focus:hover {
     /*transform: scale(1.2);*/
     outline: solid 1px black;
 }
 
-.menuzone.mud-badge-wrapper {
+.menu-zone.mud-badge-wrapper {
     pointer-events: all;
 }
+
 
 /***** Parameters Menu ******/
 
@@ -92,6 +98,10 @@
 
     .parameters-menu-items .mud-input-control {
         margin-top: 0;
+    }
+
+    .parameters-menu-items .mud-icon-button {
+        padding: 0 !important;
     }
 
 /*    .mud-input.mud-input-outlined .mud-input-outlined-border {

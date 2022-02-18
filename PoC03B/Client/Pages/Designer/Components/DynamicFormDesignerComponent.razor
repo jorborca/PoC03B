@@ -4,7 +4,7 @@
     {
         <div class="mud-grid mud-grid-spacing-xs-0 mud-grid-justify-xs-flex-start">
             <Virtualize Items="FormLayoutViewModel.GetFormComponentsByRow(rowId)" Context="formComponent">
-                <MudItem xs="@formComponent.Xs" Class=@($"mud-badge-root dropzone {GetPositionClass(formComponent.Position)} {GetSelectedClass(formComponent.Id)}")
+                <MudItem xs="@formComponent.Xs" Class=@($"mud-badge-root drop-zone {GetPositionClass(formComponent.Position)} {GetSelectedClass(formComponent.Id)}")
                     ondragover="event.preventDefault();"
                     ondragstart="event.dataTransfer.setData('', event.target.id);"
                     @ondrop="() => OnDrop(formComponent.Id)">
@@ -13,8 +13,8 @@
                         <div class="mud-width-full">
                             <DynamicComponent Type="@formComponent.ComponentType" Parameters="@formComponent.Parameters"></DynamicComponent>
                         </div>
-                        <span class="mud-badge-wrapper mud-badge-center center menuzone" @onmouseleave="OnMouseLeave_MainOperation">
-                            <span class="mud-badge mud-badge-icon mud-badge-center center mud-elevation-0 mud-badge-overlap menuzone-button-focus @GetMainOperationColor()"
+                        <span class="mud-badge-wrapper mud-badge-center center menu-zone" @onmouseleave="OnMouseLeave_MainOperation">
+                            <span class="mud-badge mud-badge-icon mud-badge-center center mud-elevation-0 mud-badge-overlap menu-zone-button-focus @GetMainOperationColor()"
                                 draggable="true"
                                 @oncontextmenu="OnChange_MainOperation"
                                 @oncontextmenu:preventDefault="true" 
@@ -42,8 +42,8 @@
                                     break;
                                 }
                             </span>
-                            @*<span class="mud-badge mud-badge-dot mud-badge-center left mud-elevation-0 mud-theme-primary mud-badge-overlap menuzone-button-focus mr-1"></span>*@
-                            <span class="mud-badge mud-badge-dot mud-badge-center right mud-elevation-0 mud-theme-primary mud-badge-overlap menuzone-button-focus ml-2"
+                            @*<span class="mud-badge mud-badge-dot mud-badge-center left mud-elevation-0 mud-theme-primary mud-badge-overlap menu-zone-button-focus mr-1"></span>*@
+                            <span class="mud-badge mud-badge-dot mud-badge-center right mud-elevation-0 mud-theme-primary mud-badge-overlap menu-zone-button-focus ml-2"
                                 draggable="true"    
                                 @ondragstart="@(() => OnDragStart(FieldOperation.Resize, formComponent.Id))">
                             </span>
@@ -51,10 +51,10 @@
                     }
                     else
                     {
-                        <span class="mud-badge-wrapper mud-badge-center center menuzone">
+                        <span class="mud-badge-wrapper mud-badge-center center menu-zone">
                             <MudIconButton Icon="@Icons.Material.Outlined.AddCircle" Size="Size.Large" Color="Color.Error"
                             OnClick="@(() => OnClick_AddComponent(formComponent.Id))"/>
-                            @*<span class="mud-badge mud-badge-icon mud-badge-center center mud-elevation-0 mud-badge-overlap menuzone-button-focus mud-theme-error"
+                            @*<span class="mud-badge mud-badge-icon mud-badge-center center mud-elevation-0 mud-badge-overlap menu-zone-button-focus mud-theme-error"
                                 @onclick="@(() => OnClick_AddComponent(formComponent.Id))">
                                 <svg class="mud-icon-root mud-svg-icon mud-inherit-text mud-icon-size-medium mud-icon-badge" focusable="false" viewBox="0 0 24 24" aria-hidden="true"><title>Add</title><!--!--><path d="M0 0h24v24H0z" fill="none"></path><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path></svg>
                             </span>*@

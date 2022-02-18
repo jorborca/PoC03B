@@ -87,11 +87,21 @@ public partial class DynamicFormDesignerComponent
 
     private void OnClick_AddComponent(Guid idOriginComponent)
     {
-        var options = new DialogOptions { MaxWidth = MaxWidth.Small, FullWidth = true, CloseButton = true, CloseOnEscapeKey = true, DisableBackdropClick = true };
-        var parameters = new DialogParameters { ["FormLayoutViewModel"] = FormLayoutViewModel };
+        var options = new DialogOptions { 
+            MaxWidth = MaxWidth.Small, 
+            FullWidth = true, 
+            NoHeader = true,
+            CloseButton = true, 
+            CloseOnEscapeKey = true, 
+            DisableBackdropClick = true 
+        };
+
+        var parameters = new DialogParameters { 
+            ["FormLayoutViewModel"] = FormLayoutViewModel 
+        };
 
         FormLayoutViewModel.SelectedId = idOriginComponent;
-        DialogService.Show<ToolsMenuDialog>("ToolsMenu Dialog", parameters, options);
+        DialogService.Show<ComponentsMenuDialog>("ComponentsMenu Dialog", parameters, options);
         MainOperation = FieldOperation.Select;
     }
 

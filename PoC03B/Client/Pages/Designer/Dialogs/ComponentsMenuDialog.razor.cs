@@ -4,20 +4,17 @@ using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using PoC03B.Client.ViewModels;
 using PoC03B.Shared.Enums;
-using System.Threading.Tasks;
 
-public partial class ToolsMenuDialog
+public partial class ComponentsMenuDialog
 {
     //[Inject] IFormLayoutViewModel FormLayoutViewModelService { get; set; }
 
-    [CascadingParameter] 
+    [CascadingParameter]
     MudDialogInstance MudDialog { get; set; }
 
     //[CascadingParameter(Name = "FormLayoutViewModel")]
     [Parameter]
     public IFormLayoutViewModel FormLayoutViewModel { get; set; }
-
-    //void Cancel() => MudDialog.Cancel();
 
     private void OnClick_ComponentType(string typeName)
     {
@@ -25,5 +22,7 @@ public partial class ToolsMenuDialog
         FormLayoutViewModel.ProcessOperation(FieldOperation.Add, null, FormLayoutViewModel.SelectedId);
         MudDialog.Close(DialogResult.Ok(true));
     }
+
+    void Cancel() => MudDialog.Cancel();
 
 }

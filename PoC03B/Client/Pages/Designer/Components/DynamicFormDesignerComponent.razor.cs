@@ -88,12 +88,11 @@ public partial class DynamicFormDesignerComponent
     private void OnClick_AddComponent(Guid idOriginComponent)
     {
         var options = new DialogOptions { 
-            MaxWidth = MaxWidth.Small, 
+            MaxWidth = MaxWidth.Medium, 
             FullWidth = true, 
-            NoHeader = true,
             CloseButton = true, 
             CloseOnEscapeKey = true, 
-            DisableBackdropClick = true 
+            DisableBackdropClick = true,
         };
 
         var parameters = new DialogParameters { 

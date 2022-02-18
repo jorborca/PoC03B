@@ -1,7 +1,7 @@
 ﻿@if(FormLayoutViewModel.SelectedId != null)
 {
-    @*mud-grid mud-grid-spacing-xs-0 mud-grid-justify-xs-flex-start px-3 py-2 parameters-menu-items*@
-    <MudGrid Spacing="0" Class="px-3 py-2 parameters-menu-items">
+    @*mud-grid mud-grid-spacing-xs-0 mud-grid-justify-xs-flex-start px-3 py-2 parameters-menu*@
+    <MudGrid Spacing="0" Class="px-3 py-2 parameters-menu">
         <Virtualize Items="FormLayoutViewModel.GetParametersComponent()" Context="componentParameter">
             <MudItem xs="4" Class="mb-1">
                 <MudText Align="Align.Center" Typo="Typo.caption">@componentParameter.Key</MudText>

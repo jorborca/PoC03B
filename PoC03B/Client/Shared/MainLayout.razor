@@ -34,10 +34,10 @@
         </MudAppBar>
         @if (FormLayoutViewModelService.CheckState(FormState.Design))
         {
-            <MudDrawer Open="true" Fixed="true" Elevation="1" Variant="@DrawerVariant.Mini" ClipMode="DrawerClipMode.Docked"
+            @*<MudDrawer Open="true" Fixed="true" Elevation="1" Variant="@DrawerVariant.Mini" ClipMode="DrawerClipMode.Docked"
                    OpenMiniOnHover="true" Color="Color.Dark" Anchor="Anchor.Left">
                 <ToolsMenu></ToolsMenu>
-            </MudDrawer>
+            </MudDrawer>*@
             <MudDrawer Open="true" Fixed="true" Elevation="1" Variant="@DrawerVariant.Mini" ClipMode="DrawerClipMode.Docked"
                    OpenMiniOnHover="true" Color="Color.Tertiary" Anchor="Anchor.Right">
                 <ParametersMenu></ParametersMenu>

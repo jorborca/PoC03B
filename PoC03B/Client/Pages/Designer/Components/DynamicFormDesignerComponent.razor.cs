@@ -5,10 +5,12 @@ using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using PoC03B.Client.ViewModels;
 using PoC03B.Shared.Enums;
+using PoC03B.Client.Pages.Designer.Dialogs;
 
 public partial class DynamicFormDesignerComponent
 {
-    [Inject] protected ISnackbar Snackbar { get; set; }
+    [Inject] ISnackbar Snackbar { get; set; }
+    [Inject] IDialogService DialogService { get; set; }
 
     [CascadingParameter(Name = "FormLayoutViewModel")]
     IFormLayoutViewModel FormLayoutViewModel { get; set; }
@@ -70,11 +72,6 @@ public partial class DynamicFormDesignerComponent
 
     private void OnDrop(Guid idTargetComponent)
     {
-        if(MainOperation == FieldOperation.Select)
-        {
-            MainOperation = FieldOperation.Move;
-        }
-
         FormLayoutViewModel.ProcessOperation(MainOperation, null, idTargetComponent);
         MainOperation = FieldOperation.Select;
     }
@@ -86,6 +83,16 @@ public partial class DynamicFormDesignerComponent
             FormLayoutViewModel.ProcessOperation(MainOperation, idOriginComponent, null);
             MainOperation = FieldOperation.Select;
         }
+    }
+
+    private void OnClick_AddComponent(Guid idOriginComponent)
+    {
+        var options = new DialogOptions { MaxWidth = MaxWidth.Small, FullWidth = true, CloseButton = true, CloseOnEscapeKey = true, DisableBackdropClick = true };
+        var parameters = new DialogParameters { ["FormLayoutViewModel"] = FormLayoutViewModel };
+
+        FormLayoutViewModel.SelectedId = idOriginComponent;
+        DialogService.Show<ToolsMenuDialog>("ToolsMenu Dialog", parameters, options);
+        MainOperation = FieldOperation.Select;
     }
 
     private void OnChange_MainOperation()

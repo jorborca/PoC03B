@@ -27,7 +27,8 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
     public Guid? SelectedId
     {
         get { return _FormLayout.SelectedId; }
-        set {
+        set
+        {
             IsBusy = true;
             _FormLayout.SelectedId = value;
             OnPropertyChanged(nameof(_FormLayout.SelectedId));
@@ -105,7 +106,6 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
         }
 
         OnPropertyChanged(nameof(_FormLayout.Items));
-
         IsBusy = false;
     }
 
@@ -123,6 +123,8 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
     {
         FormComponent originComponent = new();
         FormComponent targetComponent = new();
+
+        IsBusy = true;
 
         if (mainOperation != FieldOperation.Select)
         {
@@ -151,65 +153,63 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
                 SelectedId = idOriginComponent;
                 break;
 
-            case FieldOperation.Move:
-                if (_FormLayout.DragByTypeName != null) // Drag from ToolBar
-                {
-                    targetComponent.TypeName = _FormLayout.DragByTypeName;
-                    Type? componentType = Type.GetType($"{_FormLayout.DragByTypeName}");
-                    targetComponent.ComponentType = componentType;
+            case FieldOperation.Add:
+                if (_FormLayout.DragByTypeName == null) return;
 
-                    try
+                targetComponent.TypeName = _FormLayout.DragByTypeName;
+                Type? componentType = Type.GetType($"{_FormLayout.DragByTypeName}");
+                targetComponent.ComponentType = componentType;
+
+                try
+                {
+                    if (componentType == null) return;
+
+                    var parameters = componentType.GetProperties();
+
+                    //foreach (var propertyInfo in targetComponent.ComponentType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+                    //{
+                    //    string name = propertyInfo.Name;
+                    //    string type = propertyInfo.PropertyType.FullName;
+                    //    if (name == "Label")
+                    //    {
+                    //        object? value = propertyInfo.GetValue(targetComponent.Parameters);
+                    //    }
+                    //}
+
+                    parameters.ToList().ForEach(x =>
                     {
-                        if (componentType != null)
+                        if (x.Name != "Attributes")
                         {
-                            var parameters = componentType.GetProperties();
-
-                            //foreach (var propertyInfo in targetComponent.ComponentType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
-                            //{
-                            //    string name = propertyInfo.Name;
-                            //    string type = propertyInfo.PropertyType.FullName;
-                            //    if (name == "Label")
-                            //    {
-                            //        object? value = propertyInfo.GetValue(targetComponent.Parameters);
-                            //    }
-                            //}
-
-                            parameters.ToList().ForEach(x =>
-                            {
-                                if (x.Name != "Attributes")
+                            targetComponent.Parameters = new Dictionary<string, object>() {
                                 {
-                                    targetComponent.Parameters = new Dictionary<string, object>() {
-                                        {
-                                            x.Name,
-                                            x.PropertyType.FullName
-                                            //x.GetValue(targetComponent.ComponentType)
-                                        }
-                                    };
+                                    x.Name,
+                                    x.PropertyType.FullName
+                                    //x.GetValue(targetComponent.ComponentType)
                                 }
-                            });
+                            };
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        throw;
-                    }
-
-                    targetComponent.State = FieldState.Hold;
-                    _FormLayout.DragByTypeName = null;
+                    });
                 }
-                else
+                catch (Exception ex)
                 {
-                    Type? backupComponentType = targetComponent.ComponentType;
-                    string? backupTypeName = targetComponent.TypeName;
-                    IDictionary<string, object> backupParameters = targetComponent.Parameters;
-
-                    targetComponent.TypeName = originComponent.TypeName;
-                    targetComponent.ComponentType = originComponent.ComponentType;
-                    targetComponent.Parameters = originComponent.Parameters;
-                    targetComponent.State = FieldState.Hold;
-
-                    RestoreField(originComponent, backupComponentType, backupTypeName, backupParameters);
+                    throw;
                 }
+
+                targetComponent.State = FieldState.Hold;
+                _FormLayout.DragByTypeName = null;
+                break;
+
+            case FieldOperation.Move:
+                Type? backupComponentType = targetComponent.ComponentType;
+                string? backupTypeName = targetComponent.TypeName;
+                IDictionary<string, object> backupParameters = targetComponent.Parameters;
+
+                targetComponent.TypeName = originComponent.TypeName;
+                targetComponent.ComponentType = originComponent.ComponentType;
+                targetComponent.Parameters = originComponent.Parameters;
+                targetComponent.State = FieldState.Hold;
+
+                RestoreField(originComponent, backupComponentType, backupTypeName, backupParameters);
                 break;
 
             case FieldOperation.Resize:
@@ -275,6 +275,9 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
                 }
                 break;
         }
+
+        OnPropertyChanged(nameof(_FormLayout.Items));
+        IsBusy = false;
     }
 
     private void RestoreField(FormComponent originComponent, Type? newComponentType, string? newTypeName, IDictionary<string, object> parameters)
@@ -431,5 +434,5 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
     }
 
     #endregion
-     
+
 }

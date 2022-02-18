@@ -2,6 +2,7 @@
 {
     public enum FieldOperation
     {
+        Add = 0,
         Select = 1,
         Delete = 2,
         Expand = 3,

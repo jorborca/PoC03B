@@ -20,6 +20,7 @@ namespace PoC03B.Client
             {
                 DefaultBorderRadius = "6px",
                 DrawerWidthLeft = "170px",
+                DrawerWidthRight = "250px",
                 AppbarHeight = "50px"
             };
 

@@ -42,6 +42,7 @@
 }
 
 .mud-badge-root:hover .menuzone {
+    cursor: pointer;
     visibility: visible;
     opacity: 1;
     z-index: 4 !important;
@@ -62,6 +63,9 @@
     outline: solid 1px black;
 }
 
+.menuzone.mud-badge-wrapper {
+    pointer-events: all;
+}
 
 /***** Parameters Menu ******/
 

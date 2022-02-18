@@ -8,9 +8,9 @@ using System.ComponentModel;
 
 public partial class MainLayout
 {
-    [Inject] protected IFormLayoutViewModel FormLayoutViewModelService { get; set; }
-    [Inject] protected NavigationManager NavigationManager { get; set; }
-    [Inject] protected ISnackbar SnackBar { get; set; }
+    [Inject] IFormLayoutViewModel FormLayoutViewModelService { get; set; }
+    [Inject] NavigationManager NavigationManager { get; set; }
+    [Inject] ISnackbar SnackBar { get; set; }
 
     #region Reactive ViewModel Events
     

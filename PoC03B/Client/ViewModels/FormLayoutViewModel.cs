@@ -43,7 +43,7 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
 
     public string DragTypeName
     {
-        set { _FormLayout.DragByTypeName = value; }
+        set { _FormLayout.AddByTypeName = value; }
     }
 
     public Guid DragID
@@ -154,10 +154,10 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
                 break;
 
             case FieldOperation.Add:
-                if (_FormLayout.DragByTypeName == null) return;
+                if (_FormLayout.AddByTypeName == null) return;
 
-                targetComponent.TypeName = _FormLayout.DragByTypeName;
-                Type? componentType = Type.GetType($"{_FormLayout.DragByTypeName}");
+                targetComponent.TypeName = _FormLayout.AddByTypeName;
+                Type? componentType = Type.GetType($"{_FormLayout.AddByTypeName}");
                 targetComponent.ComponentType = componentType;
 
                 try
@@ -176,8 +176,17 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
                     //    }
                     //}
 
+                    targetComponent.Parameters = new Dictionary<string, object>();
+
                     parameters.ToList().ForEach(x =>
                     {
+                        //targetComponent.Parameters.Add(new FormParameter()
+                        //{
+                        //    Name = x.Name,
+                        //    TypeName = x.PropertyType.FullName,
+                        //    //Value = string.Empty
+                        //    //x.GetValue(targetComponent.ComponentType)
+                        //});
                         if (x.Name != "Attributes")
                         {
                             targetComponent.Parameters = new Dictionary<string, object>() {
@@ -196,7 +205,7 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
                 }
 
                 targetComponent.State = FieldState.Hold;
-                _FormLayout.DragByTypeName = null;
+                _FormLayout.AddByTypeName = null;
                 break;
 
             case FieldOperation.Move:

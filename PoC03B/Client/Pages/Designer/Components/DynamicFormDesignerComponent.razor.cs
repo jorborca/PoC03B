@@ -85,7 +85,7 @@ public partial class DynamicFormDesignerComponent
         }
     }
 
-    private void OnClick_AddComponent(Guid idOriginComponent)
+    private async Task OnClick_AddComponent(Guid idOriginComponent)
     {
         var options = new DialogOptions { 
             MaxWidth = MaxWidth.Medium, 
@@ -100,7 +100,14 @@ public partial class DynamicFormDesignerComponent
         };
 
         FormLayoutViewModel.SelectedId = idOriginComponent;
-        DialogService.Show<ComponentsMenuDialog>("ComponentsMenu Dialog", parameters, options);
+        var dialog = DialogService.Show<ComponentsMenuDialog>("ComponentsMenu Dialog", parameters, options);
+        var result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+
+        }
+
         MainOperation = FieldOperation.Select;
     }
 

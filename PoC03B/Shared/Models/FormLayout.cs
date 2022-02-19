@@ -11,7 +11,7 @@ namespace PoC03B.Shared.Models
         public int Rows { get; set; }
         
         [JsonIgnore]
-        public string? DragByTypeName { get; set; }
+        public string? AddByTypeName { get; set; }
         
         [JsonIgnore]
         public Guid? DragById { get; set; }

@@ -23,6 +23,6 @@ public partial class ComponentsMenuDialog
         MudDialog.Close(DialogResult.Ok(true));
     }
 
-    void Cancel() => MudDialog.Cancel();
+    //void Cancel() => MudDialog.Cancel();
 
 }

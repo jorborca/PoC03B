@@ -60,7 +60,6 @@ public partial class MainLayout
     private async Task OnClick_SaveForm()
     {
         await FormLayoutViewModelService.SaveForm();
-
         SnackBar.Add($"Formulario guardado.");
     }
 
@@ -69,8 +68,10 @@ public partial class MainLayout
         NavigationManager.NavigateTo($"edit/{FormLayoutViewModelService.FormId}");
     }
 
-    private void OnClick_ViewMode()
+    private async Task OnClick_ViewMode()
     {
+        await FormLayoutViewModelService.SaveForm();
+        SnackBar.Add($"Formulario actualizado.");
         NavigationManager.NavigateTo($"view/{FormLayoutViewModelService.FormId}");
     }
 

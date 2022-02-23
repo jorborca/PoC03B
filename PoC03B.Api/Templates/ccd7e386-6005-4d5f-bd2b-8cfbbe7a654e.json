@@ -1,0 +1,37 @@
+{
+  "Id": "ccd7e386-6005-4d5f-bd2b-8cfbbe7a654e",
+  "Name": "Demo",
+  "Description": "Demo",
+  "Rows": 1,
+  "Items": [
+    {
+      "Id": "ec4ef377-fde8-4199-8570-2eb0af5f6033",
+      "RowId": 1,
+      "ColId": 4,
+      "TypeName": "PoC03B.Client.Shared.Editors.TextBoxComponent",
+      "Parameters": [
+        {
+          "Name": "Id",
+          "TypeName": "System.String",
+          "Value": "IdDemo"
+        },
+        {
+          "Name": "Label",
+          "TypeName": "System.String",
+          "Value": "LabelDemo"
+        },
+        {
+          "Name": "Checked",
+          "TypeName": "System.Boolean",
+          "Value": false
+        }
+      ],
+      "Xs": 1,
+      "Sm": 1,
+      "Md": 1,
+      "Lg": 1,
+      "Position": 4,
+      "State": 1
+    }
+  ]
+}

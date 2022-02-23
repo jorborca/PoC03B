@@ -13,7 +13,7 @@ public class FormComponent
     [JsonIgnore]
     public Type? ComponentType { get; set; }
     public string? TypeName { get; set; }
-    public IDictionary<string, object> Parameters { get; set; }
+    public List<ComponentParameter> Parameters { get; set; }
     public int Xs { get; set; }
     public int Sm { get; set; }
     public int Md { get; set; }

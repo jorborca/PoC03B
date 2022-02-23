@@ -11,7 +11,7 @@
                     @if(formComponent.TypeName != null)
                     {
                         <div class="mud-width-full">
-                            <DynamicComponent Type="@formComponent.ComponentType" Parameters="@formComponent.Parameters"></DynamicComponent>
+                            <DynamicComponent Type="@formComponent.ComponentType" Parameters="@FormLayoutViewModel.GetComponentParameters(formComponent.Parameters)"></DynamicComponent>
                         </div>
                         <span class="mud-badge-wrapper mud-badge-center center menu-zone" @onmouseleave="OnMouseLeave_MainOperation">
                             <span class="mud-badge mud-badge-icon mud-badge-center center mud-elevation-0 mud-badge-overlap menu-zone-button-focus @GetMainOperationColor()"

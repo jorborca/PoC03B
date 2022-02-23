@@ -18,7 +18,7 @@ namespace PoC03B.Client.ViewModels
         void AddRow();
         void RemoveRow();
         List<FormComponent> GetFormComponentsByRow(int rowId);
-        IDictionary<string, object> GetParametersComponent();
+        List<ComponentParameter> GetParametersComponent();
         bool CheckState(FormState state);
 
         void NewForm();
@@ -28,5 +28,7 @@ namespace PoC03B.Client.ViewModels
         Task<List<FormHistory>?> LoadHistory();
 
         void ProcessOperation(FieldOperation mainOperation, Guid? idOriginComponent, Guid? idTargetComponent);
+
+        IDictionary<string, object> GetComponentParameters(List<ComponentParameter> componentParameters);
     }
 }

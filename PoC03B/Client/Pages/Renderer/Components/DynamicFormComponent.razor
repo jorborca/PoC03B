@@ -21,7 +21,7 @@
                         @if(formComponent.TypeName != null)
                         {
                             <div class="mud-badge-root mud-width-full">
-                                <DynamicComponent Type="@formComponent.ComponentType" Parameters="@formComponent.Parameters"></DynamicComponent>
+                                <DynamicComponent Type="@formComponent.ComponentType" Parameters="@FormLayoutViewModel.GetComponentParameters(formComponent.Parameters)"></DynamicComponent>
                             </div>
                         }
                     </MudItem>

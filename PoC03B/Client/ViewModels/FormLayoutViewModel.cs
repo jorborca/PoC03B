@@ -3,7 +3,7 @@
 using PoC03B.Client.Services;
 using PoC03B.Shared.Enums;
 using PoC03B.Shared.Models;
-using System.Reflection;
+using System.ComponentModel;
 using System.Text.Json;
 
 public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
@@ -71,7 +71,6 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
         {
             for (int colId = 1; colId <= 12; colId++)
             {
-
                 _FormLayout.Items.Add(new FormComponent()
                 {
                     Id = Guid.NewGuid(),
@@ -81,6 +80,7 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
                     Sm = 1,
                     Md = 1,
                     Lg = 1,
+                    Parameters = new List<ComponentParameter>(),
                     Position = FieldPosition.MediumCenter,
                     State = FieldState.Empty
                 });
@@ -160,49 +160,58 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
                 Type? componentType = Type.GetType($"{_FormLayout.AddByTypeName}");
                 targetComponent.ComponentType = componentType;
 
-                try
-                {
-                    if (componentType == null) return;
+                targetComponent.Parameters = GetMockParameters();
 
-                    var parameters = componentType.GetProperties();
+                //targetComponent.Parameters = new Dictionary<string, object>();
 
-                    //foreach (var propertyInfo in targetComponent.ComponentType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
-                    //{
-                    //    string name = propertyInfo.Name;
-                    //    string type = propertyInfo.PropertyType.FullName;
-                    //    if (name == "Label")
-                    //    {
-                    //        object? value = propertyInfo.GetValue(targetComponent.Parameters);
-                    //    }
-                    //}
+                //formParameter.ForEach(x =>
+                //{
+                //    targetComponent.Parameters.Add(
+                //        x.Name,
+                //        GetObjectByType(x.TypeName, x.Value)
+                //    );
+                //});
 
-                    targetComponent.Parameters = new Dictionary<string, object>();
+                //try
+                //{
+                //    //var parameters = componentType.GetProperties();
+                //    //var test = TypeDescriptor.GetProperties(componentType)["Label"].GetValue(componentType);
 
-                    parameters.ToList().ForEach(x =>
-                    {
-                        //targetComponent.Parameters.Add(new FormParameter()
-                        //{
-                        //    Name = x.Name,
-                        //    TypeName = x.PropertyType.FullName,
-                        //    //Value = string.Empty
-                        //    //x.GetValue(targetComponent.ComponentType)
-                        //});
-                        if (x.Name != "Attributes")
-                        {
-                            targetComponent.Parameters = new Dictionary<string, object>() {
-                                {
-                                    x.Name,
-                                    x.PropertyType.FullName
-                                    //x.GetValue(targetComponent.ComponentType)
-                                }
-                            };
-                        }
-                    });
-                }
-                catch (Exception ex)
-                {
-                    throw;
-                }
+                //    //foreach (var propertyInfo in targetComponent.ComponentType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+                //    //{
+                //    //    string name = propertyInfo.Name;
+                //    //    string type = propertyInfo.PropertyType.FullName;
+                //    //    if (name == "Label")
+                //    //    {
+                //    //        object? value = propertyInfo.GetValue(targetComponent.Parameters);
+                //    //    }
+                //    //}
+                //    //["Id"].GetValue(componentType);
+
+                //    //parameters.ToList().ForEach(x =>
+                //    //{
+                //    //    //targetComponent.Parameters.Add(new FormParameter()
+                //    //    //{
+                //    //    //    Name = x.Name,
+                //    //    //    TypeName = x.PropertyType.FullName,
+                //    //    //    //Value = string.Empty
+                //    //    //    //x.GetValue(targetComponent.ComponentType)
+                //    //    //});
+                //    //    //if (x.Name != "Attributes")
+                //    //    //{
+                //    //    //    targetComponent.Parameters.Add(                              
+                //    //    //        x.Name,
+                //    //    //        x.GetValue(targetComponent, null)
+                //    //    //        //x.PropertyType.FullName
+                //    //    //        //x.GetValue(targetComponent.ComponentType)
+                //    //    //    );
+                //    //    //}
+                //    //});
+                //}
+                //catch (Exception ex)
+                //{
+                //    throw;
+                //}
 
                 targetComponent.State = FieldState.Hold;
                 _FormLayout.AddByTypeName = null;
@@ -211,7 +220,7 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
             case FieldOperation.Move:
                 Type? backupComponentType = targetComponent.ComponentType;
                 string? backupTypeName = targetComponent.TypeName;
-                IDictionary<string, object> backupParameters = targetComponent.Parameters;
+                List<ComponentParameter> backupParameters = targetComponent.Parameters;
 
                 targetComponent.TypeName = originComponent.TypeName;
                 targetComponent.ComponentType = originComponent.ComponentType;
@@ -241,7 +250,7 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
                 break;
 
             case FieldOperation.Delete: // Eliminar Item
-                RestoreField(originComponent, null, null, new Dictionary<string, object>());
+                RestoreField(originComponent, null, null, new List<ComponentParameter>());
                 break;
 
             case FieldOperation.Expand:
@@ -289,7 +298,7 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
         IsBusy = false;
     }
 
-    private void RestoreField(FormComponent originComponent, Type? newComponentType, string? newTypeName, IDictionary<string, object> parameters)
+    private void RestoreField(FormComponent originComponent, Type? newComponentType, string? newTypeName, List<ComponentParameter> parameters)
     {
         // Restore and Split the collapsed fields
         List<FormComponent> itemsToSplit = _FormLayout.Items.Where(
@@ -311,7 +320,7 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
         originComponent.Xs = 1;
     }
 
-    public IDictionary<string, object> GetParametersComponent()
+    public List<ComponentParameter> GetParametersComponent()
     {
         return _FormLayout.Items.Single(x => x.Id == SelectedId).Parameters;
     }
@@ -324,6 +333,7 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
             Name = "Demo",
             Description = "Demo",
             Rows = 0,
+            Items = new List<FormComponent>(),
             State = FormState.Design
         };
 
@@ -372,35 +382,6 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
                     item.ComponentType = Type.GetType($"{item.TypeName}");
 
                     if (item.Xs > 1) joins = item.Xs;
-
-                    if (item.Parameters.Any())
-                    {
-                        foreach (var parameter in item.Parameters)
-                        {
-                            string key = parameter.Key;
-                            JsonElement jsonElement = (JsonElement)parameter.Value;
-
-                            if (string.IsNullOrEmpty(key) || string.IsNullOrEmpty(jsonElement.GetString()))
-                            {
-                                item.Parameters.Remove(key);
-                                continue;
-                            }
-
-                            object? newParameterType = key switch
-                            {
-                                "Visible" => jsonElement.GetBoolean(),
-                                _ => jsonElement.GetString()
-                            };
-
-                            if (newParameterType == null)
-                            {
-                                item.Parameters.Remove(key);
-                                continue;
-                            }
-
-                            item.Parameters[key] = newParameterType;
-                        }
-                    }
                 }
                 else
                 {
@@ -415,7 +396,7 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
                         Sm = 1,
                         Md = 1,
                         Lg = 1,
-                        Parameters = new Dictionary<string, object>(),
+                        Parameters = new List<ComponentParameter>(),
                         Position = FieldPosition.MediumCenter,
                         State = joins > 1 ? FieldState.Disabled : FieldState.Empty
                     });
@@ -426,9 +407,7 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
         }
 
         _FormLayout.State = state;
-
         OnPropertyChanged(nameof(_FormLayout.Items));
-
         IsBusy = false;
     }
 
@@ -440,6 +419,65 @@ public class FormLayoutViewModel : BaseViewModel, IFormLayoutViewModel
     private async Task SaveHistory(Guid id, string name, string description)
     {
         await _FormApiService.PostHistory(id, name, description);
+    }
+
+    private object GetObjectByType(string typeName, string value)
+    {
+        object result = Convert.ChangeType(value, Type.GetType($"{typeName}"));
+        return result;
+    }
+
+    public IDictionary<string, object> GetComponentParameters(List<ComponentParameter> componentParameters)
+    {
+        IDictionary<string, object> parametersDictionary = new Dictionary<string, object>();
+
+        componentParameters.ForEach(x =>
+        {
+            parametersDictionary.Add(
+                x.Name,
+                GetObjectByType(x.TypeName, x.Value.ToString())
+            );
+        });
+
+        return parametersDictionary;
+
+        //foreach (var parameter in item.Parameters)
+        //{
+        //    string key = parameter.Key;
+        //    JsonElement jsonElement = (JsonElement)parameter.Value;
+
+        //    if (string.IsNullOrEmpty(key) || string.IsNullOrEmpty(jsonElement.GetString()))
+        //    {
+        //        item.Parameters.Remove(key);
+        //        continue;
+        //    }
+
+        //    object? newParameterType = key switch
+        //    {
+        //        "Visible" => jsonElement.GetBoolean(),
+        //        "Checked" => jsonElement.GetBoolean(),
+        //        _ => jsonElement.GetString()
+        //    };
+
+        //    if (newParameterType == null)
+        //    {
+        //        item.Parameters.Remove(key);
+        //        continue;
+        //    }
+
+        //    item.Parameters[key] = newParameterType;
+        //}
+    }
+
+    private List<ComponentParameter> GetMockParameters()
+    {
+        
+        return new List<ComponentParameter>() {
+            new ComponentParameter { Name="Id", TypeName="System.String", Value="IdDemo" },
+            new ComponentParameter { Name="Label", TypeName="System.String", Value="LabelDemo" },
+            new ComponentParameter { Name="Checked", TypeName="System.Boolean", Value=false },
+            //new ComponentParameter { Name="Data", TypeName="System.Text.Json", Value="{'Test'': 'Test''}" },
+        };
     }
 
     #endregion

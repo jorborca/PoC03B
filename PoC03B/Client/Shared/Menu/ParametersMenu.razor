@@ -4,11 +4,36 @@
     <MudGrid Spacing="0" Class="px-3 py-2 parameters-menu">
         <Virtualize Items="FormLayoutViewModel.GetParametersComponent()" Context="componentParameter">
             <MudItem xs="4" Class="mb-1">
-                <MudText Align="Align.Center" Typo="Typo.caption">@componentParameter.Key</MudText>
+                <MudText Align="Align.Center" Typo="Typo.caption">@componentParameter.Name</MudText>
             </MudItem>
             <MudItem xs="8" Class="mb-1">
-                @*@componentParameter.Value.ToString()*@
-                <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" T="string" Text="Test"></MudTextField>
+            @switch(componentParameter.TypeName)
+            {
+                case "System.String":
+                <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" T="object" Value="@componentParameter.Value"></MudTextField>
+                break;
+
+                case "System.Boolean":
+                    <MudSwitch T="object" Checked="@componentParameter.Value"></MudSwitch>
+                    break;
+
+                case "System.Text.Json":
+                    break;
+
+                case "System.Collections.Generic.Dictionary":
+                @*<MudSelect @bind-Value="enumValue" Variant="Variant.Outlined" Margin="Margin.Dense" T="string">
+                    @foreach (Drink item in Enum.GetValues(typeof(Drink)))
+                    {
+                        <MudSelectItem Value="@item">@item</MudSelectItem>
+                    }
+                </MudSelect>*@
+                break;
+
+                default:
+                <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" T="string" Value="@componentParameter.Value.ToString()"></MudTextField>
+                break;
+            }
+            @*<DynamicComponent Type="@GetComponentType(componentParameter.Value)" Parameters="@GetComponentParameters(componentParameter.Value)"></DynamicComponent>*@
             </MudItem>
         </Virtualize>
     </MudGrid>
